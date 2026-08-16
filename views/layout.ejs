@@ -1,39 +1,53 @@
 <!DOCTYPE html>
 <html lang="<%= lang %>">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title><%= title %> | <%= (typeof siteSettings !== 'undefined' && siteSettings && siteSettings.site_name_en) || 'Khmer News' %></title>
+  <title>
+    <%= title %> | <%= (typeof siteSettings !=='undefined' && siteSettings && siteSettings.site_name_en) || 'Khmer News'
+        %>
+  </title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Koh+Santepheap:wght@300;400;700;900&family=Noto+Sans+Khmer:wght@300;400;500;600;700;800;900&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Koh+Santepheap:wght@300;400;700;900&family=Noto+Sans+Khmer:wght@300;400;500;600;700;800;900&family=Outfit:wght@300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="/css/style.css">
 
   <style>
     :root {
-      --primary-color: <%= (typeof siteSettings !== 'undefined' && siteSettings && siteSettings.primary_color) ? siteSettings.primary_color : '#1e3a8a' %>;
-      --accent-color: <%= (typeof siteSettings !== 'undefined' && siteSettings && siteSettings.accent_color) ? siteSettings.accent_color : '#dc2626' %>;
+      --primary-color: <%=(typeof siteSettings !=='undefined' && siteSettings && siteSettings.primary_color) ? siteSettings.primary_color: '#1e3a8a' %>;
+      --accent-color: <%=(typeof siteSettings !=='undefined' && siteSettings && siteSettings.accent_color) ? siteSettings.accent_color: '#dc2626' %>;
     }
-    <% if (typeof siteSettings !== 'undefined' && siteSettings && siteSettings.custom_css) { %>
-      <%- siteSettings.custom_css %>
-    <% } %>
+
+    <% if (typeof siteSettings !=='undefined' && siteSettings && siteSettings.custom_css) {
+      %><%- siteSettings.custom_css %><%
+    }
+
+    %>
   </style>
 </head>
+
 <body>
   <div id="readingProgress" class="reading-progress"></div>
   <div class="nav-overlay" id="navOverlay"></div>
-  
+
   <div class="top-bar">
     <div class="container">
       <div class="top-links">
         <span id="currentDate"></span>
-        <a href="/about"><%= t('nav.about') %></a>
+        <a href="/about">
+          <%= t('nav.about') %>
+        </a>
       </div>
       <div class="top-links">
-        <span><%= t('common.language') %>:</span>
+        <span>
+          <%= t('common.language') %>:
+        </span>
         <select id="langSwitcher" class="lang-select">
-          <option value="km" <%= lang === 'km' ? 'selected' : '' %>>ខ្មែរ</option>
-          <option value="en" <%= lang === 'en' ? 'selected' : '' %>>English</option>
+          <option value="km" <%=lang==='km' ? 'selected' : '' %>>ខ្មែរ</option>
+          <option value="en" <%=lang==='en' ? 'selected' : '' %>>English</option>
         </select>
       </div>
     </div>
@@ -54,7 +68,9 @@
                 Khmer<span class="brand-accent">News</span>
               <% } %>
             </span>
-            <span class="brand-sub"><%= lang === 'km' ? 'ព័ត៌មានទាន់ហេតុការណ៍ ២៤/៧' : 'BREAKING NEWS 24/7' %></span>
+            <span class="brand-sub">
+              <%= lang === 'km' ? 'ព័ត៌មានទាន់ហេតុការណ៍ ២៤/៧' : 'BREAKING NEWS 24/7' %>
+            </span>
           </div>
         </a>
 
@@ -79,11 +95,13 @@
           <span></span>
         </button>
       </div>
+    </div>
 
-      <!-- HEADER ROW 2: STICKY NAVIGATION BAR (DESKTOP) -->
-      <div class="header-nav-row">
+    <!-- HEADER ROW 2: STICKY NAVIGATION BAR (DESKTOP) -->
+    <nav class="header-nav-row" id="desktopNavRow">
+      <div class="container nav-row-container">
         <ul class="nav-links">
-          <li><a href="/" class="nav-link <%= title === 'Khmer News' ? 'active' : '' %>">🏠 <%= t('nav.home') %></a></li>
+          <li><a href="/" class="nav-link <%= title === 'Khmer News' ? 'active' : '' %>"><%= t('nav.home') %></a></li>
           <% if (typeof categories !== 'undefined' && categories) { categories.forEach(function(c) { %>
             <li><a href="/category/<%= c.slug %>" class="nav-link"><%= c[`name_${lang}`] %></a></li>
           <% }) } %>
@@ -96,10 +114,10 @@
           </form>
         </div>
       </div>
-    </div>
+    </nav>
 
     <!-- MOBILE SLIDE-OUT DRAWER SIDEBAR -->
-    <nav class="main-nav" id="mainNav">
+    <div class="main-nav" id="mainNav">
       <div class="drawer-header">
         <div class="drawer-logo-title">
           <img src="/images/khmer-new-logo.png" alt="Khmer News Logo" style="height: 32px; width: auto; object-fit: contain;">
@@ -109,7 +127,7 @@
       </div>
 
       <ul class="nav-links">
-        <li><a href="/" class="nav-link <%= title === 'Khmer News' ? 'active' : '' %>">🏠 <%= t('nav.home') %></a></li>
+        <li><a href="/" class="nav-link <%= title === 'Khmer News' ? 'active' : '' %>"><%= t('nav.home') %></a></li>
         <% if (typeof categories !== 'undefined' && categories) { categories.forEach(function(c) { %>
           <li><a href="/category/<%= c.slug %>" class="nav-link"><%= c[`name_${lang}`] %></a></li>
         <% }) } %>
@@ -121,203 +139,253 @@
           <button type="submit" class="search-btn"><%= t('nav.search') %></button>
         </form>
       </div>
-    </nav>
+    </div>
   </header>
 
-  <% if (typeof siteSettings !== 'undefined' && siteSettings && (siteSettings.breaking_news_enabled == 1 || siteSettings.breaking_news_enabled === undefined)) { %>
+  <% if (typeof siteSettings !=='undefined' && siteSettings && (siteSettings.breaking_news_enabled==1 ||
+    siteSettings.breaking_news_enabled===undefined)) { %>
     <div class="breaking-bar">
       <div class="container">
         <div class="breaking-inner">
           <span class="breaking-label">BREAKING ⚡</span>
           <div class="breaking-marquee-track-container">
             <div class="breaking-marquee-track">
-              <% var newsTxt = ''; %>
-              <% if (lang === 'km' && siteSettings.breaking_news_text_km) { %>
-                <% newsTxt = siteSettings.breaking_news_text_km; %>
-              <% } else if (lang === 'en' && siteSettings.breaking_news_text_en) { %>
-                <% newsTxt = siteSettings.breaking_news_text_en; %>
-              <% } else if (typeof articles !== 'undefined' && articles && articles.length > 0) { %>
-                <% newsTxt = articles.slice(0, 5).map(a => a[`title_${lang}`]).join('   •   '); %>
-              <% } else { %>
-                <% newsTxt = lang === 'km' ? siteSettings.site_desc_km : siteSettings.site_desc_en; %>
-              <% } %>
-              <span class="breaking-text-content"><%= newsTxt %>   •   </span>
-              <span class="breaking-text-content" aria-hidden="true"><%= newsTxt %>   •   </span>
+              <% var newsTxt='' ; %>
+                <% if (lang==='km' && siteSettings.breaking_news_text_km) { %>
+                  <% newsTxt=siteSettings.breaking_news_text_km; %>
+                    <% } else if (lang==='en' && siteSettings.breaking_news_text_en) { %>
+                      <% newsTxt=siteSettings.breaking_news_text_en; %>
+                        <% } else if (typeof articles !=='undefined' && articles && articles.length> 0) { %>
+                          <% newsTxt=articles.slice(0, 5).map(a=> a[`title_${lang}`]).join(' • '); %>
+                            <% } else { %>
+                              <% newsTxt=lang==='km' ? siteSettings.site_desc_km : siteSettings.site_desc_en; %>
+                                <% } %>
+                                  <span class="breaking-text-content">
+                                    <%= newsTxt %> •
+                                  </span>
+                                  <span class="breaking-text-content" aria-hidden="true">
+                                    <%= newsTxt %> •
+                                  </span>
             </div>
           </div>
         </div>
       </div>
     </div>
-  <% } %>
+    <% } %>
 
-  <main>
-    <%- body %>
-  </main>
+      <main>
+        <%- body %>
+      </main>
 
-  <footer class="site-footer">
-    <div class="container">
-      <div class="footer-grid">
-        <div class="footer-col brand-col">
-          <a href="/" class="brand footer-brand-logo" style="margin-bottom: 16px;">
-            <span class="brand-main">
-              <% if (typeof siteSettings !== 'undefined' && siteSettings) { %>
-                <% var siteName = lang === 'km' ? (siteSettings.site_name_km || 'ខ្មែរញូស៍') : (siteSettings.site_name_en || 'Khmer News'); %>
-                <%- siteName.replace(/News/gi, '<span class="brand-accent">News</span>').replace(/ញូស៍/g, '<span class="brand-accent">ញូស៍</span>') %>
-              <% } else { %>
-                Khmer<span class="brand-accent">News</span>
-              <% } %>
-            </span>
-            <span class="brand-sub"><%= lang === 'km' ? 'ព័ត៌មានថ្មីៗ' : 'LATEST NEWS' %></span>
-          </a>
-          <p class="footer-desc">
-            <% if (typeof siteSettings !== 'undefined' && siteSettings) { %>
-              <%= lang === 'km' ? siteSettings.site_desc_km : siteSettings.site_desc_en %>
-            <% } else { %>
-              <%= t('about.content') %>
-            <% } %>
-          </p>
-          <div class="footer-socials">
-            <% if (typeof siteSettings !== 'undefined' && siteSettings) { %>
-              <a href="<%= siteSettings.social_facebook || '#' %>" target="_blank" class="social-icon-img" aria-label="Facebook">
-                <img src="/images/facebook.png" alt="Facebook" style="width: 28px; height: 28px; object-fit: contain;">
+      <footer class="site-footer">
+        <div class="container">
+          <div class="footer-grid">
+            <div class="footer-col brand-col">
+              <a href="/" class="brand footer-brand-logo" style="margin-bottom: 16px;">
+                <span class="brand-main">
+                  <% if (typeof siteSettings !=='undefined' && siteSettings) { %>
+                    <% var siteName=lang==='km' ? (siteSettings.site_name_km || 'ខ្មែរញូស៍' ) :
+                      (siteSettings.site_name_en || 'Khmer News' ); %>
+                      <%- siteName.replace(/News/gi, '<span class="brand-accent">News</span>'
+                        ).replace(/ញូស៍/g, '<span class="brand-accent">ញូស៍</span>' ) %>
+                        <% } else { %>
+                          Khmer<span class="brand-accent">News</span>
+                          <% } %>
+                </span>
+                <span class="brand-sub">
+                  <%= lang==='km' ? 'ព័ត៌មានថ្មីៗ' : 'LATEST NEWS' %>
+                </span>
               </a>
-              <a href="<%= siteSettings.social_telegram || '#' %>" target="_blank" class="social-icon-img" aria-label="Telegram">
-                <img src="/images/telegram.png" alt="Telegram" style="width: 28px; height: 28px; object-fit: contain;">
-              </a>
-              <a href="<%= siteSettings.social_youtube || '#' %>" target="_blank" class="social-icon-img" aria-label="YouTube">
-                <img src="/images/youtube.png" alt="YouTube" style="width: 28px; height: 28px; object-fit: contain;">
-              </a>
-              <a href="#" target="_blank" class="social-icon-img" aria-label="Platform">
-                <img src="/images/logos.png" alt="Platform" style="width: 28px; height: 28px; object-fit: contain;">
-              </a>
-            <% } else { %>
-              <a href="#" class="social-icon-img" aria-label="Facebook">
-                <img src="/images/facebook.png" alt="Facebook" style="width: 28px; height: 28px; object-fit: contain;">
-              </a>
-              <a href="#" class="social-icon-img" aria-label="Telegram">
-                <img src="/images/telegram.png" alt="Telegram" style="width: 28px; height: 28px; object-fit: contain;">
-              </a>
-              <a href="#" class="social-icon-img" aria-label="YouTube">
-                <img src="/images/youtube.png" alt="YouTube" style="width: 28px; height: 28px; object-fit: contain;">
-              </a>
-              <a href="#" class="social-icon-img" aria-label="Platform">
-                <img src="/images/logos.png" alt="Platform" style="width: 28px; height: 28px; object-fit: contain;">
-              </a>
-            <% } %>
+              <p class="footer-desc">
+                <% if (typeof siteSettings !=='undefined' && siteSettings) { %>
+                  <%= lang==='km' ? siteSettings.site_desc_km : siteSettings.site_desc_en %>
+                    <% } else { %>
+                      <%= t('about.content') %>
+                        <% } %>
+              </p>
+              <div class="footer-socials">
+                <% if (typeof siteSettings !=='undefined' && siteSettings) { %>
+                  <a href="<%= siteSettings.social_facebook || '#' %>" target="_blank" class="social-icon-img"
+                    aria-label="Facebook">
+                    <img src="/images/facebook.png" alt="Facebook"
+                      style="width: 28px; height: 28px; object-fit: contain;">
+                  </a>
+                  <a href="<%= siteSettings.social_telegram || '#' %>" target="_blank" class="social-icon-img"
+                    aria-label="Telegram">
+                    <img src="/images/telegram.png" alt="Telegram"
+                      style="width: 28px; height: 28px; object-fit: contain;">
+                  </a>
+                  <a href="<%= siteSettings.social_youtube || '#' %>" target="_blank" class="social-icon-img"
+                    aria-label="YouTube">
+                    <img src="/images/youtube.png" alt="YouTube"
+                      style="width: 28px; height: 28px; object-fit: contain;">
+                  </a>
+                  <a href="#" target="_blank" class="social-icon-img" aria-label="Platform">
+                    <img src="/images/logos.png" alt="Platform" style="width: 28px; height: 28px; object-fit: contain;">
+                  </a>
+                  <% } else { %>
+                    <a href="#" class="social-icon-img" aria-label="Facebook">
+                      <img src="/images/facebook.png" alt="Facebook"
+                        style="width: 28px; height: 28px; object-fit: contain;">
+                    </a>
+                    <a href="#" class="social-icon-img" aria-label="Telegram">
+                      <img src="/images/telegram.png" alt="Telegram"
+                        style="width: 28px; height: 28px; object-fit: contain;">
+                    </a>
+                    <a href="#" class="social-icon-img" aria-label="YouTube">
+                      <img src="/images/youtube.png" alt="YouTube"
+                        style="width: 28px; height: 28px; object-fit: contain;">
+                    </a>
+                    <a href="#" class="social-icon-img" aria-label="Platform">
+                      <img src="/images/logos.png" alt="Platform"
+                        style="width: 28px; height: 28px; object-fit: contain;">
+                    </a>
+                    <% } %>
+              </div>
+            </div>
+            <div class="footer-col">
+              <h4>
+                <%= t('nav.home') %>
+              </h4>
+              <ul class="footer-links">
+                <li><a href="/">
+                    <%= t('nav.home') %>
+                  </a></li>
+                <li><a href="/about">
+                    <%= t('nav.about') %>
+                  </a></li>
+                <li><a href="/contact">Contact Us</a></li>
+                <li><a href="/advertise">Advertise</a></li>
+              </ul>
+            </div>
+            <div class="footer-col">
+              <h4>
+                <%= t('admin.categories') %>
+              </h4>
+              <ul class="footer-links">
+                <% if (typeof categories !=='undefined' && categories) { categories.forEach(c=> { %>
+                  <li><a href="/category/<%= c.slug %>">
+                      <%= c[`name_${lang}`] %>
+                    </a></li>
+                  <% }) } %>
+              </ul>
+            </div>
+            <div class="footer-col newsletter-col">
+              <h4>Newsletter</h4>
+              <p class="newsletter-desc">Subscribe to receive the latest breaking news alerts in your inbox.</p>
+              <form class="footer-newsletter-form"
+                onsubmit="event.preventDefault(); alert('Subscribed successfully!');">
+                <input type="email" placeholder="Your email address" required class="newsletter-input">
+                <button type="submit" class="newsletter-btn">Subscribe</button>
+              </form>
+            </div>
+          </div>
+
+          <div class="footer-middle">
+            <div class="contact-info-row">
+              <% if (typeof siteSettings !=='undefined' && siteSettings) { %>
+                <span><strong>Address:</strong>
+                  <%= lang==='km' ? siteSettings.contact_address_km : siteSettings.contact_address_en %>
+                </span>
+                <span>&bull;</span>
+                <span><strong>Phone:</strong>
+                  <%= siteSettings.contact_phone %>
+                </span>
+                <span>&bull;</span>
+                <span><strong>Email:</strong>
+                  <%= siteSettings.contact_email %>
+                </span>
+                <% } else { %>
+                  <span><strong>Address:</strong> Preah Monivong Blvd, Phnom Penh, Cambodia</span>
+                  <span>&bull;</span>
+                  <span><strong>Phone:</strong> +855 23 456 789</span>
+                  <span>&bull;</span>
+                  <span><strong>Email:</strong> info@khmernews.com</span>
+                  <% } %>
+            </div>
+          </div>
+
+          <div class="footer-bottom">
+            <div class="footer-bottom-inner">
+              <p>&copy; <%= new Date().getFullYear() %>
+                  <%= (typeof siteSettings !=='undefined' && siteSettings && siteSettings.site_name_en) || 'Khmer News'
+                    %>. All rights reserved.</p>
+              <div class="footer-legal-links">
+                <a href="/privacy">Privacy Policy</a>
+                <a href="/terms">Terms of Service</a>
+              </div>
+            </div>
           </div>
         </div>
-        <div class="footer-col">
-          <h4><%= t('nav.home') %></h4>
-          <ul class="footer-links">
-            <li><a href="/"><%= t('nav.home') %></a></li>
-            <li><a href="/about"><%= t('nav.about') %></a></li>
-            <li><a href="/contact">Contact Us</a></li>
-            <li><a href="/advertise">Advertise</a></li>
-          </ul>
-        </div>
-        <div class="footer-col">
-          <h4><%= t('admin.categories') %></h4>
-          <ul class="footer-links">
-            <% if (typeof categories !== 'undefined' && categories) { categories.forEach(c => { %>
-              <li><a href="/category/<%= c.slug %>"><%= c[`name_${lang}`] %></a></li>
-            <% }) } %>
-          </ul>
-        </div>
-        <div class="footer-col newsletter-col">
-          <h4>Newsletter</h4>
-          <p class="newsletter-desc">Subscribe to receive the latest breaking news alerts in your inbox.</p>
-          <form class="footer-newsletter-form" onsubmit="event.preventDefault(); alert('Subscribed successfully!');">
-            <input type="email" placeholder="Your email address" required class="newsletter-input">
-            <button type="submit" class="newsletter-btn">Subscribe</button>
-          </form>
-        </div>
-      </div>
-      
-      <div class="footer-middle">
-        <div class="contact-info-row">
-          <% if (typeof siteSettings !== 'undefined' && siteSettings) { %>
-            <span><strong>Address:</strong> <%= lang === 'km' ? siteSettings.contact_address_km : siteSettings.contact_address_en %></span>
-            <span>&bull;</span>
-            <span><strong>Phone:</strong> <%= siteSettings.contact_phone %></span>
-            <span>&bull;</span>
-            <span><strong>Email:</strong> <%= siteSettings.contact_email %></span>
-          <% } else { %>
-            <span><strong>Address:</strong> Preah Monivong Blvd, Phnom Penh, Cambodia</span>
-            <span>&bull;</span>
-            <span><strong>Phone:</strong> +855 23 456 789</span>
-            <span>&bull;</span>
-            <span><strong>Email:</strong> info@khmernews.com</span>
-          <% } %>
-        </div>
-      </div>
+      </footer>
 
-      <div class="footer-bottom">
-        <div class="footer-bottom-inner">
-          <p>&copy; <%= new Date().getFullYear() %> <%= (typeof siteSettings !== 'undefined' && siteSettings && siteSettings.site_name_en) || 'Khmer News' %>. All rights reserved.</p>
-          <div class="footer-legal-links">
-            <a href="/privacy">Privacy Policy</a>
-            <a href="/terms">Terms of Service</a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </footer>
+      <script>
+        document.addEventListener('DOMContentLoaded', function () {
+          var switcher = document.getElementById('langSwitcher');
+          if (switcher) {
+            switcher.addEventListener('change', function () {
+              var lang = this.value;
+              window.location.href = '/change-lang/' + lang;
+            });
+          }
 
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      var switcher = document.getElementById('langSwitcher');
-      if (switcher) {
-        switcher.addEventListener('change', function() {
-          var lang = this.value;
-          window.location.href = '/change-lang/' + lang;
-        });
-      }
+          var toggle = document.getElementById('menuToggle');
+          var nav = document.getElementById('mainNav');
+          var overlay = document.getElementById('navOverlay');
+          var closeBtn = document.getElementById('drawerClose');
 
-      var toggle = document.getElementById('menuToggle');
-      var nav = document.getElementById('mainNav');
-      var overlay = document.getElementById('navOverlay');
-      var closeBtn = document.getElementById('drawerClose');
+          function openMenu() {
+            if (nav) nav.classList.add('open');
+            if (toggle) toggle.classList.add('open');
+            if (overlay) overlay.classList.add('open');
+            document.body.classList.add('menu-open');
+          }
 
-      function openMenu() {
-        if (nav) nav.classList.add('open');
-        if (toggle) toggle.classList.add('open');
-        if (overlay) overlay.classList.add('open');
-        document.body.classList.add('menu-open');
-      }
+          function closeMenu() {
+            if (nav) nav.classList.remove('open');
+            if (toggle) toggle.classList.remove('open');
+            if (overlay) overlay.classList.remove('open');
+            document.body.classList.remove('menu-open');
+          }
 
-      function closeMenu() {
-        if (nav) nav.classList.remove('open');
-        if (toggle) toggle.classList.remove('open');
-        if (overlay) overlay.classList.remove('open');
-        document.body.classList.remove('menu-open');
-      }
+          if (toggle) {
+            toggle.addEventListener('click', function () {
+              if (nav && nav.classList.contains('open')) {
+                closeMenu();
+              } else {
+                openMenu();
+              }
+            });
+          }
 
-      if (toggle) {
-        toggle.addEventListener('click', function() {
-          if (nav && nav.classList.contains('open')) {
-            closeMenu();
+          if (overlay) overlay.addEventListener('click', closeMenu);
+          if (closeBtn) closeBtn.addEventListener('click', closeMenu);
+
+          document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape' && nav && nav.classList.contains('open')) {
+              closeMenu();
+            }
+          });
+
+          var desktopNav = document.getElementById('desktopNavRow');
+      if (desktopNav) {
+        window.addEventListener('scroll', function() {
+          if (window.scrollY > 120) {
+            desktopNav.classList.add('is-sticky');
           } else {
-            openMenu();
+            desktopNav.classList.remove('is-sticky');
           }
         });
       }
 
-      if (overlay) overlay.addEventListener('click', closeMenu);
-      if (closeBtn) closeBtn.addEventListener('click', closeMenu);
-
-      document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape' && nav && nav.classList.contains('open')) {
-          closeMenu();
-        }
-      });
-
       var now = new Date();
-      var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-      var dateEl = document.getElementById('currentDate');
-      if (dateEl) {
-        dateEl.textContent = now.toLocaleDateString('<%= lang %>', options);
-      }
-    });
-  </script>
+          var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+          var dateEl = document.getElementById('currentDate');
+          if (dateEl) {
+            dateEl.textContent = now.toLocaleDateString('<%= lang %>', options);
+          }
+        });
+      </script>
 </body>
+
 </html>
