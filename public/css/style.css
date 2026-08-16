@@ -690,30 +690,36 @@ body.menu-open {
 /* 2. Standard Template (Grid Card) */
 .card-template-standard {
   background: #ffffff;
-  border-radius: 8px;
+  border-radius: 16px;
   overflow: hidden;
   border: 1px solid #e2e8f0;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.04);
   display: flex;
   flex-direction: column;
   height: 100%;
-  transition: transform 0.25s, box-shadow 0.25s;
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .card-template-standard:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 12px 20px -5px rgba(0, 0, 0, 0.08);
+  transform: translateY(-4px);
+  box-shadow: 0 14px 28px -6px rgba(15, 23, 42, 0.1);
 }
 
 .card-template-standard .article-card-img {
   width: 100%;
-  height: 180px;
+  aspect-ratio: 16 / 9;
+  height: auto;
   object-fit: cover;
   background: #f1f5f9;
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-template-standard:hover .article-card-img {
+  transform: scale(1.03);
 }
 
 .card-template-standard .article-card-body {
-  padding: 16px;
+  padding: 20px;
   display: flex;
   flex-direction: column;
   flex: 1;
@@ -1890,6 +1896,16 @@ textarea.form-control {
     gap: 8px !important;
   }
   
+  .grid-cols-2,
+  .grid-cols-3,
+  .grid-cols-4,
+  .related-grid,
+  .hero-grid,
+  .split-hero-grid {
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
+  }
+
   .hero-grid {
     grid-template-columns: 1fr !important;
     gap: 16px !important;
@@ -1936,7 +1952,8 @@ textarea.form-control {
   }
 
   .card-template-standard .article-card-img {
-    height: 190px !important;
+    aspect-ratio: 16 / 9 !important;
+    height: auto !important;
   }
 
   .card-template-standard .article-card-body {
