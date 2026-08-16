@@ -80,33 +80,48 @@
         </button>
       </div>
 
-      <!-- HEADER ROW 2: STICKY NAVIGATION BAR -->
+      <!-- HEADER ROW 2: STICKY NAVIGATION BAR (DESKTOP) -->
       <div class="header-nav-row">
-        <nav class="main-nav" id="mainNav">
-          <div class="drawer-header">
-            <div class="drawer-logo-title">
-              <img src="/images/khmer-new-logo.png" alt="Khmer News Logo" style="height: 32px; width: auto; object-fit: contain;">
-              <span class="brand-main" style="font-size: 1.25rem; font-weight: 900; line-height: 1;">Khmer<span class="brand-accent">News</span></span>
-            </div>
-            <button class="drawer-close" id="drawerClose" aria-label="Close menu">&times;</button>
-          </div>
+        <ul class="nav-links">
+          <li><a href="/" class="nav-link <%= title === 'Khmer News' ? 'active' : '' %>">🏠 <%= t('nav.home') %></a></li>
+          <% if (typeof categories !== 'undefined' && categories) { categories.forEach(function(c) { %>
+            <li><a href="/category/<%= c.slug %>" class="nav-link"><%= c[`name_${lang}`] %></a></li>
+          <% }) } %>
+        </ul>
 
-          <ul class="nav-links">
-            <li><a href="/" class="nav-link <%= title === 'Khmer News' ? 'active' : '' %>">🏠 <%= t('nav.home') %></a></li>
-            <% if (typeof categories !== 'undefined' && categories) { categories.forEach(function(c) { %>
-              <li><a href="/category/<%= c.slug %>" class="nav-link"><%= c[`name_${lang}`] %></a></li>
-            <% }) } %>
-          </ul>
-
-          <div class="nav-search-wrapper">
-            <form action="/search" method="GET" class="search-form-inline">
-              <input type="text" name="q" placeholder="<%= t('common.search_placeholder') %>" class="search-input-inline">
-              <button type="submit" class="search-btn"><%= t('nav.search') %></button>
-            </form>
-          </div>
-        </nav>
+        <div class="nav-search-wrapper">
+          <form action="/search" method="GET" class="search-form-inline">
+            <input type="text" name="q" placeholder="<%= t('common.search_placeholder') %>" class="search-input-inline">
+            <button type="submit" class="search-btn"><%= t('nav.search') %></button>
+          </form>
+        </div>
       </div>
     </div>
+
+    <!-- MOBILE SLIDE-OUT DRAWER SIDEBAR -->
+    <nav class="main-nav" id="mainNav">
+      <div class="drawer-header">
+        <div class="drawer-logo-title">
+          <img src="/images/khmer-new-logo.png" alt="Khmer News Logo" style="height: 32px; width: auto; object-fit: contain;">
+          <span class="brand-main" style="font-size: 1.25rem; font-weight: 900; line-height: 1;">Khmer<span class="brand-accent">News</span></span>
+        </div>
+        <button class="drawer-close" id="drawerClose" aria-label="Close menu">&times;</button>
+      </div>
+
+      <ul class="nav-links">
+        <li><a href="/" class="nav-link <%= title === 'Khmer News' ? 'active' : '' %>">🏠 <%= t('nav.home') %></a></li>
+        <% if (typeof categories !== 'undefined' && categories) { categories.forEach(function(c) { %>
+          <li><a href="/category/<%= c.slug %>" class="nav-link"><%= c[`name_${lang}`] %></a></li>
+        <% }) } %>
+      </ul>
+
+      <div class="nav-search-wrapper">
+        <form action="/search" method="GET" class="search-form-inline">
+          <input type="text" name="q" placeholder="<%= t('common.search_placeholder') %>" class="search-input-inline">
+          <button type="submit" class="search-btn"><%= t('nav.search') %></button>
+        </form>
+      </div>
+    </nav>
   </header>
 
   <% if (typeof siteSettings !== 'undefined' && siteSettings && (siteSettings.breaking_news_enabled == 1 || siteSettings.breaking_news_enabled === undefined)) { %>

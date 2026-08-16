@@ -275,8 +275,7 @@ img {
 
 /* Navigation */
 .main-nav {
-  display: flex;
-  align-items: center;
+  display: none;
 }
 
 body.menu-open {
@@ -1665,7 +1664,7 @@ textarea.form-control {
     overflow-y: auto;
   }
   .main-nav.open {
-    right: 0;
+    right: 0 !important;
   }
 
   .drawer-header {
