@@ -6,10 +6,10 @@
       <span>&rsaquo;</span>
       <a href="/category/<%= article.category_slug %>" style="color: var(--primary-color, #1e3a8a); font-weight: 600;"><%= article[`category_name_${lang}`] %></a>
       <span>&rsaquo;</span>
-      <span style="color: #94a3b8; max-width: 400px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><%= article[`title_${lang}`] %></span>
+      <span style="color: #94a3b8; max-width: 180px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><%= article[`title_${lang}`] %></span>
     </nav>
 
-    <div class="content-layout" style="display: grid; grid-template-columns: 2.5fr 1fr; gap: 32px;">
+    <div class="content-layout">
       <div class="main-column">
         <article class="article-detail" style="background: #ffffff; border-radius: 16px; padding: 36px; border: 1px solid #e2e8f0; box-shadow: 0 4px 20px -4px rgba(15,23,42,0.04);">
           <div class="article-header" style="margin-bottom: 24px;">

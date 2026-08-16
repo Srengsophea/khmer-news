@@ -42,11 +42,11 @@
   <header class="site-header">
     <div class="container">
       <!-- HEADER ROW 1: BRAND LOGO + AD BANNER -->
-      <div class="header-brand-ad-row" style="display: flex; align-items: center; justify-content: space-between; padding: 16px 0; border-bottom: 1px solid #f1f5f9; gap: 20px;">
-        <a href="/" class="brand" style="display: flex; flex-direction: row; align-items: center; gap: 14px; text-decoration: none;">
-          <img src="/images/khmer-new-logo.png" alt="Khmer News Logo" style="height: 64px; width: auto; object-fit: contain;">
-          <div style="display: flex; flex-direction: column;">
-            <span class="brand-main" style="font-size: 1.8rem; line-height: 1; font-weight: 900; color: #0f172a;">
+      <div class="header-brand-ad-row">
+        <a href="/" class="brand">
+          <img src="/images/khmer-new-logo.png" alt="Khmer News Logo" class="brand-logo-img">
+          <div class="brand-title-group">
+            <span class="brand-main">
               <% if (typeof siteSettings !== 'undefined' && siteSettings) { %>
                 <% var siteName = lang === 'km' ? (siteSettings.site_name_km || 'ខ្មែរញូស៍') : (siteSettings.site_name_en || 'Khmer News'); %>
                 <%- siteName.replace(/News/gi, '<span class="brand-accent">News</span>').replace(/ញូស៍/g, '<span class="brand-accent">ញូស៍</span>') %>
@@ -54,19 +54,19 @@
                 Khmer<span class="brand-accent">News</span>
               <% } %>
             </span>
-            <span class="brand-sub" style="margin-top: 4px; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.08em; color: #64748b;"><%= lang === 'km' ? 'ព័ត៌មានទាន់ហេតុការណ៍ ២៤/៧' : 'BREAKING NEWS 24/7' %></span>
+            <span class="brand-sub"><%= lang === 'km' ? 'ព័ត៌មានទាន់ហេតុការណ៍ ២៤/៧' : 'BREAKING NEWS 24/7' %></span>
           </div>
         </a>
 
         <% if (typeof siteSettings !== 'undefined' && siteSettings && siteSettings.header_banner_ad_enabled && typeof getAd === 'function') { %>
           <% var headerTopAd = getAd('header_top') || getAd('header'); %>
           <% if (headerTopAd) { %>
-            <div class="header-ad-frame" style="max-height: 80px; overflow: hidden; border-radius: 8px; border: 1px solid #e2e8f0; background: #fafafa; padding: 2px;">
+            <div class="header-ad-frame">
               <% if (headerTopAd.ad_type === 'html' && headerTopAd.html_code) { %>
                 <%- headerTopAd.html_code %>
               <% } else { %>
                 <a href="<%= headerTopAd.link_url || '#' %>" target="_blank" onclick="fetch('/api/ads/click/<%= headerTopAd.id %>', {method:'POST'})">
-                  <img src="<%= headerTopAd.image_url %>" alt="<%= headerTopAd.title %>" style="max-height: 74px; width: auto; object-fit: contain;">
+                  <img src="<%= headerTopAd.image_url %>" alt="<%= headerTopAd.title %>" class="header-ad-img">
                 </a>
               <% } %>
             </div>
@@ -81,8 +81,8 @@
       </div>
 
       <!-- HEADER ROW 2: STICKY NAVIGATION BAR -->
-      <div class="header-nav-row" style="display: flex; align-items: center; justify-content: space-between; padding: 10px 0;">
-        <nav class="main-nav" id="mainNav" style="width: 100%; display: flex; justify-content: space-between; align-items: center;">
+      <div class="header-nav-row">
+        <nav class="main-nav" id="mainNav">
           <div class="drawer-header">
             <div class="drawer-logo-title">
               <img src="/images/khmer-new-logo.png" alt="Khmer News Logo" style="height: 32px; width: auto; object-fit: contain;">
@@ -91,15 +91,15 @@
             <button class="drawer-close" id="drawerClose" aria-label="Close menu">&times;</button>
           </div>
 
-          <ul class="nav-links" style="display: flex; gap: 24px; align-items: center; margin: 0; padding: 0; list-style: none;">
+          <ul class="nav-links">
             <li><a href="/" class="nav-link <%= title === 'Khmer News' ? 'active' : '' %>">🏠 <%= t('nav.home') %></a></li>
             <% if (typeof categories !== 'undefined' && categories) { categories.forEach(function(c) { %>
               <li><a href="/category/<%= c.slug %>" class="nav-link"><%= c[`name_${lang}`] %></a></li>
             <% }) } %>
           </ul>
 
-          <div style="display: flex; align-items: center; gap: 16px;">
-            <form action="/search" method="GET" class="search-form-inline" style="margin: 0;">
+          <div class="nav-search-wrapper">
+            <form action="/search" method="GET" class="search-form-inline">
               <input type="text" name="q" placeholder="<%= t('common.search_placeholder') %>" class="search-input-inline">
               <button type="submit" class="search-btn"><%= t('nav.search') %></button>
             </form>
