@@ -1,14 +1,14 @@
 <div class="admin-page-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
   <div>
-    <h1 style="font-size: 1.75rem; font-weight: 800; color: #0f172a; margin: 0;">🧩 Visual Page Builder Studio</h1>
-    <p style="color: #64748b; margin-top: 4px; font-size: 0.95rem;">Drag, reorder, toggle, and visually design your homepage layout blocks without writing any code.</p>
+    <h1 style="font-size: 1.75rem; font-weight: 800; color: #0f172a; margin: 0;">🖱️ Visual Drag & Drop Layout Studio</h1>
+    <p style="color: #64748b; margin-top: 4px; font-size: 0.95rem;">Drag and drop section blocks to reorder, customize visual wireframes, or apply pre-designed templates with one click.</p>
   </div>
   <div style="display: flex; gap: 12px;">
     <a href="/" target="_blank" class="btn btn-outline" style="display: flex; align-items: center; gap: 8px;">
       🌐 View Live Website ↗
     </a>
     <button type="button" onclick="saveAllBlocks()" class="btn btn-primary" style="padding: 10px 24px; font-weight: 700; display: flex; align-items: center; gap: 8px;">
-      💾 Save Block Layout
+      💾 Save Layout Changes
     </button>
   </div>
 </div>
@@ -19,18 +19,43 @@
   </div>
 <% } %>
 
+<!-- PRESET LAYOUT TEMPLATES BAR -->
+<div style="background: linear-gradient(135deg, #1e3a8a, #0f172a); color: white; border-radius: 12px; padding: 20px; margin-bottom: 24px; box-shadow: 0 4px 12px rgba(15,23,42,0.15);">
+  <h3 style="font-size: 1.1rem; font-weight: 700; color: #ffffff; margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">
+    <span>⚡</span> Apply Pre-designed Homepage Templates
+  </h3>
+  <p style="font-size: 0.88rem; color: rgba(255,255,255,0.8); margin-bottom: 16px;">Select a layout template to automatically configure your homepage sections with professional design patterns.</p>
+
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px;">
+    <button type="button" onclick="applyTemplate('classic')" class="template-card-btn">
+      <strong style="display: block; font-size: 1rem; margin-bottom: 4px;">🏛️ Classic News Portal</strong>
+      <span style="font-size: 0.8rem; color: rgba(255,255,255,0.75);">3-Card Hero + Spotlight + National 3-Col + Mid Ad + Tech 2-Col</span>
+    </button>
+
+    <button type="button" onclick="applyTemplate('breaking')" class="template-card-btn">
+      <strong style="display: block; font-size: 1rem; margin-bottom: 4px;">⚡ Breaking Headlines</strong>
+      <span style="font-size: 0.8rem; color: rgba(255,255,255,0.75);">Wide Banner Hero + Sports Grid + Mid Ad + National List</span>
+    </button>
+
+    <button type="button" onclick="applyTemplate('magazine')" class="template-card-btn">
+      <strong style="display: block; font-size: 1rem; margin-bottom: 4px;">📰 Magazine & Editorial</strong>
+      <span style="font-size: 0.8rem; color: rgba(255,255,255,0.75);">Split Dual Hero + Tech Grid + Newsletter + Bottom Ad</span>
+    </button>
+  </div>
+</div>
+
 <!-- TAB NAVIGATION -->
 <div style="display: flex; border-bottom: 2px solid #e2e8f0; margin-bottom: 24px;">
-  <button type="button" id="tabBlocksBtn" class="studio-tab active" onclick="switchTab('blocks')">🧩 Homepage Section Builder</button>
+  <button type="button" id="tabBlocksBtn" class="studio-tab active" onclick="switchTab('blocks')">🧩 Section Blocks Canvas (Drag & Drop)</button>
   <button type="button" id="tabThemeBtn" class="studio-tab" onclick="switchTab('theme')">🎨 Brand Colors & Header Settings</button>
 </div>
 
-<!-- SECTION 1: VISUAL BLOCK BUILDER STUDIO -->
+<!-- SECTION 1: DRAG AND DROP BUILDER STUDIO -->
 <div id="blocksStudioSection" class="studio-section">
   
   <!-- ADD BLOCK ACTION BAR -->
   <div style="background: #ffffff; border-radius: 12px; padding: 20px; border: 1px solid #e2e8f0; margin-bottom: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.03);">
-    <h3 style="font-size: 1rem; font-weight: 700; color: #1e293b; margin-bottom: 12px;">➕ Add New Section Block to Homepage</h3>
+    <h3 style="font-size: 1rem; font-weight: 700; color: #1e293b; margin-bottom: 12px;">➕ Add Section Block to Canvas</h3>
     <div style="display: flex; gap: 12px; flex-wrap: wrap;">
       <button type="button" onclick="addNewBlock('category')" class="add-block-btn" style="background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe;">
         📰 Add Category News Grid
@@ -47,7 +72,7 @@
     </div>
   </div>
 
-  <!-- VISUAL CANVAS LIST OF BLOCKS -->
+  <!-- VISUAL DRAG & DROP CANVAS LIST -->
   <div id="blocksListContainer" style="display: flex; flex-direction: column; gap: 16px; margin-bottom: 32px;">
     <!-- Rendered dynamically by Javascript below -->
   </div>
@@ -61,7 +86,7 @@
       
       <!-- Primary Colors -->
       <div style="background: #ffffff; border-radius: 12px; padding: 24px; border: 1px solid #e2e8f0;">
-        <h3 style="font-size: 1.15rem; font-weight: 700; color: #1e293b; margin-bottom: 16px;">🎯 Brand Colors</h3>
+        <h3 style="font-size: 1.15rem; font-weight: 700; color: #1e293b; margin-bottom: 16px;">🎯 Brand Palette</h3>
         
         <div class="form-group" style="margin-bottom: 20px;">
           <label style="display: block; font-weight: 600; margin-bottom: 8px;">Primary Brand Color</label>
@@ -88,7 +113,7 @@
 
       <!-- Hero Style Defaults -->
       <div style="background: #ffffff; border-radius: 12px; padding: 24px; border: 1px solid #e2e8f0;">
-        <h3 style="font-size: 1.15rem; font-weight: 700; color: #1e293b; margin-bottom: 16px;">🖼️ Default Hero Display Mode</h3>
+        <h3 style="font-size: 1.15rem; font-weight: 700; color: #1e293b; margin-bottom: 16px;">🖼️ Default Hero Mode</h3>
         
         <div style="display: flex; flex-direction: column; gap: 12px;">
           <label style="display: flex; align-items: center; gap: 12px; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; cursor: pointer;">
@@ -144,6 +169,21 @@
 </div>
 
 <style>
+  .template-card-btn {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 8px;
+    padding: 14px;
+    color: white;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .template-card-btn:hover {
+    background: rgba(255,255,255,0.18);
+    border-color: rgba(255,255,255,0.4);
+    transform: translateY(-2px);
+  }
   .studio-tab {
     padding: 12px 24px;
     font-weight: 700;
@@ -172,14 +212,24 @@
   }
   .block-card {
     background: #ffffff;
-    border: 1px solid #e2e8f0;
+    border: 2px solid #e2e8f0;
     border-radius: 12px;
     padding: 20px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.02);
-    transition: border-color 0.2s;
+    transition: all 0.2s;
+    cursor: grab;
   }
-  .block-card:hover {
-    border-color: #cbd5e1;
+  .block-card:active {
+    cursor: grabbing;
+  }
+  .block-card.dragging {
+    opacity: 0.4;
+    border-style: dashed;
+    border-color: #3b82f6;
+  }
+  .block-card.drag-over {
+    border-color: #2563eb;
+    background: #eff6ff;
   }
   .badge-type {
     display: inline-block;
@@ -189,13 +239,29 @@
     font-weight: 700;
     text-transform: uppercase;
   }
+  .wireframe-preview {
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    padding: 8px;
+    margin-top: 8px;
+    display: flex;
+    gap: 4px;
+    height: 48px;
+    align-items: center;
+  }
+  .wf-box {
+    background: #e2e8f0;
+    border-radius: 4px;
+    height: 100%;
+    flex: 1;
+  }
 </style>
 
 <script>
-  // Categories dataset passed from backend
   var availableCategories = <%- JSON.stringify(categories) %>;
-  // Initial Blocks dataset passed from backend
   var blocks = <%- JSON.stringify(blocks) %>;
+  var dragSrcIndex = null;
 
   function renderBlocks() {
     var container = document.getElementById('blocksListContainer');
@@ -203,13 +269,24 @@
     container.innerHTML = '';
 
     if (!blocks || blocks.length === 0) {
-      container.innerHTML = '<div style="padding: 32px; text-align: center; color: #64748b; background: white; border-radius: 12px; border: 1px solid #e2e8f0;">No section blocks configured. Click any "Add New Section" button above to get started!</div>';
+      container.innerHTML = '<div style="padding: 32px; text-align: center; color: #64748b; background: white; border-radius: 12px; border: 1px solid #e2e8f0;">No section blocks configured. Apply a template above or add a section block!</div>';
       return;
     }
 
     blocks.forEach(function(block, idx) {
       var card = document.createElement('div');
       card.className = 'block-card';
+      card.draggable = true;
+      card.setAttribute('data-index', idx);
+
+      // Drag and drop event handlers
+      card.addEventListener('dragstart', handleDragStart);
+      card.addEventListener('dragover', handleDragOver);
+      card.addEventListener('dragenter', handleDragEnter);
+      card.addEventListener('dragleave', handleDragLeave);
+      card.addEventListener('drop', handleDrop);
+      card.addEventListener('dragend', handleDragEnd);
+
       if (!block.enabled) {
         card.style.opacity = '0.55';
         card.style.background = '#f8fafc';
@@ -221,15 +298,38 @@
       else if (block.type === 'ad_slot') { badgeBg = '#fef3c7'; badgeColor = '#92400e'; badgeText = 'AD BANNER SLOT'; }
       else if (block.type === 'newsletter') { badgeBg = '#f3e8ff'; badgeColor = '#6b21a8'; badgeText = 'NEWSLETTER CTA'; }
 
+      // Wireframe mini diagram
+      var wireframeHtml = '';
+      if (block.type === 'hero') {
+        if (block.style === 'single_hero_banner') {
+          wireframeHtml = '<div class="wireframe-preview"><div class="wf-box" style="background: #1e3a8a;"></div></div>';
+        } else if (block.style === 'split_2') {
+          wireframeHtml = '<div class="wireframe-preview"><div class="wf-box" style="background: #3b82f6;"></div><div class="wf-box" style="background: #3b82f6;"></div></div>';
+        } else {
+          wireframeHtml = '<div class="wireframe-preview"><div class="wf-box" style="flex:2; background: #1e3a8a;"></div><div style="display:flex; flex-direction:column; gap:2px; flex:1; height:100%;"><div class="wf-box"></div><div class="wf-box"></div></div></div>';
+        }
+      } else if (block.type === 'category') {
+        if (block.style === 'grid_3_col') {
+          wireframeHtml = '<div class="wireframe-preview"><div class="wf-box"></div><div class="wf-box"></div><div class="wf-box"></div></div>';
+        } else if (block.style === 'list_view') {
+          wireframeHtml = '<div class="wireframe-preview" style="flex-direction:column; gap:2px;"><div class="wf-box" style="height:12px;"></div><div class="wf-box" style="height:12px;"></div></div>';
+        } else {
+          wireframeHtml = '<div class="wireframe-preview"><div class="wf-box"></div><div class="wf-box"></div></div>';
+        }
+      } else if (block.type === 'ad_slot') {
+        wireframeHtml = '<div class="wireframe-preview"><div class="wf-box" style="background: #f59e0b; color: white; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 700;">AD BANNER SLOT</div></div>';
+      }
+
       var html = `
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
           <div style="display: flex; align-items: center; gap: 12px;">
+            <span style="cursor: grab; font-size: 1.2rem; color: #94a3b8;" title="Drag to reorder">⣿</span>
             <span class="badge-type" style="background: ${badgeBg}; color: ${badgeColor};">${badgeText}</span>
             <strong style="font-size: 1.1rem; color: #0f172a;">${block.title_km || block.title_en || 'Section Block'}</strong>
           </div>
           <div style="display: flex; align-items: center; gap: 8px;">
-            <button type="button" onclick="moveBlock(${idx}, -1)" ${idx === 0 ? 'disabled' : ''} style="padding: 4px 10px; border-radius: 6px; border: 1px solid #cbd5e1; background: white; cursor: pointer;">⬆️ Up</button>
-            <button type="button" onclick="moveBlock(${idx}, 1)" ${idx === blocks.length - 1 ? 'disabled' : ''} style="padding: 4px 10px; border-radius: 6px; border: 1px solid #cbd5e1; background: white; cursor: pointer;">⬇️ Down</button>
+            <button type="button" onclick="moveBlock(${idx}, -1)" ${idx === 0 ? 'disabled' : ''} style="padding: 4px 10px; border-radius: 6px; border: 1px solid #cbd5e1; background: white; cursor: pointer;">⬆️</button>
+            <button type="button" onclick="moveBlock(${idx}, 1)" ${idx === blocks.length - 1 ? 'disabled' : ''} style="padding: 4px 10px; border-radius: 6px; border: 1px solid #cbd5e1; background: white; cursor: pointer;">⬇️</button>
             <button type="button" onclick="toggleBlock(${idx})" style="padding: 4px 12px; border-radius: 6px; border: 1px solid #cbd5e1; background: ${block.enabled ? '#dcfce7' : '#fee2e2'}; color: ${block.enabled ? '#166534' : '#991b1b'}; font-weight: 700; cursor: pointer;">
               ${block.enabled ? '🟢 Visible' : '🔴 Hidden'}
             </button>
@@ -262,7 +362,7 @@
           </div>
           <div>
             <label style="font-size: 0.8rem; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Layout Column Mode</label>
-            <select onchange="updateBlock(${idx}, 'style', this.value)" style="width: 100%; padding: 6px 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.9rem;">
+            <select onchange="updateBlock(${idx}, 'style', this.value); renderBlocks();" style="width: 100%; padding: 6px 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.9rem;">
               <option value="grid_3_col" ${block.style === 'grid_3_col' ? 'selected' : ''}>3-Column Grid</option>
               <option value="grid_2_col" ${block.style === 'grid_2_col' ? 'selected' : ''}>2-Column Grid</option>
               <option value="list_view" ${block.style === 'list_view' ? 'selected' : ''}>Minimal List View</option>
@@ -277,7 +377,7 @@
         html += `
           <div>
             <label style="font-size: 0.8rem; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Hero Style Mode</label>
-            <select onchange="updateBlock(${idx}, 'style', this.value)" style="width: 100%; padding: 6px 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.9rem;">
+            <select onchange="updateBlock(${idx}, 'style', this.value); renderBlocks();" style="width: 100%; padding: 6px 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.9rem;">
               <option value="grid_3" ${block.style === 'grid_3' ? 'selected' : ''}>Standard 3-Card Grid</option>
               <option value="split_2" ${block.style === 'split_2' ? 'selected' : ''}>Split Dual Featured</option>
               <option value="single_hero_banner" ${block.style === 'single_hero_banner' ? 'selected' : ''}>Single Ultra-Wide Banner</option>
@@ -298,9 +398,40 @@
       }
 
       html += `</div>`;
+      if (wireframeHtml) html += wireframeHtml;
+
       card.innerHTML = html;
       container.appendChild(card);
     });
+  }
+
+  // HTML5 Drag and Drop handlers
+  function handleDragStart(e) {
+    dragSrcIndex = parseInt(this.getAttribute('data-index'));
+    this.classList.add('dragging');
+    e.dataTransfer.effectAllowed = 'move';
+  }
+  function handleDragOver(e) {
+    if (e.preventDefault) e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    return false;
+  }
+  function handleDragEnter() { this.classList.add('drag-over'); }
+  function handleDragLeave() { this.classList.remove('drag-over'); }
+  function handleDrop(e) {
+    if (e.stopPropagation) e.stopPropagation();
+    var targetIndex = parseInt(this.getAttribute('data-index'));
+    if (dragSrcIndex !== null && dragSrcIndex !== targetIndex) {
+      var item = blocks.splice(dragSrcIndex, 1)[0];
+      blocks.splice(targetIndex, 0, item);
+      renderBlocks();
+    }
+    return false;
+  }
+  function handleDragEnd() {
+    this.classList.remove('dragging');
+    var cards = document.querySelectorAll('.block-card');
+    cards.forEach(c => c.classList.remove('drag-over'));
   }
 
   function moveBlock(idx, dir) {
@@ -346,6 +477,37 @@
     }
     blocks.push(newBlock);
     renderBlocks();
+  }
+
+  function applyTemplate(tpl) {
+    if (!confirm('Apply this homepage template? This will update your section block arrangement.')) return;
+    
+    if (tpl === 'classic') {
+      blocks = [
+        { id: "b-hero", type: "hero", title_km: "ព័ត៌មានលេចធ្លោ", title_en: "Featured Showcase", style: "grid_3", enabled: true, limit: 3 },
+        { id: "b-spotlight", type: "spotlight", title_km: "ព័ត៌មានសំខាន់ប្រចាំថ្ងៃ", title_en: "Top Daily Spotlight", style: "wide_card", enabled: true, limit: 1 },
+        { id: "b-ad-mid", type: "ad_slot", title_km: "ផ្ទាំងពាណិជ្ជកម្មកណ្តាល", title_en: "Mid Banner", position_slot: "homepage_mid_banner", enabled: true },
+        { id: "b-cat-national", type: "category", category_id: 1, title_km: "ព័ត៌មានជាតិ", title_en: "National News", style: "grid_3_col", enabled: true, limit: 6 },
+        { id: "b-cat-tech", type: "category", category_id: 4, title_km: "បច្ចេកវិទ្យា", title_en: "Technology", style: "grid_2_col", enabled: true, limit: 4 },
+        { id: "b-newsletter", type: "newsletter", title_km: "ជាវព័ត៌មានប្រចាំថ្ងៃ", title_en: "Daily Newsletter", enabled: true }
+      ];
+    } else if (tpl === 'breaking') {
+      blocks = [
+        { id: "b-hero", type: "hero", title_km: "ព័ត៌មានទាន់ហេតុការណ៍", title_en: "Breaking Headlines", style: "single_hero_banner", enabled: true, limit: 1 },
+        { id: "b-cat-sports", type: "category", category_id: 3, title_km: "កីឡា", title_en: "Sports", style: "grid_3_col", enabled: true, limit: 6 },
+        { id: "b-ad-mid", type: "ad_slot", title_km: "ផ្ទាំងពាណិជ្ជកម្មកណ្តាល", title_en: "Mid Banner", position_slot: "homepage_mid_banner", enabled: true },
+        { id: "b-cat-national", type: "category", category_id: 1, title_km: "ព័ត៌មានជាតិ", title_en: "National News", style: "list_view", enabled: true, limit: 4 }
+      ];
+    } else if (tpl === 'magazine') {
+      blocks = [
+        { id: "b-hero", type: "hero", title_km: "ទស្សនាវដ្តីព័ត៌មាន", title_en: "Editorial Magazine", style: "split_2", enabled: true, limit: 2 },
+        { id: "b-cat-tech", type: "category", category_id: 4, title_km: "បច្ចេកវិទ្យា", title_en: "Technology", style: "grid_2_col", enabled: true, limit: 4 },
+        { id: "b-newsletter", type: "newsletter", title_km: "ជាវព័ត៌មានប្រចាំថ្ងៃ", title_en: "Daily Newsletter", enabled: true },
+        { id: "b-ad-bottom", type: "ad_slot", title_km: "ផ្ទាំងពាណិជ្ជកម្មខាងក្រោម", title_en: "Bottom Banner", position_slot: "homepage_bottom_banner", enabled: true }
+      ];
+    }
+    renderBlocks();
+    saveAllBlocks();
   }
 
   function saveAllBlocks() {
