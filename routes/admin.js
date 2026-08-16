@@ -142,12 +142,22 @@ router.get('/layout', requireAdmin, (req, res) => {
   const db = getDb();
   const lang = req.lang;
   db.get("SELECT * FROM settings WHERE id = 1", [], (err, settings) => {
-    res.render('admin/layout_manager', {
-      title: 'Layout & Theme Studio',
-      settings: settings || {},
-      lang,
-      success: req.query.success || null,
-      adminUser: req.session.adminUser
+    db.all("SELECT * FROM categories ORDER BY id", [], (err2, categories) => {
+      let blocks = [];
+      try {
+        blocks = settings && settings.homepage_blocks ? JSON.parse(settings.homepage_blocks) : [];
+      } catch (e) {
+        blocks = [];
+      }
+      res.render('admin/layout_manager', {
+        title: 'Layout & Theme Studio',
+        settings: settings || {},
+        blocks: blocks,
+        categories: categories || [],
+        lang,
+        success: req.query.success || null,
+        adminUser: req.session.adminUser
+      });
     });
   });
 });
@@ -157,21 +167,33 @@ router.post('/layout/save', requireAdmin, express.urlencoded({ extended: false }
   const {
     primary_color, accent_color, hero_layout_style,
     breaking_news_enabled, breaking_news_text_km, breaking_news_text_en,
-    header_banner_ad_enabled, sidebar_position, custom_css
+    header_banner_ad_enabled, sidebar_position, custom_css, homepage_blocks
   } = req.body;
 
   db.run(`
     UPDATE settings SET
       primary_color = ?, accent_color = ?, hero_layout_style = ?,
       breaking_news_enabled = ?, breaking_news_text_km = ?, breaking_news_text_en = ?,
-      header_banner_ad_enabled = ?, sidebar_position = ?, custom_css = ?
+      header_banner_ad_enabled = ?, sidebar_position = ?, custom_css = ?,
+      homepage_blocks = COALESCE(NULLIF(?, ''), homepage_blocks)
     WHERE id = 1
   `, [
     primary_color || '#1e3a8a', accent_color || '#dc2626', hero_layout_style || 'grid_3',
     breaking_news_enabled ? 1 : 0, breaking_news_text_km || '', breaking_news_text_en || '',
-    header_banner_ad_enabled ? 1 : 0, sidebar_position || 'right', custom_css || ''
+    header_banner_ad_enabled ? 1 : 0, sidebar_position || 'right', custom_css || '',
+    homepage_blocks || ''
   ], (err) => {
     res.redirect('/admin/layout?success=Layout+and+theme+updated+successfully');
+  });
+});
+
+router.post('/layout/blocks/save', requireAdmin, express.json(), (req, res) => {
+  const db = getDb();
+  const { blocks } = req.body;
+  const blocksJson = JSON.stringify(blocks || []);
+  db.run("UPDATE settings SET homepage_blocks = ? WHERE id = 1", [blocksJson], (err) => {
+    if (err) return res.status(500).json({ error: 'Save failed' });
+    res.json({ success: true });
   });
 });
 

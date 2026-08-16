@@ -5,21 +5,42 @@ const { getDb } = require('../database');
 router.get('/', (req, res) => {
   const db = getDb();
   const lang = req.lang;
+  
   db.all(
-    `SELECT a.*, c.slug as category_slug, c.name_km as category_name_km, c.name_en as category_name_en FROM articles a LEFT JOIN categories c ON a.category_id = c.id ORDER BY a.created_at DESC LIMIT 10`,
+    `SELECT a.*, c.slug as category_slug, c.name_km as category_name_km, c.name_en as category_name_en FROM articles a LEFT JOIN categories c ON a.category_id = c.id ORDER BY a.created_at DESC`,
     [],
-    (err, articles) => {
+    (err, allArticles) => {
       db.all(`SELECT * FROM categories ORDER BY id`, [], (err2, categories) => {
         db.all(
           `SELECT a.*, c.slug as category_slug, c.name_km as category_name_km, c.name_en as category_name_en FROM articles a LEFT JOIN categories c ON a.category_id = c.id WHERE a.is_featured = 1 ORDER BY a.created_at DESC LIMIT 5`,
           [],
           (err3, featured) => {
-            res.render('index', {
-              articles,
-              categories,
-              featured,
-              lang,
-              title: 'Khmer News'
+            db.get("SELECT homepage_blocks FROM settings WHERE id = 1", [], (err4, setRow) => {
+              let blocks = [];
+              try {
+                blocks = setRow && setRow.homepage_blocks ? JSON.parse(setRow.homepage_blocks) : [];
+              } catch (e) {
+                blocks = [];
+              }
+
+              // Group articles by category_id
+              const articlesByCat = {};
+              (allArticles || []).forEach(a => {
+                if (a.category_id) {
+                  if (!articlesByCat[a.category_id]) articlesByCat[a.category_id] = [];
+                  articlesByCat[a.category_id].push(a);
+                }
+              });
+
+              res.render('index', {
+                articles: allArticles || [],
+                articlesByCat: articlesByCat,
+                homepageBlocks: blocks,
+                categories: categories || [],
+                featured: (featured && featured.length > 0) ? featured : (allArticles || []).slice(0, 3),
+                lang,
+                title: 'Khmer News'
+              });
             });
           }
         );

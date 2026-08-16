@@ -221,7 +221,7 @@ img {
 }
 
 .brand-accent {
-  color: #b91c1c;
+  color: var(--accent-color, #dc2626);
 }
 
 /* Navigation */
@@ -274,8 +274,8 @@ body.menu-open {
 
 .nav-link:hover,
 .nav-link.active {
-  color: #b91c1c;
-  border-bottom-color: #b91c1c;
+  color: var(--primary-color, #1e3a8a);
+  border-bottom-color: var(--accent-color, #dc2626);
 }
 
 /* Search Box Inline */
@@ -291,9 +291,9 @@ body.menu-open {
 }
 
 .search-form-inline:focus-within {
-  border-color: #b91c1c;
+  border-color: var(--primary-color, #1e3a8a);
   background: #ffffff;
-  box-shadow: 0 0 0 3px rgba(185, 28, 28, 0.08);
+  box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1);
 }
 
 .search-input-inline {
@@ -312,7 +312,7 @@ body.menu-open {
 }
 
 .search-btn {
-  background: #b91c1c;
+  background: var(--primary-color, #1e3a8a);
   color: #ffffff;
   border: none;
   border-radius: 30px;
@@ -324,7 +324,7 @@ body.menu-open {
 }
 
 .search-btn:hover {
-  background: #991b1b;
+  background: var(--accent-color, #dc2626);
 }
 
 /* Lang Switcher */

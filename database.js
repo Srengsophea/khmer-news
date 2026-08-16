@@ -101,6 +101,7 @@ function runMigrations(callback) {
     "ALTER TABLE settings ADD COLUMN header_banner_ad_enabled INTEGER DEFAULT 1",
     "ALTER TABLE settings ADD COLUMN sidebar_position TEXT DEFAULT 'right'",
     "ALTER TABLE settings ADD COLUMN custom_css TEXT DEFAULT ''",
+    "ALTER TABLE settings ADD COLUMN homepage_blocks TEXT DEFAULT ''",
     "ALTER TABLE ads ADD COLUMN ad_type TEXT DEFAULT 'image'",
     "ALTER TABLE ads ADD COLUMN html_code TEXT DEFAULT ''",
     "ALTER TABLE ads ADD COLUMN click_count INTEGER DEFAULT 0",
@@ -124,9 +125,29 @@ function runMigrations(callback) {
 }
 
 function ensureDefaultSettings(callback) {
+  const defaultBlocks = JSON.stringify([
+    { id: "b-hero", type: "hero", title_km: "ព័ត៌មានលេចធ្លោ", title_en: "Featured Showcase", style: "grid_3", enabled: true, limit: 3 },
+    { id: "b-spotlight", type: "spotlight", title_km: "ព័ត៌មានសំខាន់ប្រចាំថ្ងៃ", title_en: "Top Spotlight", style: "wide_card", enabled: true, limit: 1 },
+    { id: "b-ad-mid", type: "ad_slot", title_km: "ផ្ទាំងពាណិជ្ជកម្មកណ្តាល", title_en: "Mid Content Banner", position_slot: "homepage_mid_banner", enabled: true },
+    { id: "b-cat-national", type: "category", category_id: 1, title_km: "ព័ត៌មានជាតិ", title_en: "National News", style: "grid_3_col", enabled: true, limit: 6 },
+    { id: "b-cat-tech", type: "category", category_id: 4, title_km: "បច្ចេកវិទ្យា", title_en: "Technology", style: "grid_2_col", enabled: true, limit: 4 },
+    { id: "b-cat-sports", type: "category", category_id: 3, title_km: "កីឡា", title_en: "Sports", style: "list_view", enabled: true, limit: 4 },
+    { id: "b-ad-bottom", type: "ad_slot", title_km: "ផ្ទាំងពាណិជ្ជកម្មខាងក្រោម", title_en: "Bottom Banner", position_slot: "homepage_bottom_banner", enabled: true },
+    { id: "b-newsletter", type: "newsletter", title_km: "ជាវព័ត៌មានប្រចាំថ្ងៃ", title_en: "Subscribe Newsletter", enabled: true }
+  ]);
+
   db.get("SELECT COUNT(*) as c FROM settings", (err, row) => {
     if (err || (row && row.c > 0)) {
-      if (callback) callback();
+      // Ensure homepage_blocks is initialized if empty
+      db.get("SELECT homepage_blocks FROM settings WHERE id = 1", [], (e, sRow) => {
+        if (sRow && (!sRow.homepage_blocks || sRow.homepage_blocks.trim() === '')) {
+          db.run("UPDATE settings SET homepage_blocks = ? WHERE id = 1", [defaultBlocks], () => {
+            if (callback) callback();
+          });
+        } else {
+          if (callback) callback();
+        }
+      });
       return;
     }
     db.run(`
@@ -135,7 +156,7 @@ function ensureDefaultSettings(callback) {
         contact_phone, contact_email, contact_address_km, contact_address_en,
         social_facebook, social_telegram, social_youtube, social_twitter,
         primary_color, accent_color, hero_layout_style, breaking_news_enabled,
-        breaking_news_text_km, breaking_news_text_en, header_banner_ad_enabled, sidebar_position
+        breaking_news_text_km, breaking_news_text_en, header_banner_ad_enabled, sidebar_position, homepage_blocks
       ) VALUES (
         1, 'ខ្មែរញូស៍', 'Khmer News',
         'ប្រភពព័ត៌មានឈានមុខគេ និងទាន់ហេតុការណ៍នៅកម្ពុជា',
@@ -146,9 +167,9 @@ function ensureDefaultSettings(callback) {
         '#1e3a8a', '#dc2626', 'grid_3', 1,
         'ព័ត៌មានទាន់ហេតុការណ៍៖ កម្ពុជាប្រកាសគម្រោងអភិវឌ្ឍន៍ហេដ្ឋារចនាសម្ព័ន្ធបច្ចេកវិទ្យាថ្មី',
         'BREAKING NEWS: Cambodia Announces Major Tech & Infrastructure Expansion Project',
-        1, 'right'
+        1, 'right', ?
       )
-    `, [], () => {
+    `, [defaultBlocks], () => {
       if (callback) callback();
     });
   });

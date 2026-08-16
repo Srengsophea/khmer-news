@@ -1,11 +1,16 @@
 <div class="admin-page-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
   <div>
-    <h1 style="font-size: 1.75rem; font-weight: 800; color: #0f172a; margin: 0;">🎨 Layout & Theme Studio</h1>
-    <p style="color: #64748b; margin-top: 4px; font-size: 0.95rem;">Customize your news website layout, theme colors, breaking ticker, and section displays dynamically.</p>
+    <h1 style="font-size: 1.75rem; font-weight: 800; color: #0f172a; margin: 0;">🧩 Visual Page Builder Studio</h1>
+    <p style="color: #64748b; margin-top: 4px; font-size: 0.95rem;">Drag, reorder, toggle, and visually design your homepage layout blocks without writing any code.</p>
   </div>
-  <a href="/" target="_blank" class="btn btn-outline" style="display: flex; align-items: center; gap: 8px;">
-    👁️ Live Preview Website
-  </a>
+  <div style="display: flex; gap: 12px;">
+    <a href="/" target="_blank" class="btn btn-outline" style="display: flex; align-items: center; gap: 8px;">
+      🌐 View Live Website ↗
+    </a>
+    <button type="button" onclick="saveAllBlocks()" class="btn btn-primary" style="padding: 10px 24px; font-weight: 700; display: flex; align-items: center; gap: 8px;">
+      💾 Save Block Layout
+    </button>
+  </div>
 </div>
 
 <% if (typeof success !== 'undefined' && success) { %>
@@ -14,156 +19,364 @@
   </div>
 <% } %>
 
-<form action="/admin/layout/save" method="POST">
-  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 32px;">
-    
-    <!-- CARD 1: Theme & Color Palette -->
-    <div style="background: #ffffff; border-radius: 12px; padding: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); border: 1px solid #e2e8f0;">
-      <h3 style="font-size: 1.15rem; font-weight: 700; color: #1e293b; margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
-        <span>🎯</span> Brand Theme & Accent Colors
-      </h3>
-      
-      <div class="form-group" style="margin-bottom: 20px;">
-        <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #334155;">Primary Brand Color</label>
-        <div style="display: flex; gap: 12px; align-items: center;">
-          <input type="color" id="primaryColorPicker" name="primary_color" value="<%= settings.primary_color || '#1e3a8a' %>" style="width: 50px; height: 42px; border: 1px solid #cbd5e1; border-radius: 6px; cursor: pointer; padding: 2px;">
-          <input type="text" id="primaryColorText" value="<%= settings.primary_color || '#1e3a8a' %>" style="flex: 1; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 6px; font-family: monospace; font-size: 1rem;" readonly>
-        </div>
-        <div style="display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap;">
-          <button type="button" class="preset-btn" onclick="setPrimary('#1e3a8a')" style="background: #1e3a8a; color: white; border: none; padding: 6px 12px; border-radius: 6px; font-size: 0.8rem; cursor: pointer;">Royal Blue</button>
-          <button type="button" class="preset-btn" onclick="setPrimary('#b91c1c')" style="background: #b91c1c; color: white; border: none; padding: 6px 12px; border-radius: 6px; font-size: 0.8rem; cursor: pointer;">Crimson News</button>
-          <button type="button" class="preset-btn" onclick="setPrimary('#047857')" style="background: #047857; color: white; border: none; padding: 6px 12px; border-radius: 6px; font-size: 0.8rem; cursor: pointer;">Emerald Tech</button>
-          <button type="button" class="preset-btn" onclick="setPrimary('#5b21b6')" style="background: #5b21b6; color: white; border: none; padding: 6px 12px; border-radius: 6px; font-size: 0.8rem; cursor: pointer;">Deep Purple</button>
-          <button type="button" class="preset-btn" onclick="setPrimary('#0f172a')" style="background: #0f172a; color: white; border: none; padding: 6px 12px; border-radius: 6px; font-size: 0.8rem; cursor: pointer;">Dark Slate</button>
-        </div>
-      </div>
+<!-- TAB NAVIGATION -->
+<div style="display: flex; border-bottom: 2px solid #e2e8f0; margin-bottom: 24px;">
+  <button type="button" id="tabBlocksBtn" class="studio-tab active" onclick="switchTab('blocks')">🧩 Homepage Section Builder</button>
+  <button type="button" id="tabThemeBtn" class="studio-tab" onclick="switchTab('theme')">🎨 Brand Colors & Header Settings</button>
+</div>
 
-      <div class="form-group" style="margin-bottom: 20px;">
-        <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #334155;">Accent Tag & Badge Color</label>
-        <div style="display: flex; gap: 12px; align-items: center;">
-          <input type="color" id="accentColorPicker" name="accent_color" value="<%= settings.accent_color || '#dc2626' %>" style="width: 50px; height: 42px; border: 1px solid #cbd5e1; border-radius: 6px; cursor: pointer; padding: 2px;">
-          <input type="text" id="accentColorText" value="<%= settings.accent_color || '#dc2626' %>" style="flex: 1; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 6px; font-family: monospace; font-size: 1rem;" readonly>
-        </div>
-      </div>
+<!-- SECTION 1: VISUAL BLOCK BUILDER STUDIO -->
+<div id="blocksStudioSection" class="studio-section">
+  
+  <!-- ADD BLOCK ACTION BAR -->
+  <div style="background: #ffffff; border-radius: 12px; padding: 20px; border: 1px solid #e2e8f0; margin-bottom: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.03);">
+    <h3 style="font-size: 1rem; font-weight: 700; color: #1e293b; margin-bottom: 12px;">➕ Add New Section Block to Homepage</h3>
+    <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+      <button type="button" onclick="addNewBlock('category')" class="add-block-btn" style="background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe;">
+        📰 Add Category News Grid
+      </button>
+      <button type="button" onclick="addNewBlock('ad_slot')" class="add-block-btn" style="background: #fefce8; color: #a16207; border: 1px solid #fef08a;">
+        📣 Add Ad Banner Slot
+      </button>
+      <button type="button" onclick="addNewBlock('spotlight')" class="add-block-btn" style="background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0;">
+        ⭐ Add Spotlight Feature Block
+      </button>
+      <button type="button" onclick="addNewBlock('newsletter')" class="add-block-btn" style="background: #faf5ff; color: #7e22ce; border: 1px solid #e9d5ff;">
+        📬 Add Newsletter CTA Widget
+      </button>
     </div>
+  </div>
 
-    <!-- CARD 2: Hero Layout Style -->
-    <div style="background: #ffffff; border-radius: 12px; padding: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); border: 1px solid #e2e8f0;">
-      <h3 style="font-size: 1.15rem; font-weight: 700; color: #1e293b; margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
-        <span>🖼️</span> Hero Showcase Layout Mode
-      </h3>
+  <!-- VISUAL CANVAS LIST OF BLOCKS -->
+  <div id="blocksListContainer" style="display: flex; flex-direction: column; gap: 16px; margin-bottom: 32px;">
+    <!-- Rendered dynamically by Javascript below -->
+  </div>
+
+</div>
+
+<!-- SECTION 2: THEME & BRAND COLOR SETTINGS -->
+<div id="themeStudioSection" class="studio-section" style="display: none;">
+  <form action="/admin/layout/save" method="POST">
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 32px;">
       
-      <div class="form-group" style="margin-bottom: 20px;">
-        <label style="display: block; font-weight: 600; margin-bottom: 12px; color: #334155;">Select Hero Display Style</label>
+      <!-- Primary Colors -->
+      <div style="background: #ffffff; border-radius: 12px; padding: 24px; border: 1px solid #e2e8f0;">
+        <h3 style="font-size: 1.15rem; font-weight: 700; color: #1e293b; margin-bottom: 16px;">🎯 Brand Colors</h3>
+        
+        <div class="form-group" style="margin-bottom: 20px;">
+          <label style="display: block; font-weight: 600; margin-bottom: 8px;">Primary Brand Color</label>
+          <div style="display: flex; gap: 12px; align-items: center;">
+            <input type="color" id="primaryColorPicker" name="primary_color" value="<%= settings.primary_color || '#1e3a8a' %>" style="width: 50px; height: 42px; border-radius: 6px; cursor: pointer; padding: 2px;">
+            <input type="text" id="primaryColorText" value="<%= settings.primary_color || '#1e3a8a' %>" style="flex: 1; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 6px; font-family: monospace;" readonly>
+          </div>
+          <div style="display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap;">
+            <button type="button" onclick="setPrimary('#1e3a8a')" style="background: #1e3a8a; color: white; border: none; padding: 6px 12px; border-radius: 6px; font-size: 0.8rem; cursor: pointer;">Royal Blue</button>
+            <button type="button" onclick="setPrimary('#b91c1c')" style="background: #b91c1c; color: white; border: none; padding: 6px 12px; border-radius: 6px; font-size: 0.8rem; cursor: pointer;">Crimson News</button>
+            <button type="button" onclick="setPrimary('#047857')" style="background: #047857; color: white; border: none; padding: 6px 12px; border-radius: 6px; font-size: 0.8rem; cursor: pointer;">Emerald Tech</button>
+            <button type="button" onclick="setPrimary('#5b21b6')" style="background: #5b21b6; color: white; border: none; padding: 6px 12px; border-radius: 6px; font-size: 0.8rem; cursor: pointer;">Deep Purple</button>
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 20px;">
+          <label style="display: block; font-weight: 600; margin-bottom: 8px;">Accent Badge Color</label>
+          <div style="display: flex; gap: 12px; align-items: center;">
+            <input type="color" id="accentColorPicker" name="accent_color" value="<%= settings.accent_color || '#dc2626' %>" style="width: 50px; height: 42px; border-radius: 6px; cursor: pointer; padding: 2px;">
+            <input type="text" id="accentColorText" value="<%= settings.accent_color || '#dc2626' %>" style="flex: 1; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 6px; font-family: monospace;" readonly>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hero Style Defaults -->
+      <div style="background: #ffffff; border-radius: 12px; padding: 24px; border: 1px solid #e2e8f0;">
+        <h3 style="font-size: 1.15rem; font-weight: 700; color: #1e293b; margin-bottom: 16px;">🖼️ Default Hero Display Mode</h3>
         
         <div style="display: flex; flex-direction: column; gap: 12px;">
-          <label style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; border: 1px solid #cbd5e1; border-radius: 8px; cursor: pointer; background: <%= settings.hero_layout_style === 'grid_3' ? '#f0f9ff' : '#ffffff' %>;">
+          <label style="display: flex; align-items: center; gap: 12px; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; cursor: pointer;">
             <input type="radio" name="hero_layout_style" value="grid_3" <%= (settings.hero_layout_style === 'grid_3' || !settings.hero_layout_style) ? 'checked' : '' %>>
             <div>
-              <strong style="display: block; color: #0f172a;">Standard 3-Card Grid (1 Hero + 2 Side Stories)</strong>
-              <span style="font-size: 0.85rem; color: #64748b;">Classic news layout featuring 1 large story on left and 2 stacked stories on right.</span>
+              <strong style="display: block; color: #0f172a;">Standard 3-Card Grid (1 Main + 2 Side)</strong>
             </div>
           </label>
-
-          <label style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; border: 1px solid #cbd5e1; border-radius: 8px; cursor: pointer; background: <%= settings.hero_layout_style === 'split_2' ? '#f0f9ff' : '#ffffff' %>;">
+          <label style="display: flex; align-items: center; gap: 12px; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; cursor: pointer;">
             <input type="radio" name="hero_layout_style" value="split_2" <%= settings.hero_layout_style === 'split_2' ? 'checked' : '' %>>
             <div>
               <strong style="display: block; color: #0f172a;">Split Dual Featured (2 Equal Columns)</strong>
-              <span style="font-size: 0.85rem; color: #64748b;">Two large featured article cards side by side with modern overlay tags.</span>
             </div>
           </label>
-
-          <label style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; border: 1px solid #cbd5e1; border-radius: 8px; cursor: pointer; background: <%= settings.hero_layout_style === 'single_hero_banner' ? '#f0f9ff' : '#ffffff' %>;">
+          <label style="display: flex; align-items: center; gap: 12px; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; cursor: pointer;">
             <input type="radio" name="hero_layout_style" value="single_hero_banner" <%= settings.hero_layout_style === 'single_hero_banner' ? 'checked' : '' %>>
             <div>
               <strong style="display: block; color: #0f172a;">Single Ultra-Wide Hero Banner</strong>
-              <span style="font-size: 0.85rem; color: #64748b;">Full width panoramic top headline banner for major breaking cover stories.</span>
             </div>
           </label>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- CARD 3: Breaking News Ticker Settings -->
-  <div style="background: #ffffff; border-radius: 12px; padding: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; margin-bottom: 32px;">
-    <h3 style="font-size: 1.15rem; font-weight: 700; color: #1e293b; margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
-      <span>⚡</span> Live Breaking News Ticker
-    </h3>
-
-    <div style="margin-bottom: 20px;">
-      <label style="display: flex; align-items: center; gap: 10px; font-weight: 600; color: #1e293b; cursor: pointer;">
-        <input type="checkbox" name="breaking_news_enabled" value="1" <%= (settings.breaking_news_enabled == 1 || settings.breaking_news_enabled === undefined) ? 'checked' : '' %> style="width: 18px; height: 18px;">
-        Enable Live Animated Breaking News Ticker Bar
-      </label>
-    </div>
-
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-      <div>
-        <label style="display: block; font-weight: 600; margin-bottom: 6px; color: #334155;">Custom Breaking Ticker Text (Khmer)</label>
-        <input type="text" name="breaking_news_text_km" value="<%= settings.breaking_news_text_km || '' %>" placeholder="បញ្ចូលអត្ថបទព័ត៌មានទាន់ហេតុការណ៍..." style="width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.95rem;">
-        <span style="font-size: 0.8rem; color: #64748b;">Leave blank to automatically use latest published article titles.</span>
-      </div>
-      <div>
-        <label style="display: block; font-weight: 600; margin-bottom: 6px; color: #334155;">Custom Breaking Ticker Text (English)</label>
-        <input type="text" name="breaking_news_text_en" value="<%= settings.breaking_news_text_en || '' %>" placeholder="Enter custom breaking headline text..." style="width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.95rem;">
-        <span style="font-size: 0.8rem; color: #64748b;">Leave blank to automatically use latest published article titles.</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- CARD 4: Header Ad & Sidebar Layout -->
-  <div style="background: #ffffff; border-radius: 12px; padding: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; margin-bottom: 32px;">
-    <h3 style="font-size: 1.15rem; font-weight: 700; color: #1e293b; margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
-      <span>📐</span> Header Banner Ad & Sidebar Settings
-    </h3>
-
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-      <div>
-        <label style="display: flex; align-items: center; gap: 10px; font-weight: 600; color: #1e293b; cursor: pointer; margin-bottom: 8px;">
-          <input type="checkbox" name="header_banner_ad_enabled" value="1" <%= (settings.header_banner_ad_enabled == 1 || settings.header_banner_ad_enabled === undefined) ? 'checked' : '' %> style="width: 18px; height: 18px;">
-          Display Header Banner Ad Slot (Next to logo)
+    <!-- Ticker and Custom CSS -->
+    <div style="background: #ffffff; border-radius: 12px; padding: 24px; border: 1px solid #e2e8f0; margin-bottom: 32px;">
+      <h3 style="font-size: 1.15rem; font-weight: 700; color: #1e293b; margin-bottom: 16px;">⚡ Live Breaking News Ticker</h3>
+      <div style="margin-bottom: 16px;">
+        <label style="display: flex; align-items: center; gap: 10px; font-weight: 600; cursor: pointer;">
+          <input type="checkbox" name="breaking_news_enabled" value="1" <%= (settings.breaking_news_enabled == 1 || settings.breaking_news_enabled === undefined) ? 'checked' : '' %> style="width: 18px; height: 18px;">
+          Enable Live Breaking News Ticker Bar
         </label>
-        <span style="font-size: 0.85rem; color: #64748b; display: block;">Shows active 'header_top' ad in the header area next to logo.</span>
+      </div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px;">
+        <div>
+          <label style="display: block; font-weight: 600; margin-bottom: 6px;">Ticker Text (Khmer)</label>
+          <input type="text" name="breaking_news_text_km" value="<%= settings.breaking_news_text_km || '' %>" style="width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 6px;">
+        </div>
+        <div>
+          <label style="display: block; font-weight: 600; margin-bottom: 6px;">Ticker Text (English)</label>
+          <input type="text" name="breaking_news_text_en" value="<%= settings.breaking_news_text_en || '' %>" style="width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 6px;">
+        </div>
       </div>
 
-      <div>
-        <label style="display: block; font-weight: 600; margin-bottom: 6px; color: #334155;">Sidebar Position</label>
-        <select name="sidebar_position" style="width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.95rem;">
-          <option value="right" <%= settings.sidebar_position === 'right' ? 'selected' : '' %>>Right Sidebar (Standard)</option>
-          <option value="left" <%= settings.sidebar_position === 'left' ? 'selected' : '' %>>Left Sidebar</option>
-        </select>
-      </div>
+      <h3 style="font-size: 1.15rem; font-weight: 700; color: #1e293b; margin-bottom: 16px;">💻 Custom CSS Code</h3>
+      <textarea name="custom_css" rows="4" style="width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-family: monospace;" placeholder="/* Custom CSS */"><%= settings.custom_css || '' %></textarea>
     </div>
-  </div>
 
-  <!-- CARD 5: Custom CSS Overrides -->
-  <div style="background: #ffffff; border-radius: 12px; padding: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; margin-bottom: 32px;">
-    <h3 style="font-size: 1.15rem; font-weight: 700; color: #1e293b; margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
-      <span>💻</span> Custom CSS Injection
-    </h3>
-    <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #334155;">Add Custom CSS Rules (Applied live to website header)</label>
-    <textarea name="custom_css" rows="4" style="width: 100%; padding: 12px 14px; border: 1px solid #cbd5e1; border-radius: 6px; font-family: monospace; font-size: 0.9rem;" placeholder="/* Example: .site-header { background: #0f172a; } */"><%= settings.custom_css || '' %></textarea>
-  </div>
-
-  <div style="display: flex; gap: 16px;">
-    <button type="submit" class="btn btn-primary" style="padding: 12px 32px; font-size: 1.05rem; font-weight: 700; border-radius: 8px; cursor: pointer;">
-      💾 Save Layout & Theme Changes
+    <button type="submit" class="btn btn-primary" style="padding: 12px 32px; font-weight: 700; border-radius: 8px;">
+      💾 Save Theme & Brand Settings
     </button>
-  </div>
-</form>
+  </form>
+</div>
+
+<style>
+  .studio-tab {
+    padding: 12px 24px;
+    font-weight: 700;
+    font-size: 1rem;
+    border: none;
+    background: transparent;
+    color: #64748b;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s;
+  }
+  .studio-tab.active {
+    color: #1e3a8a;
+    border-bottom-color: #1e3a8a;
+  }
+  .add-block-btn {
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: transform 0.15s;
+  }
+  .add-block-btn:hover {
+    transform: translateY(-2px);
+  }
+  .block-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    transition: border-color 0.2s;
+  }
+  .block-card:hover {
+    border-color: #cbd5e1;
+  }
+  .badge-type {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+</style>
 
 <script>
+  // Categories dataset passed from backend
+  var availableCategories = <%- JSON.stringify(categories) %>;
+  // Initial Blocks dataset passed from backend
+  var blocks = <%- JSON.stringify(blocks) %>;
+
+  function renderBlocks() {
+    var container = document.getElementById('blocksListContainer');
+    if (!container) return;
+    container.innerHTML = '';
+
+    if (!blocks || blocks.length === 0) {
+      container.innerHTML = '<div style="padding: 32px; text-align: center; color: #64748b; background: white; border-radius: 12px; border: 1px solid #e2e8f0;">No section blocks configured. Click any "Add New Section" button above to get started!</div>';
+      return;
+    }
+
+    blocks.forEach(function(block, idx) {
+      var card = document.createElement('div');
+      card.className = 'block-card';
+      if (!block.enabled) {
+        card.style.opacity = '0.55';
+        card.style.background = '#f8fafc';
+      }
+
+      var badgeBg = '#e0f2fe', badgeColor = '#0369a1', badgeText = block.type.toUpperCase();
+      if (block.type === 'hero') { badgeBg = '#dbeafe'; badgeColor = '#1e40af'; badgeText = 'HERO SHOWCASE'; }
+      else if (block.type === 'category') { badgeBg = '#fce7f3'; badgeColor = '#9d174d'; badgeText = 'CATEGORY NEWS BLOCK'; }
+      else if (block.type === 'ad_slot') { badgeBg = '#fef3c7'; badgeColor = '#92400e'; badgeText = 'AD BANNER SLOT'; }
+      else if (block.type === 'newsletter') { badgeBg = '#f3e8ff'; badgeColor = '#6b21a8'; badgeText = 'NEWSLETTER CTA'; }
+
+      var html = `
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <span class="badge-type" style="background: ${badgeBg}; color: ${badgeColor};">${badgeText}</span>
+            <strong style="font-size: 1.1rem; color: #0f172a;">${block.title_km || block.title_en || 'Section Block'}</strong>
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <button type="button" onclick="moveBlock(${idx}, -1)" ${idx === 0 ? 'disabled' : ''} style="padding: 4px 10px; border-radius: 6px; border: 1px solid #cbd5e1; background: white; cursor: pointer;">⬆️ Up</button>
+            <button type="button" onclick="moveBlock(${idx}, 1)" ${idx === blocks.length - 1 ? 'disabled' : ''} style="padding: 4px 10px; border-radius: 6px; border: 1px solid #cbd5e1; background: white; cursor: pointer;">⬇️ Down</button>
+            <button type="button" onclick="toggleBlock(${idx})" style="padding: 4px 12px; border-radius: 6px; border: 1px solid #cbd5e1; background: ${block.enabled ? '#dcfce7' : '#fee2e2'}; color: ${block.enabled ? '#166534' : '#991b1b'}; font-weight: 700; cursor: pointer;">
+              ${block.enabled ? '🟢 Visible' : '🔴 Hidden'}
+            </button>
+            <button type="button" onclick="deleteBlock(${idx})" style="padding: 4px 10px; border-radius: 6px; border: 1px solid #fca5a5; background: #fff5f5; color: #dc2626; cursor: pointer;">🗑️</button>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; background: #f8fafc; padding: 14px; border-radius: 8px;">
+          <div>
+            <label style="font-size: 0.8rem; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Title (Khmer)</label>
+            <input type="text" value="${block.title_km || ''}" onchange="updateBlock(${idx}, 'title_km', this.value)" style="width: 100%; padding: 6px 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.9rem;">
+          </div>
+          <div>
+            <label style="font-size: 0.8rem; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Title (English)</label>
+            <input type="text" value="${block.title_en || ''}" onchange="updateBlock(${idx}, 'title_en', this.value)" style="width: 100%; padding: 6px 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.9rem;">
+          </div>
+      `;
+
+      if (block.type === 'category') {
+        var catOptions = availableCategories.map(function(c) {
+          return `<option value="${c.id}" ${block.category_id == c.id ? 'selected' : ''}>${c.name_km} (${c.name_en})</option>`;
+        }).join('');
+        
+        html += `
+          <div>
+            <label style="font-size: 0.8rem; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Select Category</label>
+            <select onchange="updateBlock(${idx}, 'category_id', this.value)" style="width: 100%; padding: 6px 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.9rem;">
+              ${catOptions}
+            </select>
+          </div>
+          <div>
+            <label style="font-size: 0.8rem; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Layout Column Mode</label>
+            <select onchange="updateBlock(${idx}, 'style', this.value)" style="width: 100%; padding: 6px 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.9rem;">
+              <option value="grid_3_col" ${block.style === 'grid_3_col' ? 'selected' : ''}>3-Column Grid</option>
+              <option value="grid_2_col" ${block.style === 'grid_2_col' ? 'selected' : ''}>2-Column Grid</option>
+              <option value="list_view" ${block.style === 'list_view' ? 'selected' : ''}>Minimal List View</option>
+            </select>
+          </div>
+          <div>
+            <label style="font-size: 0.8rem; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Articles Count</label>
+            <input type="number" value="${block.limit || 6}" onchange="updateBlock(${idx}, 'limit', parseInt(this.value))" style="width: 100%; padding: 6px 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.9rem;">
+          </div>
+        `;
+      } else if (block.type === 'hero') {
+        html += `
+          <div>
+            <label style="font-size: 0.8rem; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Hero Style Mode</label>
+            <select onchange="updateBlock(${idx}, 'style', this.value)" style="width: 100%; padding: 6px 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.9rem;">
+              <option value="grid_3" ${block.style === 'grid_3' ? 'selected' : ''}>Standard 3-Card Grid</option>
+              <option value="split_2" ${block.style === 'split_2' ? 'selected' : ''}>Split Dual Featured</option>
+              <option value="single_hero_banner" ${block.style === 'single_hero_banner' ? 'selected' : ''}>Single Ultra-Wide Banner</option>
+            </select>
+          </div>
+        `;
+      } else if (block.type === 'ad_slot') {
+        html += `
+          <div>
+            <label style="font-size: 0.8rem; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Target Ad Position Slot</label>
+            <select onchange="updateBlock(${idx}, 'position_slot', this.value)" style="width: 100%; padding: 6px 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.9rem;">
+              <option value="homepage_mid_banner" ${block.position_slot === 'homepage_mid_banner' ? 'selected' : ''}>Homepage Mid Content Banner</option>
+              <option value="homepage_bottom_banner" ${block.position_slot === 'homepage_bottom_banner' ? 'selected' : ''}>Homepage Bottom Banner</option>
+              <option value="header_top" ${block.position_slot === 'header_top' ? 'selected' : ''}>Header Top Banner</option>
+            </select>
+          </div>
+        `;
+      }
+
+      html += `</div>`;
+      card.innerHTML = html;
+      container.appendChild(card);
+    });
+  }
+
+  function moveBlock(idx, dir) {
+    var newIdx = idx + dir;
+    if (newIdx < 0 || newIdx >= blocks.length) return;
+    var temp = blocks[idx];
+    blocks[idx] = blocks[newIdx];
+    blocks[newIdx] = temp;
+    renderBlocks();
+  }
+
+  function toggleBlock(idx) {
+    blocks[idx].enabled = !blocks[idx].enabled;
+    renderBlocks();
+  }
+
+  function deleteBlock(idx) {
+    if (confirm('Remove this section block from homepage?')) {
+      blocks.splice(idx, 1);
+      renderBlocks();
+    }
+  }
+
+  function updateBlock(idx, key, val) {
+    blocks[idx][key] = val;
+  }
+
+  function addNewBlock(type) {
+    var newBlock = {
+      id: 'block-' + Date.now(),
+      type: type,
+      title_km: type === 'category' ? 'ព័ត៌មានថ្មីៗ' : 'ផ្នែកថ្មី',
+      title_en: type === 'category' ? 'Latest Category Stories' : 'New Section',
+      enabled: true,
+      limit: 6,
+      style: type === 'category' ? 'grid_3_col' : 'standard'
+    };
+    if (type === 'category' && availableCategories.length > 0) {
+      newBlock.category_id = availableCategories[0].id;
+    }
+    if (type === 'ad_slot') {
+      newBlock.position_slot = 'homepage_mid_banner';
+    }
+    blocks.push(newBlock);
+    renderBlocks();
+  }
+
+  function saveAllBlocks() {
+    fetch('/admin/layout/blocks/save', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ blocks: blocks })
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        alert('Homepage block layout saved successfully! View website to see live changes.');
+      } else {
+        alert('Failed to save layout.');
+      }
+    });
+  }
+
+  function switchTab(tab) {
+    document.getElementById('blocksStudioSection').style.display = tab === 'blocks' ? 'block' : 'none';
+    document.getElementById('themeStudioSection').style.display = tab === 'theme' ? 'block' : 'none';
+    document.getElementById('tabBlocksBtn').className = 'studio-tab ' + (tab === 'blocks' ? 'active' : '');
+    document.getElementById('tabThemeBtn').className = 'studio-tab ' + (tab === 'theme' ? 'active' : '');
+  }
+
   function setPrimary(color) {
     document.getElementById('primaryColorPicker').value = color;
     document.getElementById('primaryColorText').value = color;
   }
 
-  document.getElementById('primaryColorPicker').addEventListener('input', function() {
-    document.getElementById('primaryColorText').value = this.value;
-  });
-
-  document.getElementById('accentColorPicker').addEventListener('input', function() {
-    document.getElementById('accentColorText').value = this.value;
+  document.addEventListener('DOMContentLoaded', function() {
+    renderBlocks();
   });
 </script>
