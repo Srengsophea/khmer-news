@@ -1,0 +1,89 @@
+<div class="admin-page">
+  <div class="admin-page-head">
+    <h1 class="admin-page-title">Ads Management</h1>
+    <a href="/admin/ads/edit/0" class="btn btn-primary">Add Ad Banner</a>
+  </div>
+
+  <% if (typeof ad !== 'undefined' && ad) { %>
+    <div class="admin-form-wrapper" style="background: #ffffff; border-radius: 12px; padding: 32px; border: 1px solid #e2e8f0; box-shadow: 0 1px 3px rgba(0,0,0,0.02);">
+      <h2><%= ad.id ? 'Edit Advertisement' : 'Add Advertisement' %></h2>
+      <form method="POST" action="/admin/ads/save" class="admin-form">
+        <input type="hidden" name="id" value="<%= ad.id %>">
+        <div class="form-group">
+          <label>Campaign Title</label>
+          <input type="text" name="title" value="<%= ad.title %>" class="form-control" placeholder="e.g. Header Sale Promo" required>
+        </div>
+        <div class="form-group">
+          <label>Ad Banner Image URL</label>
+          <input type="text" name="image_url" value="<%= ad.image_url %>" class="form-control" placeholder="e.g. https://domain.com/banner.png" required>
+        </div>
+        <div class="form-group">
+          <label>Destination Target Link URL</label>
+          <input type="url" name="link_url" value="<%= ad.link_url %>" class="form-control" placeholder="e.g. https://advertiser.com" required>
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div class="form-group">
+            <label>Ad Banner Position</label>
+            <select name="position" class="form-control" required>
+              <option value="header" <%= ad.position === 'header' ? 'selected' : '' %>>Header Banner (970x90)</option>
+              <option value="sidebar" <%= ad.position === 'sidebar' ? 'selected' : '' %>>Sidebar Square (300x250)</option>
+              <option value="inline" <%= ad.position === 'inline' ? 'selected' : '' %>>Inline Article (640x100)</option>
+            </select>
+          </div>
+          <div class="form-group" style="display:flex; flex-direction:column; justify-content:center;">
+            <label style="margin-bottom:0; display:flex; align-items:center; gap:8px;">
+              <input type="checkbox" name="is_active" value="1" <%= ad.is_active || ad.is_active === undefined ? 'checked' : '' %> style="width:18px; height:18px;">
+              Campaign Active
+            </label>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Save Advertisement</button>
+        <a href="/admin/ads" class="btn">Cancel</a>
+      </form>
+    </div>
+  <% } else { %>
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Campaign Title</th>
+          <th>Image Link</th>
+          <th>Target Link</th>
+          <th>Position</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if (ads && ads.length > 0) { %>
+          <% ads.forEach(function(a) { %>
+            <tr>
+              <td><%= a.id %></td>
+              <td><strong><%= a.title %></strong></td>
+              <td><a href="<%= a.image_url %>" target="_blank" style="color: #3b82f6; text-decoration: underline; font-size: 0.85rem;">View Image</a></td>
+              <td><a href="<%= a.link_url %>" target="_blank" style="color: #3b82f6; text-decoration: underline; font-size: 0.85rem;">Visit Site</a></td>
+              <td>
+                <span class="badge" style="background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem;">
+                  <%= a.position.toUpperCase() %>
+                </span>
+              </td>
+              <td>
+                <% if (a.is_active) { %>
+                  <span class="badge" style="background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem;">ACTIVE</span>
+                <% } else { %>
+                  <span class="badge" style="background: #fef2f2; color: #991b1b; border: 1px solid #fee2e2; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem;">PAUSED</span>
+                <% } %>
+              </td>
+              <td>
+                <a href="/admin/ads/edit/<%= a.id %>" class="btn btn-sm">Edit</a>
+                <a href="/admin/ads/delete/<%= a.id %>" class="btn btn-sm btn-danger" onclick="return confirm('Delete this ad banner campaign?')">Delete</a>
+              </td>
+            </tr>
+          <% }) %>
+        <% } else { %>
+          <tr><td colspan="7">No active or paused advertisements. Add one!</td></tr>
+        <% } %>
+      </tbody>
+    </table>
+  <% } %>
+</div>

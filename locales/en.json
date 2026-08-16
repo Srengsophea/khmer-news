@@ -1,0 +1,60 @@
+{
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "search": "Search",
+    "admin": "Admin"
+  },
+  "common": {
+    "read_more": "Read More",
+    "view_all": "View All",
+    "no_articles": "No articles found",
+    "search_placeholder": "Search news...",
+    "language": "Language",
+    "english": "English",
+    "khmer": "Khmer"
+  },
+  "categories": {
+    "national": "National News",
+    "international": "International News",
+    "sports": "Sports",
+    "technology": "Technology",
+    "economy": "Economy"
+  },
+  "labels": {
+    "title": "Title",
+    "content": "Content",
+    "category": "Category",
+    "image_url": "Image URL",
+    "featured": "Featured",
+    "action": "Action",
+    "edit": "Edit",
+    "delete": "Delete",
+    "save": "Save",
+    "cancel": "Cancel",
+    "name_km": "Name (Khmer)",
+    "name_en": "Name (English)",
+    "slug": "Slug"
+  },
+  "admin": {
+    "login": "Admin Login",
+    "username": "Username",
+    "password": "Password",
+    "login_btn": "Login",
+    "dashboard": "Dashboard",
+    "articles": "Articles",
+    "categories": "Categories",
+    "logout": "Logout",
+    "stats_articles": "Articles",
+    "stats_categories": "Categories",
+    "recent_articles": "Recent Articles",
+    "add_article": "Add Article",
+    "add_category": "Add Category",
+    "edit_article": "Edit Article",
+    "edit_category": "Edit Category"
+  },
+  "about": {
+    "title": "About Us",
+    "content": "Khmer News is a bilingual news platform providing the latest news in both Khmer and English. We cover national, international, sports, technology, and economy news."
+  }
+}

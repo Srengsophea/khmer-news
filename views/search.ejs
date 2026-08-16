@@ -1,0 +1,38 @@
+<section class="search-section">
+  <div class="container">
+    <h1 class="section-title"><%= t('nav.search') %></h1>
+    <form action="/search" method="GET" class="search-box">
+      <input type="text" name="q" value="<%= query %>" placeholder="<%= t('common.search_placeholder') %>" autofocus>
+      <button type="submit"><%= t('nav.search') %></button>
+    </form>
+    <% if (query && articles && articles.length > 0) { %>
+      <div class="grid grid-cols-3 gap-6">
+        <% articles.forEach(function(a) { %>
+          <article class="card-template-standard">
+            <a href="/article/<%= a.slug %>">
+              <img src="<%= a.image_url %>" alt="<%= a[`title_${lang}`] %>" class="article-card-img">
+            </a>
+            <div class="article-card-body">
+              <div class="article-card-meta">
+                <span class="article-card-category badge-cat-<%= a.category_slug %>"><%= a[`category_name_${lang}`] %></span>
+              </div>
+              <h3 class="article-card-title">
+                <a href="/article/<%= a.slug %>"><%= a[`title_${lang}`] %></a>
+              </h3>
+              <p class="article-card-excerpt"><%= a[`content_${lang}`].replace(/<[^>]*>/g, '').substring(0, 160) %>...</p>
+              <div class="article-card-footer">
+                <span class="article-card-date"><%= new Date(a.created_at).toLocaleDateString(lang === 'km' ? 'km-KH' : 'en-US', { year: 'numeric', month: 'short', day: 'numeric' }) %></span>
+                <a href="/article/<%= a.slug %>" class="read-more"><%= t('common.read_more') %> &rarr;</a>
+              </div>
+            </div>
+          </article>
+        <% }) %>
+      </div>
+    <% } else if (query) { %>
+      <div style="text-align:center; padding:60px 0; color:#64748b;">
+        <p style="font-size:1.1rem; font-weight:600;">No results found for "<%= query %>"</p>
+        <p style="margin-top:8px;">Try searching with different keywords.</p>
+      </div>
+    <% } %>
+  </div>
+</section>

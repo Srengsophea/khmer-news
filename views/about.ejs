@@ -1,0 +1,26 @@
+<section class="section">
+  <div class="container">
+    <nav class="breadcrumb">
+      <a href="/"><%= t('nav.home') %></a> &rarr; <%= t('nav.about') %>
+    </nav>
+    <div style="max-width: 760px; background: #fff; border-radius: 12px; padding: 32px; border: 1px solid #e2e8f0;">
+      <h1 style="font-size: 2rem; font-weight: 900; color: #0f172a; margin-bottom: 20px;"><%= t('about.title') %></h1>
+      <p style="font-size: 1.05rem; line-height: 1.85; color: #334155; margin-bottom: 24px;"><%= t('about.content') %></p>
+      <div style="border-top: 1px solid #e2e8f0; padding-top: 24px;">
+        <h2 style="font-size: 1.2rem; font-weight: 800; color: #0f172a; margin-bottom: 16px;"><%= t('admin.categories') %></h2>
+        <ul style="list-style: none; display: grid; gap: 10px;">
+          <% if (categories && categories.length > 0) { %>
+            <% categories.forEach(function(c) { %>
+              <li>
+                <a href="/category/<%= c.slug %>" style="display: flex; align-items: center; gap: 10px; font-weight: 600; color: #334155; font-size: 0.95rem;">
+                  <span style="color: #dc2626;">📰</span>
+                  <span><%= c[`name_${lang}`] %></span>
+                </a>
+              </li>
+            <% }) %>
+          <% } %>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>

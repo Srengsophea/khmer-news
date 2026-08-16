@@ -1,0 +1,59 @@
+<div class="admin-page">
+  <div class="admin-page-head">
+    <h1 class="admin-page-title"><%= t('admin.categories') %></h1>
+    <a href="/admin/categories/edit/0" class="btn btn-primary"><%= t('admin.add_category') %></a>
+  </div>
+
+  <% if (typeof category !== 'undefined' && category) { %>
+    <div class="admin-form-wrapper">
+      <h2><%= category.id ? t('admin.edit_category') : t('admin.add_category') %></h2>
+      <form method="POST" action="/admin/categories/save" class="admin-form">
+        <input type="hidden" name="id" value="<%= category.id %>">
+        <div class="form-group">
+          <label><%= t('labels.name_en') %></label>
+          <input type="text" name="name_en" value="<%= category.name_en %>" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label><%= t('labels.name_km') %></label>
+          <input type="text" name="name_km" value="<%= category.name_km %>" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label><%= t('labels.slug') %></label>
+          <input type="text" name="slug" value="<%= category.slug %>" class="form-control" required>
+        </div>
+        <button type="submit" class="btn btn-primary"><%= t('labels.save') %></button>
+        <a href="/admin/categories" class="btn"><%= t('labels.cancel') %></a>
+      </form>
+    </div>
+  <% } else { %>
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th><%= t('labels.name_en') %></th>
+          <th><%= t('labels.name_km') %></th>
+          <th><%= t('labels.slug') %></th>
+          <th><%= t('labels.action') %></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if (categories && categories.length > 0) { %>
+          <% categories.forEach(function(c) { %>
+            <tr>
+              <td><%= c.id %></td>
+              <td><%= c.name_en %></td>
+              <td><%= c.name_km %></td>
+              <td><%= c.slug %></td>
+              <td>
+                <a href="/admin/categories/edit/<%= c.id %>" class="btn btn-sm"><%= t('labels.edit') %></a>
+                <a href="/admin/categories/delete/<%= c.id %>" class="btn btn-sm btn-danger" onclick="return confirm('Delete category?')"><%= t('labels.delete') %></a>
+              </td>
+            </tr>
+          <% }) %>
+        <% } else { %>
+          <tr><td colspan="5"><%= t('common.no_articles') %></td></tr>
+        <% } %>
+      </tbody>
+    </table>
+  <% } %>
+</div>

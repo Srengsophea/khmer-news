@@ -1,0 +1,36 @@
+<div class="admin-page">
+  <h1 class="admin-page-title" style="margin-bottom: 24px;"><%= t('admin.dashboard') %></h1>
+  <div class="stat-grid">
+    <div class="stat-card">
+      <div class="stat-number"><%= stats.articles %></div>
+      <div class="stat-label"><%= t('admin.stats_articles') %></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number"><%= stats.categories %></div>
+      <div class="stat-label"><%= t('admin.stats_categories') %></div>
+    </div>
+  </div>
+  <h2 style="margin: 32px 0 16px;"><%= t('admin.recent_articles') %></h2>
+  <table class="admin-table">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th><%= t('labels.title') %></th>
+        <th><%= t('labels.category') %></th>
+        <th><%= t('labels.action') %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if (recent && recent.length > 0) { %>
+        <% recent.forEach(function(a, i) { %>
+          <tr>
+            <td><%= i + 1 %></td>
+            <td><%= a[`title_${lang}`] %></td>
+            <td><%= a.name_km || a.name_en || '' %></td>
+            <td><a href="/admin/articles/edit/<%= a.id %>"><%= t('labels.edit') %></a></td>
+          </tr>
+        <% }) %>
+      <% } %>
+    </tbody>
+  </table>
+</div>

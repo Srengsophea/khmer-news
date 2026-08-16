@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="<%= lang %>">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= t('admin.login') %> | Khmer News</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Khmer:wght@300;400;500;600;700;800;900&family=Noto+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div style="min-height: 100vh; display: flex; align-items: center; justify-content: center; background: #0f172a; padding: 20px;">
+    <div style="width: 100%; max-width: 420px; background: #fff; border-radius: 12px; padding: 40px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);">
+      <div style="text-align: center; margin-bottom: 32px;">
+        <h1 style="font-size: 1.8rem; font-weight: 900; color: #0f172a; margin-bottom: 8px;">Khmer<span style="color:#dc2626">News</span></h1>
+        <p style="color: #64748b; font-size: 0.9rem;">Admin Dashboard Login</p>
+      </div>
+      <% if (error) { %>
+        <div style="background: #fef2f2; color: #dc2626; padding: 12px 16px; border-radius: 6px; margin-bottom: 20px; font-size: 0.88rem; font-weight: 500;">
+          <%= error %>
+        </div>
+      <% } %>
+      <form method="POST" action="/admin/login">
+        <div class="form-group">
+          <label><%= t('admin.username') %></label>
+          <input type="text" name="username" required class="form-control" autofocus>
+        </div>
+        <div class="form-group">
+          <label><%= t('admin.password') %></label>
+          <input type="password" name="password" required class="form-control">
+        </div>
+        <button type="submit" class="btn btn-primary w-full" style="margin-top: 8px;"><%= t('admin.login_btn') %></button>
+      </form>
+      <p style="text-align: center; margin-top: 20px; font-size: 0.82rem; color: #94a3b8;">Demo: admin / admin123</p>
+      <p style="text-align: center; margin-top: 12px;">
+        <a href="/" style="color: #64748b; font-size: 0.88rem;">&larr; Back to website</a>
+      </p>
+    </div>
+  </div>
+</body>
+</html>

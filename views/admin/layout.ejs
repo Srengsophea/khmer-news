@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="<%= lang %>">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= typeof title !== 'undefined' ? title : 'Admin Panel' %> | Khmer News</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Koh+Santepheap:wght@300;400;700;900&family=Noto+Sans+Khmer:wght@300;400;500;600;700;800;900&family=Noto+Serif+Khmer:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="admin-layout">
+    <aside class="admin-sidebar">
+      <div class="admin-brand">Khmer<span style="color:#b91c1c">News</span> Admin</div>
+      <nav class="admin-nav">
+        <a href="/admin/dashboard" class="admin-nav-item <%= typeof title !== 'undefined' && title === 'Dashboard' ? 'active' : '' %>">📊 <%= t('admin.dashboard') %></a>
+        <a href="/admin/articles" class="admin-nav-item <%= typeof title !== 'undefined' && (title === 'Articles' || title === 'Add Article' || title === 'Edit Article') ? 'active' : '' %>">📰 <%= t('admin.articles') %></a>
+        <a href="/admin/categories" class="admin-nav-item <%= typeof title !== 'undefined' && (title === 'Categories' || title === 'Add Category' || title === 'Edit Category') ? 'active' : '' %>">📂 <%= t('admin.categories') %></a>
+        <a href="/admin/ads" class="admin-nav-item <%= typeof title !== 'undefined' && (title === 'Ads Management' || title === 'Edit Ad' || title === 'Add Ad') ? 'active' : '' %>">📣 Ads Management</a>
+        <a href="/admin/settings" class="admin-nav-item <%= typeof title !== 'undefined' && title === 'Settings' ? 'active' : '' %>">🔧 Settings</a>
+        <a href="/" class="admin-nav-item">🌐 Go to Website</a>
+        <a href="/admin/logout" class="admin-nav-item" style="margin-top: auto; border-top: 1px solid #1e293b; padding-top: 16px; color: #f87171;">🚪 <%= t('admin.logout') %></a>
+      </nav>
+    </aside>
+    <main class="admin-main">
+      <div class="admin-topbar">
+        <div class="admin-user-greeting">Welcome, <strong><%= adminUser %></strong></div>
+        <div style="display: flex; align-items: center; gap: 16px;">
+          <select id="langSwitcher" class="lang-select">
+            <option value="km" <%= lang === 'km' ? 'selected' : '' %>>ខ្មែរ</option>
+            <option value="en" <%= lang === 'en' ? 'selected' : '' %>>English</option>
+          </select>
+          <a href="/admin/logout" class="btn btn-sm btn-danger"><%= t('admin.logout') %></a>
+        </div>
+      </div>
+      <div class="admin-content">
+        <%- body %>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var switcher = document.getElementById('langSwitcher');
+      if (switcher) {
+        switcher.addEventListener('change', function() {
+          var lang = this.value;
+          window.location.href = '/change-lang/' + lang;
+        });
+      }
+    });
+  </script>
+</body>
+</html>

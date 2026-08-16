@@ -1,0 +1,85 @@
+<div class="admin-page">
+  <div class="admin-page-head">
+    <h1 class="admin-page-title">Website Settings</h1>
+  </div>
+
+  <% if (success) { %>
+    <div style="background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0; padding: 12px 16px; border-radius: 6px; margin-bottom: 20px; font-size: 0.95rem; font-weight: 600;">
+      <%= success %>
+    </div>
+  <% } %>
+
+  <div class="admin-form-wrapper" style="background: #ffffff; border-radius: 12px; padding: 32px; border: 1px solid #e2e8f0; box-shadow: 0 1px 3px rgba(0,0,0,0.02);">
+    <form method="POST" action="/admin/settings/save">
+      <h3 style="margin-bottom: 16px; border-bottom: 1px solid #f1f5f9; padding-bottom: 8px; color: #0f172a;">General Settings</h3>
+      <div class="grid grid-cols-2 gap-4">
+        <div class="form-group">
+          <label>Website Name (Khmer)</label>
+          <input type="text" name="site_name_km" value="<%= settings.site_name_km %>" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label>Website Name (English)</label>
+          <input type="text" name="site_name_en" value="<%= settings.site_name_en %>" class="form-control" required>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-4">
+        <div class="form-group">
+          <label>Website Description (Khmer)</label>
+          <textarea name="site_desc_km" rows="3" class="form-control" required><%= settings.site_desc_km %></textarea>
+        </div>
+        <div class="form-group">
+          <label>Website Description (English)</label>
+          <textarea name="site_desc_en" rows="3" class="form-control" required><%= settings.site_desc_en %></textarea>
+        </div>
+      </div>
+
+      <h3 style="margin: 28px 0 16px; border-bottom: 1px solid #f1f5f9; padding-bottom: 8px; color: #0f172a;">Contact Information</h3>
+      <div class="grid grid-cols-2 gap-4">
+        <div class="form-group">
+          <label>Contact Phone</label>
+          <input type="text" name="contact_phone" value="<%= settings.contact_phone %>" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label>Contact Email</label>
+          <input type="email" name="contact_email" value="<%= settings.contact_email %>" class="form-control" required>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-4">
+        <div class="form-group">
+          <label>Contact Address (Khmer)</label>
+          <input type="text" name="contact_address_km" value="<%= settings.contact_address_km %>" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label>Contact Address (English)</label>
+          <input type="text" name="contact_address_en" value="<%= settings.contact_address_en %>" class="form-control" required>
+        </div>
+      </div>
+
+      <h3 style="margin: 28px 0 16px; border-bottom: 1px solid #f1f5f9; padding-bottom: 8px; color: #0f172a;">Social Media Links</h3>
+      <div class="grid grid-cols-2 gap-4">
+        <div class="form-group">
+          <label>Facebook Page URL</label>
+          <input type="url" name="social_facebook" value="<%= settings.social_facebook %>" class="form-control">
+        </div>
+        <div class="form-group">
+          <label>Telegram Channel URL</label>
+          <input type="url" name="social_telegram" value="<%= settings.social_telegram %>" class="form-control">
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-4">
+        <div class="form-group">
+          <label>YouTube Channel URL</label>
+          <input type="url" name="social_youtube" value="<%= settings.social_youtube %>" class="form-control">
+        </div>
+        <div class="form-group">
+          <label>Twitter/X URL</label>
+          <input type="url" name="social_twitter" value="<%= settings.social_twitter %>" class="form-control">
+        </div>
+      </div>
+
+      <div style="margin-top: 24px;">
+        <button type="submit" class="btn btn-primary">Save Settings</button>
+      </div>
+    </form>
+  </div>
+</div>

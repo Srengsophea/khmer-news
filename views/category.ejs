@@ -1,0 +1,34 @@
+<section class="section">
+  <div class="container">
+    <div class="category-header">
+      <h1><%= category[`name_${lang}`] %></h1>
+      <p><%= t('about.content') %></p>
+    </div>
+    <% if (articles && articles.length > 0) { %>
+      <div class="grid grid-cols-3 gap-6">
+        <% articles.forEach(function(a) { %>
+          <article class="card-template-standard">
+            <a href="/article/<%= a.slug %>">
+              <img src="<%= a.image_url %>" alt="<%= a[`title_${lang}`] %>" class="article-card-img">
+            </a>
+            <div class="article-card-body">
+              <div class="article-card-meta">
+                <span class="article-card-category badge-cat-<%= category.slug %>"><%= category[`name_${lang}`] %></span>
+              </div>
+              <h3 class="article-card-title">
+                <a href="/article/<%= a.slug %>"><%= a[`title_${lang}`] %></a>
+              </h3>
+              <p class="article-card-excerpt"><%= a[`content_${lang}`].replace(/<[^>]*>/g, '').substring(0, 160) %>...</p>
+              <div class="article-card-footer">
+                <span class="article-card-date"><%= new Date(a.created_at).toLocaleDateString(lang === 'km' ? 'km-KH' : 'en-US', { year: 'numeric', month: 'short', day: 'numeric' }) %></span>
+                <a href="/article/<%= a.slug %>" class="read-more"><%= t('common.read_more') %> &rarr;</a>
+              </div>
+            </div>
+          </article>
+        <% }) %>
+      </div>
+    <% } else { %>
+      <p><%= t('common.no_articles') %></p>
+    <% } %>
+  </div>
+</section>

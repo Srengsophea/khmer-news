@@ -1,0 +1,67 @@
+<section class="section">
+  <div class="container">
+    <nav class="breadcrumb">
+      <a href="/"><%= t('nav.home') %></a> &rarr;
+      <a href="/category/<%= article.category_slug %>"><%= article[`category_name_${lang}`] %></a> &rarr;
+      <span><%= article[`title_${lang}`].substring(0, 60) %>...</span>
+    </nav>
+    <article class="article-detail">
+      <img src="<%= article.image_url %>" alt="<%= article[`title_${lang}`] %>" class="article-hero-img">
+      <div class="article-body">
+        <div class="article-header">
+          <span class="article-category badge-cat-<%= article.category_slug %>"><%= article[`category_name_${lang}`] %></span>
+          <h1 class="article-title"><%= article[`title_${lang}`] %></h1>
+          <div class="article-meta-row">
+            <span><%= t('common.language') %>: <%= lang === 'km' ? 'ខ្មែរ' : 'English' %></span>
+            <span>&bull;</span>
+            <span><%= new Date(article.created_at).toLocaleDateString(lang === 'km' ? 'km-KH' : 'en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) %></span>
+          </div>
+        </div>
+        <div class="article-content">
+          <%- article[`content_${lang}`] %>
+        </div>
+
+        <% if (typeof siteAds !== 'undefined' && siteAds) { %>
+          <% var inlineAd = siteAds.find(ad => ad.position === 'inline'); %>
+          <% if (inlineAd) { %>
+            <div class="inline-ad-banner" style="margin: 32px auto 0; display: flex; justify-content: center;">
+              <a href="<%= inlineAd.link_url %>" target="_blank" style="width: 100%;">
+                <img src="<%= inlineAd.image_url %>" alt="<%= inlineAd.title %>" style="max-height: 120px; border-radius: 6px; border: 1px solid #e2e8f0; width: 100%; object-fit: contain;">
+              </a>
+            </div>
+          <% } %>
+        <% } %>
+      </div>
+    </article>
+  </div>
+</section>
+
+<section class="related-section">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title"><%= t('common.view_all') %></h2>
+    </div>
+    <div class="related-grid">
+      <% articles.forEach(function(a) { %>
+        <article class="article-card">
+          <a href="/article/<%= a.slug %>">
+            <img src="<%= a.image_url %>" alt="<%= a[`title_${lang}`] %>" class="article-card-img">
+          </a>
+          <div class="article-card-body">
+            <div class="article-card-meta">
+              <span class="article-card-category"><%= a[`category_name_${lang}`] %></span>
+            </div>
+            <h3 class="article-card-title">
+              <a href="/article/<%= a.slug %>"><%= a[`title_${lang}`] %></a>
+            </h3>
+            <p class="article-card-excerpt"><%= a[`content_${lang}`].replace(/<[^>]*>/g, '').substring(0, 120) %>...</p>
+            <div class="article-card-footer">
+              <span class="article-card-date"><%= new Date(a.created_at).toLocaleDateString(lang === 'km' ? 'km-KH' : 'en-US', { year: 'numeric', month: 'short', day: 'numeric' }) %></span>
+              <a href="/article/<%= a.slug %>" class="read-more"><%= t('common.read_more') %> &rarr;</a>
+            </div>
+          </div>
+        </article>
+      <% }) %>
+    </div>
+  </div>
+</section>
