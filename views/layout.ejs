@@ -129,18 +129,21 @@
       <div class="container">
         <div class="breaking-inner">
           <span class="breaking-label">BREAKING ⚡</span>
-          <div class="breaking-marquee">
-            <span class="breaking-text">
+          <div class="breaking-marquee-track-container">
+            <div class="breaking-marquee-track">
+              <% var newsTxt = ''; %>
               <% if (lang === 'km' && siteSettings.breaking_news_text_km) { %>
-                <%= siteSettings.breaking_news_text_km %>
+                <% newsTxt = siteSettings.breaking_news_text_km; %>
               <% } else if (lang === 'en' && siteSettings.breaking_news_text_en) { %>
-                <%= siteSettings.breaking_news_text_en %>
+                <% newsTxt = siteSettings.breaking_news_text_en; %>
               <% } else if (typeof articles !== 'undefined' && articles && articles.length > 0) { %>
-                <%= articles.slice(0, 4).map(a => a[`title_${lang}`]).join('  •  ') %>
+                <% newsTxt = articles.slice(0, 5).map(a => a[`title_${lang}`]).join('   •   '); %>
               <% } else { %>
-                <%= lang === 'km' ? siteSettings.site_desc_km : siteSettings.site_desc_en %>
+                <% newsTxt = lang === 'km' ? siteSettings.site_desc_km : siteSettings.site_desc_en; %>
               <% } %>
-            </span>
+              <span class="breaking-text-content"><%= newsTxt %>   •   </span>
+              <span class="breaking-text-content" aria-hidden="true"><%= newsTxt %>   •   </span>
+            </div>
           </div>
         </div>
       </div>
