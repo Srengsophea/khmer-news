@@ -1,89 +1,151 @@
 <div class="admin-page">
-  <div class="admin-page-head">
-    <h1 class="admin-page-title">Ads Management</h1>
-    <a href="/admin/ads/edit/0" class="btn btn-primary">Add Ad Banner</a>
+  <div class="admin-page-head" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+    <div>
+      <h1 class="admin-page-title" style="font-size: 1.75rem; font-weight: 800; color: #0f172a; margin: 0;">📣 Professional Ads Manager</h1>
+      <p style="color: #64748b; margin-top: 4px; font-size: 0.95rem;">Manage banner campaigns, Google AdSense codes, and placement slots across your news website.</p>
+    </div>
+    <a href="/admin/ads/edit/0" class="btn btn-primary" style="display: flex; align-items: center; gap: 8px;">
+      ➕ Add New Ad Campaign
+    </a>
   </div>
 
   <% if (typeof ad !== 'undefined' && ad) { %>
-    <div class="admin-form-wrapper" style="background: #ffffff; border-radius: 12px; padding: 32px; border: 1px solid #e2e8f0; box-shadow: 0 1px 3px rgba(0,0,0,0.02);">
-      <h2><%= ad.id ? 'Edit Advertisement' : 'Add Advertisement' %></h2>
+    <div class="admin-form-wrapper" style="background: #ffffff; border-radius: 12px; padding: 32px; border: 1px solid #e2e8f0; box-shadow: 0 1px 3px rgba(0,0,0,0.05); margin-bottom: 32px;">
+      <h2 style="font-size: 1.3rem; font-weight: 700; color: #1e293b; margin-bottom: 20px;"><%= ad.id ? '✏️ Edit Advertisement Campaign' : '➕ Create New Advertisement' %></h2>
       <form method="POST" action="/admin/ads/save" class="admin-form">
-        <input type="hidden" name="id" value="<%= ad.id %>">
-        <div class="form-group">
-          <label>Campaign Title</label>
-          <input type="text" name="title" value="<%= ad.title %>" class="form-control" placeholder="e.g. Header Sale Promo" required>
-        </div>
-        <div class="form-group">
-          <label>Ad Banner Image URL</label>
-          <input type="text" name="image_url" value="<%= ad.image_url %>" class="form-control" placeholder="e.g. https://domain.com/banner.png" required>
-        </div>
-        <div class="form-group">
-          <label>Destination Target Link URL</label>
-          <input type="url" name="link_url" value="<%= ad.link_url %>" class="form-control" placeholder="e.g. https://advertiser.com" required>
-        </div>
-        <div class="grid grid-cols-2 gap-4">
+        <input type="hidden" name="id" value="<%= ad.id || '' %>">
+        
+        <div class="grid grid-cols-2 gap-4" style="margin-bottom: 20px;">
           <div class="form-group">
-            <label>Ad Banner Position</label>
-            <select name="position" class="form-control" required>
-              <option value="header" <%= ad.position === 'header' ? 'selected' : '' %>>Header Banner (970x90)</option>
-              <option value="sidebar" <%= ad.position === 'sidebar' ? 'selected' : '' %>>Sidebar Square (300x250)</option>
-              <option value="inline" <%= ad.position === 'inline' ? 'selected' : '' %>>Inline Article (640x100)</option>
+            <label style="font-weight: 600;">Campaign Title</label>
+            <input type="text" name="title" value="<%= ad.title || '' %>" class="form-control" placeholder="e.g. Summer Tech Sale Header Banner" required style="width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 6px;">
+          </div>
+          <div class="form-group">
+            <label style="font-weight: 600;">Ad Slot Position</label>
+            <select name="position" class="form-control" required style="width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 6px;">
+              <option value="header_top" <%= ad.position === 'header_top' || ad.position === 'header' ? 'selected' : '' %>>📌 Header Top Banner (Next to Logo / Above Nav)</option>
+              <option value="homepage_hero_right" <%= ad.position === 'homepage_hero_right' ? 'selected' : '' %>>📌 Homepage Hero Right Side Banner</option>
+              <option value="homepage_mid_banner" <%= ad.position === 'homepage_mid_banner' ? 'selected' : '' %>>📌 Homepage Mid-Content Wide Leaderboard (728x90)</option>
+              <option value="homepage_bottom_banner" <%= ad.position === 'homepage_bottom_banner' ? 'selected' : '' %>>📌 Homepage Bottom Footer Banner</option>
+              <option value="sidebar" <%= ad.position === 'sidebar' ? 'selected' : '' %>>📌 Sidebar Rectangle Widget (300x250)</option>
+              <option value="article_inline" <%= ad.position === 'article_inline' || ad.position === 'inline' ? 'selected' : '' %>>📌 Article Page Inline Content (Within Body)</option>
+              <option value="article_bottom" <%= ad.position === 'article_bottom' ? 'selected' : '' %>>📌 Article Page Bottom Recommendation Banner</option>
             </select>
           </div>
-          <div class="form-group" style="display:flex; flex-direction:column; justify-content:center;">
-            <label style="margin-bottom:0; display:flex; align-items:center; gap:8px;">
-              <input type="checkbox" name="is_active" value="1" <%= ad.is_active || ad.is_active === undefined ? 'checked' : '' %> style="width:18px; height:18px;">
-              Campaign Active
+        </div>
+
+        <div class="form-group" style="margin-bottom: 20px;">
+          <label style="font-weight: 600; display: block; margin-bottom: 8px;">Ad Content Type</label>
+          <div style="display: flex; gap: 20px;">
+            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+              <input type="radio" name="ad_type" value="image" id="typeImage" <%= (ad.ad_type === 'image' || !ad.ad_type) ? 'checked' : '' %>>
+              Image Banner URL
+            </label>
+            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+              <input type="radio" name="ad_type" value="html" id="typeHtml" <%= ad.ad_type === 'html' ? 'checked' : '' %>>
+              Custom HTML / Google AdSense Code
             </label>
           </div>
         </div>
-        <button type="submit" class="btn btn-primary">Save Advertisement</button>
-        <a href="/admin/ads" class="btn">Cancel</a>
+
+        <div id="imageBlock" style="display: <%= (ad.ad_type === 'html') ? 'none' : 'block' %>;">
+          <div class="form-group" style="margin-bottom: 16px;">
+            <label style="font-weight: 600;">Ad Banner Image URL</label>
+            <input type="text" name="image_url" value="<%= ad.image_url || '' %>" class="form-control" placeholder="https://example.com/images/banner.png" style="width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 6px;">
+          </div>
+          <div class="form-group" style="margin-bottom: 16px;">
+            <label style="font-weight: 600;">Destination Link URL</label>
+            <input type="text" name="link_url" value="<%= ad.link_url || '' %>" class="form-control" placeholder="https://advertiser-website.com" style="width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 6px;">
+          </div>
+        </div>
+
+        <div id="htmlBlock" style="display: <%= (ad.ad_type === 'html') ? 'block' : 'none' %>; margin-bottom: 16px;">
+          <div class="form-group">
+            <label style="font-weight: 600;">HTML / AdSense Code Snippet</label>
+            <textarea name="html_code" rows="4" class="form-control" style="width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 6px; font-family: monospace; font-size: 0.9rem;" placeholder="<script async src='https://pagead2.googlesyndication.com...'></script>"><%= ad.html_code || '' %></textarea>
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 24px;">
+          <label style="display: flex; align-items: center; gap: 10px; font-weight: 600; cursor: pointer;">
+            <input type="checkbox" name="is_active" value="1" <%= (ad.is_active || ad.is_active === undefined) ? 'checked' : '' %> style="width: 18px; height: 18px;">
+            Campaign Active & Displaying
+          </label>
+        </div>
+
+        <div style="display: flex; gap: 12px;">
+          <button type="submit" class="btn btn-primary" style="padding: 10px 24px; font-weight: 700;">💾 Save Advertisement</button>
+          <a href="/admin/ads" class="btn btn-outline" style="padding: 10px 20px;">Cancel</a>
+        </div>
       </form>
     </div>
-  <% } else { %>
-    <table class="admin-table">
-      <thead>
+
+    <script>
+      document.getElementById('typeImage').addEventListener('change', function() {
+        document.getElementById('imageBlock').style.display = 'block';
+        document.getElementById('htmlBlock').style.display = 'none';
+      });
+      document.getElementById('typeHtml').addEventListener('change', function() {
+        document.getElementById('imageBlock').style.display = 'none';
+        document.getElementById('htmlBlock').style.display = 'block';
+      });
+    </script>
+  <% } %>
+
+  <div style="background: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+    <table class="admin-table" style="width: 100%; border-collapse: collapse;">
+      <thead style="background: #f8fafc; border-bottom: 1px solid #e2e8f0;">
         <tr>
-          <th>#</th>
-          <th>Campaign Title</th>
-          <th>Image Link</th>
-          <th>Target Link</th>
-          <th>Position</th>
-          <th>Status</th>
-          <th>Actions</th>
+          <th style="padding: 14px 16px; text-align: left;">ID</th>
+          <th style="padding: 14px 16px; text-align: left;">Campaign Title</th>
+          <th style="padding: 14px 16px; text-align: left;">Type</th>
+          <th style="padding: 14px 16px; text-align: left;">Position Slot</th>
+          <th style="padding: 14px 16px; text-align: left;">Clicks</th>
+          <th style="padding: 14px 16px; text-align: left;">Status</th>
+          <th style="padding: 14px 16px; text-align: right;">Actions</th>
         </tr>
       </thead>
       <tbody>
         <% if (ads && ads.length > 0) { %>
           <% ads.forEach(function(a) { %>
-            <tr>
-              <td><%= a.id %></td>
-              <td><strong><%= a.title %></strong></td>
-              <td><a href="<%= a.image_url %>" target="_blank" style="color: #3b82f6; text-decoration: underline; font-size: 0.85rem;">View Image</a></td>
-              <td><a href="<%= a.link_url %>" target="_blank" style="color: #3b82f6; text-decoration: underline; font-size: 0.85rem;">Visit Site</a></td>
-              <td>
-                <span class="badge" style="background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem;">
-                  <%= a.position.toUpperCase() %>
-                </span>
-              </td>
-              <td>
-                <% if (a.is_active) { %>
-                  <span class="badge" style="background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem;">ACTIVE</span>
-                <% } else { %>
-                  <span class="badge" style="background: #fef2f2; color: #991b1b; border: 1px solid #fee2e2; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem;">PAUSED</span>
+            <tr style="border-bottom: 1px solid #f1f5f9;">
+              <td style="padding: 14px 16px;"><%= a.id %></td>
+              <td style="padding: 14px 16px;">
+                <strong style="color: #0f172a;"><%= a.title %></strong>
+                <% if (a.image_url) { %>
+                  <br><a href="<%= a.image_url %>" target="_blank" style="color: #2563eb; font-size: 0.8rem; text-decoration: underline;">View Banner Image</a>
                 <% } %>
               </td>
-              <td>
-                <a href="/admin/ads/edit/<%= a.id %>" class="btn btn-sm">Edit</a>
-                <a href="/admin/ads/delete/<%= a.id %>" class="btn btn-sm btn-danger" onclick="return confirm('Delete this ad banner campaign?')">Delete</a>
+              <td style="padding: 14px 16px;">
+                <span style="font-size: 0.8rem; font-weight: 600; background: #e0f2fe; color: #0369a1; padding: 2px 8px; border-radius: 4px;">
+                  <%= (a.ad_type || 'image').toUpperCase() %>
+                </span>
+              </td>
+              <td style="padding: 14px 16px;">
+                <span class="badge" style="background: #f1f5f9; color: #334155; border: 1px solid #cbd5e1; padding: 3px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 600;">
+                  <%= a.position %>
+                </span>
+              </td>
+              <td style="padding: 14px 16px; font-weight: 700; color: #059669;">
+                <%= a.click_count || 0 %> clicks
+              </td>
+              <td style="padding: 14px 16px;">
+                <% if (a.is_active) { %>
+                  <span class="badge" style="background: #dcfce7; color: #166534; border: 1px solid #86efac; padding: 3px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 700;">ACTIVE</span>
+                <% } else { %>
+                  <span class="badge" style="background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; padding: 3px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 700;">PAUSED</span>
+                <% } %>
+              </td>
+              <td style="padding: 14px 16px; text-align: right;">
+                <a href="/admin/ads/edit/<%= a.id %>" class="btn btn-sm" style="padding: 6px 12px; font-size: 0.85rem;">Edit</a>
+                <a href="/admin/ads/delete/<%= a.id %>" class="btn btn-sm btn-danger" style="padding: 6px 12px; font-size: 0.85rem;" onclick="return confirm('Delete this ad banner campaign?')">Delete</a>
               </td>
             </tr>
           <% }) %>
         <% } else { %>
-          <tr><td colspan="7">No active or paused advertisements. Add one!</td></tr>
+          <tr><td colspan="7" style="padding: 24px; text-align: center; color: #64748b;">No ad campaigns found. Click "Add New Ad Campaign" above to create one!</td></tr>
         <% } %>
       </tbody>
     </table>
-  <% } %>
+  </div>
 </div>

@@ -41,15 +41,39 @@ app.use((req, res, next) => {
   const db = getDb();
   if (db) {
     db.get("SELECT * FROM settings WHERE id = 1", [], (err, settings) => {
-      res.locals.siteSettings = settings || {};
+      const siteSettings = settings || {
+        primary_color: '#1e3a8a',
+        accent_color: '#dc2626',
+        hero_layout_style: 'grid_3',
+        breaking_news_enabled: 1,
+        header_banner_ad_enabled: 1
+      };
+      res.locals.siteSettings = siteSettings;
+
       db.all("SELECT * FROM ads WHERE is_active = 1", [], (err2, ads) => {
-        res.locals.siteAds = ads || [];
+        const rawAds = ads || [];
+        res.locals.siteAds = rawAds;
+        
+        // Group active ads by position key
+        const adsByPos = {};
+        rawAds.forEach(ad => {
+          if (!adsByPos[ad.position]) {
+            adsByPos[ad.position] = [];
+          }
+          adsByPos[ad.position].push(ad);
+        });
+        res.locals.siteAdsByPos = adsByPos;
+        res.locals.getAd = (pos) => {
+          return adsByPos[pos] && adsByPos[pos].length > 0 ? adsByPos[pos][0] : null;
+        };
         next();
       });
     });
   } else {
     res.locals.siteSettings = {};
     res.locals.siteAds = [];
+    res.locals.siteAdsByPos = {};
+    res.locals.getAd = () => null;
     next();
   }
 });

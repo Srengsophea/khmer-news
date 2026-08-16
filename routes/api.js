@@ -31,4 +31,11 @@ router.get('/search', (req, res) => {
   );
 });
 
+router.post('/ads/click/:id', (req, res) => {
+  const db = getDb();
+  db.run("UPDATE ads SET click_count = COALESCE(click_count, 0) + 1 WHERE id = ?", [req.params.id], () => {
+    res.json({ success: true });
+  });
+});
+
 module.exports = router;

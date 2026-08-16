@@ -3,14 +3,26 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title><%= title %> | Khmer News</title>
+  <title><%= title %> | <%= (typeof siteSettings !== 'undefined' && siteSettings && siteSettings.site_name_en) || 'Khmer News' %></title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Koh+Santepheap:wght@300;400;700;900&family=Noto+Sans+Khmer:wght@300;400;500;600;700;800;900&family=Noto+Serif+Khmer:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Koh+Santepheap:wght@300;400;700;900&family=Noto+Sans+Khmer:wght@300;400;500;600;700;800;900&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/style.css">
+
+  <style>
+    :root {
+      --primary-color: <%= (typeof siteSettings !== 'undefined' && siteSettings && siteSettings.primary_color) ? siteSettings.primary_color : '#1e3a8a' %>;
+      --accent-color: <%= (typeof siteSettings !== 'undefined' && siteSettings && siteSettings.accent_color) ? siteSettings.accent_color : '#dc2626' %>;
+    }
+    <% if (typeof siteSettings !== 'undefined' && siteSettings && siteSettings.custom_css) { %>
+      <%- siteSettings.custom_css %>
+    <% } %>
+  </style>
 </head>
 <body>
+  <div id="readingProgress" class="reading-progress"></div>
   <div class="nav-overlay" id="navOverlay"></div>
+  
   <div class="top-bar">
     <div class="container">
       <div class="top-links">
@@ -44,11 +56,28 @@
             <span class="brand-sub" style="margin-top: 2px;"><%= lang === 'km' ? 'ព័ត៌មានថ្មីៗ' : 'LATEST NEWS' %></span>
           </div>
         </a>
+
+        <% if (typeof siteSettings !== 'undefined' && siteSettings && siteSettings.header_banner_ad_enabled && typeof getAd === 'function') { %>
+          <% var headerTopAd = getAd('header_top') || getAd('header'); %>
+          <% if (headerTopAd) { %>
+            <div class="header-top-ad-slot" style="margin: 0 auto; display: flex; align-items: center; max-height: 70px; overflow: hidden;">
+              <% if (headerTopAd.ad_type === 'html' && headerTopAd.html_code) { %>
+                <%- headerTopAd.html_code %>
+              <% } else { %>
+                <a href="<%= headerTopAd.link_url || '#' %>" target="_blank" onclick="fetch('/api/ads/click/<%= headerTopAd.id %>', {method:'POST'})">
+                  <img src="<%= headerTopAd.image_url %>" alt="<%= headerTopAd.title %>" style="max-height: 65px; border-radius: 6px; object-fit: contain;">
+                </a>
+              <% } %>
+            </div>
+          <% } %>
+        <% } %>
+
         <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">
           <span></span>
           <span></span>
           <span></span>
         </button>
+        
         <nav class="main-nav" id="mainNav">
           <div class="drawer-header">
             <div class="drawer-logo-title">
@@ -94,30 +123,27 @@
     </div>
   </header>
 
-  <div class="breaking-bar">
-    <div class="container">
-      <div class="breaking-inner">
-        <span class="breaking-label">BREAKING</span>
-        <span class="breaking-text">
-          <% if (typeof siteSettings !== 'undefined' && siteSettings) { %>
-            <%= lang === 'km' ? siteSettings.site_name_km : siteSettings.site_name_en %> — <%= lang === 'km' ? siteSettings.site_desc_km : siteSettings.site_desc_en %>
-          <% } else { %>
-            <%= t('nav.home') %> — <%= t('about.content') %>
-          <% } %>
-        </span>
+  <% if (typeof siteSettings !== 'undefined' && siteSettings && (siteSettings.breaking_news_enabled == 1 || siteSettings.breaking_news_enabled === undefined)) { %>
+    <div class="breaking-bar">
+      <div class="container">
+        <div class="breaking-inner">
+          <span class="breaking-label">BREAKING ⚡</span>
+          <div class="breaking-marquee">
+            <span class="breaking-text">
+              <% if (lang === 'km' && siteSettings.breaking_news_text_km) { %>
+                <%= siteSettings.breaking_news_text_km %>
+              <% } else if (lang === 'en' && siteSettings.breaking_news_text_en) { %>
+                <%= siteSettings.breaking_news_text_en %>
+              <% } else if (typeof articles !== 'undefined' && articles && articles.length > 0) { %>
+                <%= articles.slice(0, 4).map(a => a[`title_${lang}`]).join('  •  ') %>
+              <% } else { %>
+                <%= lang === 'km' ? siteSettings.site_desc_km : siteSettings.site_desc_en %>
+              <% } %>
+            </span>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-
-  <% if (typeof siteAds !== 'undefined' && siteAds) { %>
-    <% var headerAd = siteAds.find(ad => ad.position === 'header'); %>
-    <% if (headerAd) { %>
-      <div class="header-ad-banner container" style="margin: 16px auto; display: flex; justify-content: center;">
-        <a href="<%= headerAd.link_url %>" target="_blank">
-          <img src="<%= headerAd.image_url %>" alt="<%= headerAd.title %>" style="max-height: 90px; border-radius: 4px; border: 1px solid #e2e8f0; width: 100%; object-fit: contain;">
-        </a>
-      </div>
-    <% } %>
   <% } %>
 
   <main>

@@ -137,12 +137,50 @@ router.get('/categories/delete/:id', requireAdmin, (req, res) => {
   db.run(`DELETE FROM categories WHERE id = ?`, [req.params.id], () => res.redirect('/admin/categories'));
 });
 
+// --- Layout & Theme Studio Management ---
+router.get('/layout', requireAdmin, (req, res) => {
+  const db = getDb();
+  const lang = req.lang;
+  db.get("SELECT * FROM settings WHERE id = 1", [], (err, settings) => {
+    res.render('admin/layout_manager', {
+      title: 'Layout & Theme Studio',
+      settings: settings || {},
+      lang,
+      success: req.query.success || null,
+      adminUser: req.session.adminUser
+    });
+  });
+});
+
+router.post('/layout/save', requireAdmin, express.urlencoded({ extended: false }), (req, res) => {
+  const db = getDb();
+  const {
+    primary_color, accent_color, hero_layout_style,
+    breaking_news_enabled, breaking_news_text_km, breaking_news_text_en,
+    header_banner_ad_enabled, sidebar_position, custom_css
+  } = req.body;
+
+  db.run(`
+    UPDATE settings SET
+      primary_color = ?, accent_color = ?, hero_layout_style = ?,
+      breaking_news_enabled = ?, breaking_news_text_km = ?, breaking_news_text_en = ?,
+      header_banner_ad_enabled = ?, sidebar_position = ?, custom_css = ?
+    WHERE id = 1
+  `, [
+    primary_color || '#1e3a8a', accent_color || '#dc2626', hero_layout_style || 'grid_3',
+    breaking_news_enabled ? 1 : 0, breaking_news_text_km || '', breaking_news_text_en || '',
+    header_banner_ad_enabled ? 1 : 0, sidebar_position || 'right', custom_css || ''
+  ], (err) => {
+    res.redirect('/admin/layout?success=Layout+and+theme+updated+successfully');
+  });
+});
+
 // --- Settings Management ---
 router.get('/settings', requireAdmin, (req, res) => {
   const db = getDb();
   const lang = req.lang;
   db.get("SELECT * FROM settings WHERE id = 1", [], (err, settings) => {
-    res.render('admin/settings', { title: 'Settings', settings, lang, success: req.query.success || null, adminUser: req.session.adminUser });
+    res.render('admin/settings', { title: 'Settings', settings: settings || {}, lang, success: req.query.success || null, adminUser: req.session.adminUser });
   });
 });
 
@@ -174,7 +212,7 @@ router.get('/ads', requireAdmin, (req, res) => {
   const db = getDb();
   const lang = req.lang;
   db.all("SELECT * FROM ads ORDER BY id DESC", [], (err, ads) => {
-    res.render('admin/ads', { title: 'Ads Management', ads, lang, adminUser: req.session.adminUser });
+    res.render('admin/ads', { title: 'Ads Management', ads: ads || [], lang, adminUser: req.session.adminUser, ad: null });
   });
 });
 
@@ -182,28 +220,37 @@ router.get('/ads/edit/:id', requireAdmin, (req, res) => {
   const db = getDb();
   const lang = req.lang;
   if (req.params.id == 0) {
-    res.render('admin/ads', { title: 'Add Ad', ad: {}, lang, adminUser: req.session.adminUser });
+    db.all("SELECT * FROM ads ORDER BY id DESC", [], (err, ads) => {
+      res.render('admin/ads', { title: 'Add Ad', ads: ads || [], ad: {}, lang, adminUser: req.session.adminUser });
+    });
   } else {
     db.get("SELECT * FROM ads WHERE id = ?", [req.params.id], (err, ad) => {
-      res.render('admin/ads', { title: 'Edit Ad', ad, lang, adminUser: req.session.adminUser });
+      db.all("SELECT * FROM ads ORDER BY id DESC", [], (err2, ads) => {
+        res.render('admin/ads', { title: 'Edit Ad', ads: ads || [], ad: ad || {}, lang, adminUser: req.session.adminUser });
+      });
     });
   }
 });
 
 router.post('/ads/save', requireAdmin, express.urlencoded({ extended: false }), (req, res) => {
   const db = getDb();
-  const { id, title, image_url, link_url, position, is_active } = req.body;
+  const { id, title, image_url, link_url, position, is_active, ad_type, html_code } = req.body;
   const active = is_active ? 1 : 0;
+  const type = ad_type || 'image';
+  const imgUrl = image_url || '';
+  const link = link_url || '#';
+  const code = html_code || '';
+
   if (id) {
     db.run(
-      "UPDATE ads SET title = ?, image_url = ?, link_url = ?, position = ?, is_active = ? WHERE id = ?",
-      [title, image_url, link_url, position, active, id],
+      "UPDATE ads SET title = ?, image_url = ?, link_url = ?, position = ?, is_active = ?, ad_type = ?, html_code = ? WHERE id = ?",
+      [title, imgUrl, link, position, active, type, code, id],
       () => res.redirect('/admin/ads')
     );
   } else {
     db.run(
-      "INSERT INTO ads (title, image_url, link_url, position, is_active) VALUES (?,?,?,?,?)",
-      [title, image_url, link_url, position, active],
+      "INSERT INTO ads (title, image_url, link_url, position, is_active, ad_type, html_code) VALUES (?,?,?,?,?,?,?)",
+      [title, imgUrl, link, position, active, type, code],
       () => res.redirect('/admin/ads')
     );
   }

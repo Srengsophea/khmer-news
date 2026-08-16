@@ -15,11 +15,12 @@
       <div class="admin-brand">Khmer<span style="color:#b91c1c">News</span> Admin</div>
       <nav class="admin-nav">
         <a href="/admin/dashboard" class="admin-nav-item <%= typeof title !== 'undefined' && title === 'Dashboard' ? 'active' : '' %>">📊 <%= t('admin.dashboard') %></a>
+        <a href="/admin/layout" class="admin-nav-item <%= typeof title !== 'undefined' && title === 'Layout & Theme Studio' ? 'active' : '' %>">🎨 Layout Studio</a>
         <a href="/admin/articles" class="admin-nav-item <%= typeof title !== 'undefined' && (title === 'Articles' || title === 'Add Article' || title === 'Edit Article') ? 'active' : '' %>">📰 <%= t('admin.articles') %></a>
         <a href="/admin/categories" class="admin-nav-item <%= typeof title !== 'undefined' && (title === 'Categories' || title === 'Add Category' || title === 'Edit Category') ? 'active' : '' %>">📂 <%= t('admin.categories') %></a>
         <a href="/admin/ads" class="admin-nav-item <%= typeof title !== 'undefined' && (title === 'Ads Management' || title === 'Edit Ad' || title === 'Add Ad') ? 'active' : '' %>">📣 Ads Management</a>
         <a href="/admin/settings" class="admin-nav-item <%= typeof title !== 'undefined' && title === 'Settings' ? 'active' : '' %>">🔧 Settings</a>
-        <a href="/" class="admin-nav-item">🌐 Go to Website</a>
+        <a href="/" target="_blank" class="admin-nav-item">🌐 View Live Site ↗</a>
         <a href="/admin/logout" class="admin-nav-item" style="margin-top: auto; border-top: 1px solid #1e293b; padding-top: 16px; color: #f87171;">🚪 <%= t('admin.logout') %></a>
       </nav>
     </aside>

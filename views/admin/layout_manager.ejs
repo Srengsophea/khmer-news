@@ -1,0 +1,169 @@
+<div class="admin-page-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+  <div>
+    <h1 style="font-size: 1.75rem; font-weight: 800; color: #0f172a; margin: 0;">🎨 Layout & Theme Studio</h1>
+    <p style="color: #64748b; margin-top: 4px; font-size: 0.95rem;">Customize your news website layout, theme colors, breaking ticker, and section displays dynamically.</p>
+  </div>
+  <a href="/" target="_blank" class="btn btn-outline" style="display: flex; align-items: center; gap: 8px;">
+    👁️ Live Preview Website
+  </a>
+</div>
+
+<% if (typeof success !== 'undefined' && success) { %>
+  <div style="background-color: #dcfce7; border: 1px solid #86efac; color: #166534; padding: 14px 18px; border-radius: 8px; margin-bottom: 24px; display: flex; align-items: center; gap: 10px; font-weight: 500;">
+    <span>✅</span> <%= success %>
+  </div>
+<% } %>
+
+<form action="/admin/layout/save" method="POST">
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 32px;">
+    
+    <!-- CARD 1: Theme & Color Palette -->
+    <div style="background: #ffffff; border-radius: 12px; padding: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); border: 1px solid #e2e8f0;">
+      <h3 style="font-size: 1.15rem; font-weight: 700; color: #1e293b; margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
+        <span>🎯</span> Brand Theme & Accent Colors
+      </h3>
+      
+      <div class="form-group" style="margin-bottom: 20px;">
+        <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #334155;">Primary Brand Color</label>
+        <div style="display: flex; gap: 12px; align-items: center;">
+          <input type="color" id="primaryColorPicker" name="primary_color" value="<%= settings.primary_color || '#1e3a8a' %>" style="width: 50px; height: 42px; border: 1px solid #cbd5e1; border-radius: 6px; cursor: pointer; padding: 2px;">
+          <input type="text" id="primaryColorText" value="<%= settings.primary_color || '#1e3a8a' %>" style="flex: 1; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 6px; font-family: monospace; font-size: 1rem;" readonly>
+        </div>
+        <div style="display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap;">
+          <button type="button" class="preset-btn" onclick="setPrimary('#1e3a8a')" style="background: #1e3a8a; color: white; border: none; padding: 6px 12px; border-radius: 6px; font-size: 0.8rem; cursor: pointer;">Royal Blue</button>
+          <button type="button" class="preset-btn" onclick="setPrimary('#b91c1c')" style="background: #b91c1c; color: white; border: none; padding: 6px 12px; border-radius: 6px; font-size: 0.8rem; cursor: pointer;">Crimson News</button>
+          <button type="button" class="preset-btn" onclick="setPrimary('#047857')" style="background: #047857; color: white; border: none; padding: 6px 12px; border-radius: 6px; font-size: 0.8rem; cursor: pointer;">Emerald Tech</button>
+          <button type="button" class="preset-btn" onclick="setPrimary('#5b21b6')" style="background: #5b21b6; color: white; border: none; padding: 6px 12px; border-radius: 6px; font-size: 0.8rem; cursor: pointer;">Deep Purple</button>
+          <button type="button" class="preset-btn" onclick="setPrimary('#0f172a')" style="background: #0f172a; color: white; border: none; padding: 6px 12px; border-radius: 6px; font-size: 0.8rem; cursor: pointer;">Dark Slate</button>
+        </div>
+      </div>
+
+      <div class="form-group" style="margin-bottom: 20px;">
+        <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #334155;">Accent Tag & Badge Color</label>
+        <div style="display: flex; gap: 12px; align-items: center;">
+          <input type="color" id="accentColorPicker" name="accent_color" value="<%= settings.accent_color || '#dc2626' %>" style="width: 50px; height: 42px; border: 1px solid #cbd5e1; border-radius: 6px; cursor: pointer; padding: 2px;">
+          <input type="text" id="accentColorText" value="<%= settings.accent_color || '#dc2626' %>" style="flex: 1; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 6px; font-family: monospace; font-size: 1rem;" readonly>
+        </div>
+      </div>
+    </div>
+
+    <!-- CARD 2: Hero Layout Style -->
+    <div style="background: #ffffff; border-radius: 12px; padding: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); border: 1px solid #e2e8f0;">
+      <h3 style="font-size: 1.15rem; font-weight: 700; color: #1e293b; margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
+        <span>🖼️</span> Hero Showcase Layout Mode
+      </h3>
+      
+      <div class="form-group" style="margin-bottom: 20px;">
+        <label style="display: block; font-weight: 600; margin-bottom: 12px; color: #334155;">Select Hero Display Style</label>
+        
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+          <label style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; border: 1px solid #cbd5e1; border-radius: 8px; cursor: pointer; background: <%= settings.hero_layout_style === 'grid_3' ? '#f0f9ff' : '#ffffff' %>;">
+            <input type="radio" name="hero_layout_style" value="grid_3" <%= (settings.hero_layout_style === 'grid_3' || !settings.hero_layout_style) ? 'checked' : '' %>>
+            <div>
+              <strong style="display: block; color: #0f172a;">Standard 3-Card Grid (1 Hero + 2 Side Stories)</strong>
+              <span style="font-size: 0.85rem; color: #64748b;">Classic news layout featuring 1 large story on left and 2 stacked stories on right.</span>
+            </div>
+          </label>
+
+          <label style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; border: 1px solid #cbd5e1; border-radius: 8px; cursor: pointer; background: <%= settings.hero_layout_style === 'split_2' ? '#f0f9ff' : '#ffffff' %>;">
+            <input type="radio" name="hero_layout_style" value="split_2" <%= settings.hero_layout_style === 'split_2' ? 'checked' : '' %>>
+            <div>
+              <strong style="display: block; color: #0f172a;">Split Dual Featured (2 Equal Columns)</strong>
+              <span style="font-size: 0.85rem; color: #64748b;">Two large featured article cards side by side with modern overlay tags.</span>
+            </div>
+          </label>
+
+          <label style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; border: 1px solid #cbd5e1; border-radius: 8px; cursor: pointer; background: <%= settings.hero_layout_style === 'single_hero_banner' ? '#f0f9ff' : '#ffffff' %>;">
+            <input type="radio" name="hero_layout_style" value="single_hero_banner" <%= settings.hero_layout_style === 'single_hero_banner' ? 'checked' : '' %>>
+            <div>
+              <strong style="display: block; color: #0f172a;">Single Ultra-Wide Hero Banner</strong>
+              <span style="font-size: 0.85rem; color: #64748b;">Full width panoramic top headline banner for major breaking cover stories.</span>
+            </div>
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CARD 3: Breaking News Ticker Settings -->
+  <div style="background: #ffffff; border-radius: 12px; padding: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; margin-bottom: 32px;">
+    <h3 style="font-size: 1.15rem; font-weight: 700; color: #1e293b; margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
+      <span>⚡</span> Live Breaking News Ticker
+    </h3>
+
+    <div style="margin-bottom: 20px;">
+      <label style="display: flex; align-items: center; gap: 10px; font-weight: 600; color: #1e293b; cursor: pointer;">
+        <input type="checkbox" name="breaking_news_enabled" value="1" <%= (settings.breaking_news_enabled == 1 || settings.breaking_news_enabled === undefined) ? 'checked' : '' %> style="width: 18px; height: 18px;">
+        Enable Live Animated Breaking News Ticker Bar
+      </label>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+      <div>
+        <label style="display: block; font-weight: 600; margin-bottom: 6px; color: #334155;">Custom Breaking Ticker Text (Khmer)</label>
+        <input type="text" name="breaking_news_text_km" value="<%= settings.breaking_news_text_km || '' %>" placeholder="បញ្ចូលអត្ថបទព័ត៌មានទាន់ហេតុការណ៍..." style="width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.95rem;">
+        <span style="font-size: 0.8rem; color: #64748b;">Leave blank to automatically use latest published article titles.</span>
+      </div>
+      <div>
+        <label style="display: block; font-weight: 600; margin-bottom: 6px; color: #334155;">Custom Breaking Ticker Text (English)</label>
+        <input type="text" name="breaking_news_text_en" value="<%= settings.breaking_news_text_en || '' %>" placeholder="Enter custom breaking headline text..." style="width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.95rem;">
+        <span style="font-size: 0.8rem; color: #64748b;">Leave blank to automatically use latest published article titles.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- CARD 4: Header Ad & Sidebar Layout -->
+  <div style="background: #ffffff; border-radius: 12px; padding: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; margin-bottom: 32px;">
+    <h3 style="font-size: 1.15rem; font-weight: 700; color: #1e293b; margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
+      <span>📐</span> Header Banner Ad & Sidebar Settings
+    </h3>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+      <div>
+        <label style="display: flex; align-items: center; gap: 10px; font-weight: 600; color: #1e293b; cursor: pointer; margin-bottom: 8px;">
+          <input type="checkbox" name="header_banner_ad_enabled" value="1" <%= (settings.header_banner_ad_enabled == 1 || settings.header_banner_ad_enabled === undefined) ? 'checked' : '' %> style="width: 18px; height: 18px;">
+          Display Header Banner Ad Slot (Next to logo)
+        </label>
+        <span style="font-size: 0.85rem; color: #64748b; display: block;">Shows active 'header_top' ad in the header area next to logo.</span>
+      </div>
+
+      <div>
+        <label style="display: block; font-weight: 600; margin-bottom: 6px; color: #334155;">Sidebar Position</label>
+        <select name="sidebar_position" style="width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.95rem;">
+          <option value="right" <%= settings.sidebar_position === 'right' ? 'selected' : '' %>>Right Sidebar (Standard)</option>
+          <option value="left" <%= settings.sidebar_position === 'left' ? 'selected' : '' %>>Left Sidebar</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- CARD 5: Custom CSS Overrides -->
+  <div style="background: #ffffff; border-radius: 12px; padding: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; margin-bottom: 32px;">
+    <h3 style="font-size: 1.15rem; font-weight: 700; color: #1e293b; margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
+      <span>💻</span> Custom CSS Injection
+    </h3>
+    <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #334155;">Add Custom CSS Rules (Applied live to website header)</label>
+    <textarea name="custom_css" rows="4" style="width: 100%; padding: 12px 14px; border: 1px solid #cbd5e1; border-radius: 6px; font-family: monospace; font-size: 0.9rem;" placeholder="/* Example: .site-header { background: #0f172a; } */"><%= settings.custom_css || '' %></textarea>
+  </div>
+
+  <div style="display: flex; gap: 16px;">
+    <button type="submit" class="btn btn-primary" style="padding: 12px 32px; font-size: 1.05rem; font-weight: 700; border-radius: 8px; cursor: pointer;">
+      💾 Save Layout & Theme Changes
+    </button>
+  </div>
+</form>
+
+<script>
+  function setPrimary(color) {
+    document.getElementById('primaryColorPicker').value = color;
+    document.getElementById('primaryColorText').value = color;
+  }
+
+  document.getElementById('primaryColorPicker').addEventListener('input', function() {
+    document.getElementById('primaryColorText').value = this.value;
+  });
+
+  document.getElementById('accentColorPicker').addEventListener('input', function() {
+    document.getElementById('accentColorText').value = this.value;
+  });
+</script>

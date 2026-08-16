@@ -38,9 +38,12 @@ router.get('/article/:slug', (req, res) => {
       if (!article) {
         return res.status(404).render('404', { layout: false, title: '404' });
       }
+      // Increment views count
+      db.run("UPDATE articles SET views_count = COALESCE(views_count, 0) + 1 WHERE id = ?", [article.id]);
+
       db.all(`SELECT * FROM categories ORDER BY id`, [], (e2, categories) => {
         db.all(
-          `SELECT a.*, c.slug as category_slug, c.name_km as category_name_km, c.name_en as category_name_en FROM articles a LEFT JOIN categories c ON a.category_id = c.id WHERE a.slug != ? ORDER BY a.created_at DESC LIMIT 3`,
+          `SELECT a.*, c.slug as category_slug, c.name_km as category_name_km, c.name_en as category_name_en FROM articles a LEFT JOIN categories c ON a.category_id = c.id WHERE a.slug != ? ORDER BY a.created_at DESC LIMIT 4`,
           [req.params.slug],
           (e3, articles) => {
             res.render('article', { article, categories, articles, lang, title: article[`title_${lang}`] });

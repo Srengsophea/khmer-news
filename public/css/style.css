@@ -1,5 +1,9 @@
 /* Khmer-News Premium News Stylesheet */
-/* Color Palette: Editorial Red (#b91c1c), Slate Dark (#0f172a), Border Light (#e2e8f0), Body Bg (#f8fafc) */
+:root {
+  --primary-color: #1e3a8a;
+  --accent-color: #dc2626;
+  --primary-hover: #1e40af;
+}
 
 *,
 *::before,
@@ -22,6 +26,17 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+.reading-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 4px;
+  background: var(--accent-color, #dc2626);
+  z-index: 9999;
+  width: 0%;
+  transition: width 0.1s ease;
+}
+
 /* System-wide Khmer Styling when lang="km" is set */
 html[lang="km"] body {
   font-family: 'Noto Sans Khmer', Arial, sans-serif;
@@ -31,7 +46,7 @@ html[lang="km"] body {
 
 /* Headings: Premium Editorial Serif style */
 h1, h2, h3, h4, h5, h6 {
-  font-family: 'Playfair Display', Georgia, Cambria, "Times New Roman", Times, serif;
+  font-family: 'Outfit', 'Playfair Display', Georgia, serif;
   color: #0f172a;
   font-weight: 700;
   line-height: 1.25;

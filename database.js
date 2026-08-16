@@ -57,7 +57,16 @@ function initDatabase(callback) {
         social_facebook TEXT,
         social_telegram TEXT,
         social_youtube TEXT,
-        social_twitter TEXT
+        social_twitter TEXT,
+        primary_color TEXT DEFAULT '#1e3a8a',
+        accent_color TEXT DEFAULT '#dc2626',
+        hero_layout_style TEXT DEFAULT 'grid_3',
+        breaking_news_enabled INTEGER DEFAULT 1,
+        breaking_news_text_km TEXT DEFAULT '',
+        breaking_news_text_en TEXT DEFAULT '',
+        header_banner_ad_enabled INTEGER DEFAULT 1,
+        sidebar_position TEXT DEFAULT 'right',
+        custom_css TEXT DEFAULT ''
       );
       CREATE TABLE IF NOT EXISTS ads (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -65,15 +74,86 @@ function initDatabase(callback) {
         image_url TEXT NOT NULL,
         link_url TEXT NOT NULL,
         position TEXT NOT NULL,
-        is_active INTEGER DEFAULT 1
+        is_active INTEGER DEFAULT 1,
+        ad_type TEXT DEFAULT 'image',
+        html_code TEXT DEFAULT '',
+        click_count INTEGER DEFAULT 0,
+        views_count INTEGER DEFAULT 0
       );
     `;
     db.exec(schema, (err) => {
       if (err) return callback(err);
-      callback(null);
+      runMigrations(() => {
+        callback(null);
+      });
     });
   });
 }
+
+function runMigrations(callback) {
+  const alterQueries = [
+    "ALTER TABLE settings ADD COLUMN primary_color TEXT DEFAULT '#1e3a8a'",
+    "ALTER TABLE settings ADD COLUMN accent_color TEXT DEFAULT '#dc2626'",
+    "ALTER TABLE settings ADD COLUMN hero_layout_style TEXT DEFAULT 'grid_3'",
+    "ALTER TABLE settings ADD COLUMN breaking_news_enabled INTEGER DEFAULT 1",
+    "ALTER TABLE settings ADD COLUMN breaking_news_text_km TEXT DEFAULT ''",
+    "ALTER TABLE settings ADD COLUMN breaking_news_text_en TEXT DEFAULT ''",
+    "ALTER TABLE settings ADD COLUMN header_banner_ad_enabled INTEGER DEFAULT 1",
+    "ALTER TABLE settings ADD COLUMN sidebar_position TEXT DEFAULT 'right'",
+    "ALTER TABLE settings ADD COLUMN custom_css TEXT DEFAULT ''",
+    "ALTER TABLE ads ADD COLUMN ad_type TEXT DEFAULT 'image'",
+    "ALTER TABLE ads ADD COLUMN html_code TEXT DEFAULT ''",
+    "ALTER TABLE ads ADD COLUMN click_count INTEGER DEFAULT 0",
+    "ALTER TABLE ads ADD COLUMN views_count INTEGER DEFAULT 0",
+    "ALTER TABLE articles ADD COLUMN views_count INTEGER DEFAULT 0",
+    "ALTER TABLE articles ADD COLUMN read_time_minutes INTEGER DEFAULT 3",
+    "ALTER TABLE articles ADD COLUMN author_name TEXT DEFAULT 'Khmer News Desk'"
+  ];
+
+  let completed = 0;
+  alterQueries.forEach((q) => {
+    db.run(q, [], () => {
+      completed++;
+      if (completed === alterQueries.length) {
+        ensureDefaultSettings(() => {
+          if (callback) callback();
+        });
+      }
+    });
+  });
+}
+
+function ensureDefaultSettings(callback) {
+  db.get("SELECT COUNT(*) as c FROM settings", (err, row) => {
+    if (err || (row && row.c > 0)) {
+      if (callback) callback();
+      return;
+    }
+    db.run(`
+      INSERT INTO settings (
+        id, site_name_km, site_name_en, site_desc_km, site_desc_en,
+        contact_phone, contact_email, contact_address_km, contact_address_en,
+        social_facebook, social_telegram, social_youtube, social_twitter,
+        primary_color, accent_color, hero_layout_style, breaking_news_enabled,
+        breaking_news_text_km, breaking_news_text_en, header_banner_ad_enabled, sidebar_position
+      ) VALUES (
+        1, 'ខ្មែរញូស៍', 'Khmer News',
+        'ប្រភពព័ត៌មានឈានមុខគេ និងទាន់ហេតុការណ៍នៅកម្ពុជា',
+        'Leading & Breaking News Portal in Cambodia',
+        '+855 12 345 678', 'info@khmernews.com.kh',
+        'ភ្នំពេញ, កម្ពុជា', 'Phnom Penh, Cambodia',
+        'https://facebook.com', 'https://t.me/khmernews', 'https://youtube.com', 'https://twitter.com',
+        '#1e3a8a', '#dc2626', 'grid_3', 1,
+        'ព័ត៌មានទាន់ហេតុការណ៍៖ កម្ពុជាប្រកាសគម្រោងអភិវឌ្ឍន៍ហេដ្ឋារចនាសម្ព័ន្ធបច្ចេកវិទ្យាថ្មី',
+        'BREAKING NEWS: Cambodia Announces Major Tech & Infrastructure Expansion Project',
+        1, 'right'
+      )
+    `, [], () => {
+      if (callback) callback();
+    });
+  });
+}
+
 
 function seedDatabase(callback) {
   db.get("SELECT COUNT(*) as c FROM categories", (err, row) => {
