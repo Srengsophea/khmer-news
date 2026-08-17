@@ -1,36 +1,85 @@
 <div class="admin-page">
-  <h1 class="admin-page-title" style="margin-bottom: 24px;"><%= t('admin.dashboard') %></h1>
-  <div class="stat-grid">
+  <h1 class="admin-page-title" style="margin-bottom: 24px;"><i class="fas fa-chart-simple"></i> <%= t('admin.dashboard') %></h1>
+  <div class="stat-grid" style="grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));">
     <div class="stat-card">
       <div class="stat-number"><%= stats.articles %></div>
-      <div class="stat-label"><%= t('admin.stats_articles') %></div>
+      <div class="stat-label"><i class="fas fa-newspaper"></i> <%= t('admin.stats_articles') %></div>
     </div>
     <div class="stat-card">
       <div class="stat-number"><%= stats.categories %></div>
-      <div class="stat-label"><%= t('admin.stats_categories') %></div>
+      <div class="stat-label"><i class="fas fa-folder"></i> <%= t('admin.stats_categories') %></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number"><%= stats.views.toLocaleString() %></div>
+      <div class="stat-label"><i class="fas fa-eye"></i> <%= t('admin.stats_views') %></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number"><%= stats.subscribers %></div>
+      <div class="stat-label"><i class="fas fa-envelope-open-text"></i> <%= t('admin.stats_subscribers') %></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number"><%= stats.messages %></div>
+      <div class="stat-label"><i class="fas fa-envelope"></i> <%= t('admin.stats_messages') %></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number"><%= stats.tags %></div>
+      <div class="stat-label"><i class="fas fa-tags"></i> <%= t('admin.stats_tags') %></div>
     </div>
   </div>
-  <h2 style="margin: 32px 0 16px;"><%= t('admin.recent_articles') %></h2>
-  <table class="admin-table">
-    <thead>
-      <tr>
-        <th>#</th>
-        <th><%= t('labels.title') %></th>
-        <th><%= t('labels.category') %></th>
-        <th><%= t('labels.action') %></th>
-      </tr>
-    </thead>
-    <tbody>
-      <% if (recent && recent.length > 0) { %>
-        <% recent.forEach(function(a, i) { %>
-          <tr>
-            <td><%= i + 1 %></td>
-            <td><%= a[`title_${lang}`] %></td>
-            <td><%= a.name_km || a.name_en || '' %></td>
-            <td><a href="/admin/articles/edit/<%= a.id %>"><%= t('labels.edit') %></a></td>
-          </tr>
-        <% }) %>
-      <% } %>
-    </tbody>
-  </table>
+
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 28px;" class="dashboard-columns">
+    <div>
+      <h2 style="margin: 0 0 16px; font-size: 1.2rem; font-weight: 800; color: #0f172a;"><%= t('admin.recent_articles') %></h2>
+      <div style="background: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0; overflow: hidden;">
+        <table class="admin-table" style="margin: 0;">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th><%= t('labels.title') %></th>
+              <th><%= t('labels.category') %></th>
+              <th><%= t('labels.action') %></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% if (recent && recent.length > 0) { %>
+              <% recent.forEach(function(a, i) { %>
+                <tr>
+                  <td><%= i + 1 %></td>
+                  <td><a href="/admin/articles/edit/<%= a.id %>" style="color: #1e3a8a;"><%= a[`title_${lang}`] %></a></td>
+                  <td><%= a.name_km || a.name_en || '' %></td>
+                  <td><a href="/article/<%= a.slug %>" target="_blank" style="color: #2563eb;">View ↗</a></td>
+                </tr>
+              <% }) %>
+            <% } %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div>
+      <h2 style="margin: 0 0 16px; font-size: 1.2rem; font-weight: 800; color: #0f172a;"><i class="fas fa-fire"></i> <%= t('admin.top_articles') %></h2>
+      <div style="background: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0; overflow: hidden;">
+        <table class="admin-table" style="margin: 0;">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th><%= t('labels.title') %></th>
+              <th><%= t('labels.views_count') %></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% if (topArticles && topArticles.length > 0) { %>
+              <% topArticles.forEach(function(a, i) { %>
+                <tr>
+                  <td><%= i + 1 %></td>
+                  <td><a href="/admin/articles/edit/<%= a.id %>" style="color: #1e3a8a;"><%= a[`title_${lang}`] %></a></td>
+                  <td><strong><i class="fas fa-eye"></i> <%= a.views_count || 0 %> <%= t('admin.article_views') %></strong></td>
+                </tr>
+              <% }) %>
+            <% } %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
 </div>

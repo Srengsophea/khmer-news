@@ -17,39 +17,77 @@
           <label><%= t('labels.title') %> (KM)</label>
           <input type="text" name="title_km" value="<%= article.title_km %>" class="form-control" required>
         </div>
-        <div class="form-group">
-          <label><%= t('labels.category') %></label>
-          <select name="category_id" class="form-control">
-            <option value=""><%= t('labels.category') %></option>
-            <% categories.forEach(function(c) { %>
-              <option value="<%= c.id %>" <%= c.id == article.category_id ? 'selected' : '' %>><%= c.name_en %> / <%= c.name_km %></option>
-            <% }) %>
-          </select>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+          <div class="form-group">
+            <label><%= t('labels.category') %></label>
+            <select name="category_id" class="form-control">
+              <option value=""><%= t('labels.category') %></option>
+              <% categories.forEach(function(c) { %>
+                <option value="<%= c.id %>" <%= c.id == article.category_id ? 'selected' : '' %>><%= c.name_en %> / <%= c.name_km %></option>
+              <% }) %>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Card Template Layout</label>
+            <select name="card_template" class="form-control">
+              <option value="standard" <%= article.card_template === 'standard' ? 'selected' : '' %>>Standard Card</option>
+              <option value="horizontal" <%= article.card_template === 'horizontal' ? 'selected' : '' %>>Horizontal Card</option>
+              <option value="minimal" <%= article.card_template === 'minimal' ? 'selected' : '' %>>Minimal Text Card</option>
+              <option value="highlight" <%= article.card_template === 'highlight' ? 'selected' : '' %>>Highlight Dark Card</option>
+              <option value="wide" <%= article.card_template === 'wide' ? 'selected' : '' %>>Wide Full Card</option>
+            </select>
+          </div>
         </div>
-        <div class="form-group">
-          <label><%= t('labels.image_url') %></label>
-          <input type="text" name="image_url" value="<%= article.image_url %>" class="form-control">
-        </div>
-        <div class="form-group">
-          <label>Card Template Layout</label>
-          <select name="card_template" class="form-control">
-            <option value="standard" <%= article.card_template === 'standard' ? 'selected' : '' %>>Standard Card</option>
-            <option value="horizontal" <%= article.card_template === 'horizontal' ? 'selected' : '' %>>Horizontal Card</option>
-            <option value="minimal" <%= article.card_template === 'minimal' ? 'selected' : '' %>>Minimal Text Card</option>
-            <option value="highlight" <%= article.card_template === 'highlight' ? 'selected' : '' %>>Highlight Dark Card</option>
-            <option value="wide" <%= article.card_template === 'wide' ? 'selected' : '' %>>Wide Full Card</option>
-          </select>
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px;">
+          <div class="form-group">
+            <label><%= t('labels.author') %></label>
+            <input type="text" name="author_name" value="<%= article.author_name || '' %>" class="form-control">
+          </div>
+          <div class="form-group">
+            <label><%= t('labels.read_time') %></label>
+            <input type="number" name="read_time_minutes" value="<%= article.read_time_minutes || 3 %>" class="form-control" min="1" max="60">
+          </div>
+          <div class="form-group">
+            <label><%= t('labels.image_url') %></label>
+            <input type="text" name="image_url" value="<%= article.image_url || '' %>" class="form-control">
+          </div>
         </div>
         <div class="form-group">
           <label><input type="checkbox" name="is_featured" value="1" <%= article.is_featured ? 'checked' : '' %>> <%= t('labels.featured') %></label>
         </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+          <div class="form-group">
+            <label>Summary (EN)</label>
+            <input type="text" name="summary_en" value="<%= article.summary_en || '' %>" class="form-control">
+          </div>
+          <div class="form-group">
+            <label>Summary (KM)</label>
+            <input type="text" name="summary_km" value="<%= article.summary_km || '' %>" class="form-control">
+          </div>
+        </div>
+        <div class="form-group">
+          <label><i class="fas fa-tags"></i> <%= t('labels.tags') %></label>
+          <div style="display: flex; flex-wrap: wrap; gap: 10px; padding: 10px 0;">
+            <% if (typeof allTags !== 'undefined' && allTags && allTags.length > 0) { %>
+              <% allTags.forEach(function(tag) { %>
+                <label style="display: flex; align-items: center; gap: 6px; background: #f1f5f9; padding: 6px 12px; border-radius: 20px; cursor: pointer; font-size: 0.88rem;">
+                  <input type="checkbox" name="tag_ids" value="<%= tag.id %>"
+                    <%= (typeof articleTagIds !== 'undefined' && articleTagIds.indexOf(tag.id) !== -1) ? 'checked' : '' %>>
+                  <%= tag.name_en %> / <%= tag.name_km %>
+                </label>
+              <% }) %>
+            <% } else { %>
+              <span style="color: #94a3b8;">No tags defined yet.</span>
+            <% } %>
+          </div>
+        </div>
         <div class="form-group">
           <label><%= t('labels.content') %> (EN)</label>
-          <textarea name="content_en" rows="5" class="form-control" required><%= article.content_en %></textarea>
+          <textarea name="content_en" rows="5" class="form-control" required><%= article.content_en || '' %></textarea>
         </div>
         <div class="form-group">
           <label><%= t('labels.content') %> (KM)</label>
-          <textarea name="content_km" rows="5" class="form-control" required><%= article.content_km %></textarea>
+          <textarea name="content_km" rows="5" class="form-control" required><%= article.content_km || '' %></textarea>
         </div>
         <button type="submit" class="btn btn-primary"><%= t('labels.save') %></button>
         <a href="/admin/articles" class="btn"><%= t('labels.cancel') %></a>
@@ -75,7 +113,7 @@
               <td><%= a.title_en %></td>
               <td><%= a.title_km %></td>
               <td><%= a.category_name_en || '' %></td>
-              <td><%= a.is_featured ? '✓' : '✗' %></td>
+              <td><% if (a.is_featured) { %><i class="fas fa-check" style="color: #16a34a;"></i><% } else { %><i class="fas fa-xmark" style="color: #dc2626;"></i><% } %></td>
               <td>
                 <a href="/admin/articles/edit/<%= a.id %>" class="btn btn-sm"><%= t('labels.edit') %></a>
                 <a href="/admin/articles/delete/<%= a.id %>" class="btn btn-sm btn-danger" onclick="return confirm('Delete article?')"><%= t('labels.delete') %></a>

@@ -24,11 +24,11 @@
                       </h1>
                       <div
                         style="display: flex; gap: 16px; align-items: center; margin-top: 12px; color: rgba(255,255,255,0.85); font-size: 0.9rem;">
-                        <span>📅 <%= new Date(featured[0].created_at).toLocaleDateString(lang==='km' ? 'km-KH' : 'en-US'
+                        <span><i class="fas fa-calendar-days"></i> <%= new Date(featured[0].created_at).toLocaleDateString(lang==='km' ? 'km-KH' : 'en-US'
                             , { weekday: 'long' , year: 'numeric' , month: 'long' , day: 'numeric' }) %></span>
-                        <span>⏱️ <%= featured[0].read_time_minutes || 3 %>
+                        <span><i class="fas fa-stopwatch"></i> <%= featured[0].read_time_minutes || 3 %>
                             <%= lang==='km' ? 'នាទីអាន' : 'min read' %></span>
-                        <span>👁️ <%= featured[0].views_count || 120 %>
+                        <span><i class="fas fa-eye"></i> <%= featured[0].views_count || 120 %>
                             <%= lang==='km' ? 'ការទស្សនា' : 'views' %></span>
                       </div>
                     </div>
@@ -48,7 +48,7 @@
                           <h2 class="hero-title" style="font-size: 1.5rem; line-height: 1.3; margin-top: 8px;">
                             <%= f[`title_${lang}`] %>
                           </h2>
-                          <span class="hero-meta" style="margin-top: 8px; font-size: 0.85rem;">📅 <%= new
+                          <span class="hero-meta" style="margin-top: 8px; font-size: 0.85rem;"><i class="fas fa-calendar-days"></i> <%= new
                               Date(f.created_at).toLocaleDateString(lang==='km' ? 'km-KH' : 'en-US' , { year: 'numeric'
                               , month: 'short' , day: 'numeric' }) %></span>
                         </div>
@@ -56,7 +56,104 @@
                       <% }) %>
                   </div>
 
-                  <% } else { %>
+                  <% } else if (heroStyle==='carousel' && featured && featured.length> 0) { %>
+                    <div class="hero-carousel" data-carousel>
+                      <div class="carousel-track">
+                        <% featured.forEach(function(f, fi) { %>
+                          <div class="carousel-slide <%= fi === 0 ? 'active' : '' %>">
+                            <a href="/article/<%= f.slug %>" class="carousel-slide-link">
+                              <img src="<%= f.image_url %>" alt="<%= f[`title_${lang}`] %>">
+                              <div class="carousel-overlay">
+                                <span class="hero-category badge-cat-<%= f.category_slug %>">
+                                  <%= f[`category_name_${lang}`] %>
+                                </span>
+                                <h2 class="carousel-title">
+                                  <%= f[`title_${lang}`] %>
+                                </h2>
+                                <span class="carousel-meta"><i class="fas fa-calendar-days"></i> <%= new
+                                    Date(f.created_at).toLocaleDateString(lang==='km' ? 'km-KH' : 'en-US' , {
+                                    year: 'numeric' , month: 'short' , day: 'numeric' }) %> &bull; <i class="fas fa-stopwatch"></i> <%= f.read_time_minutes || 3
+                                    %>
+                                    <%= lang==='km' ? 'នាទីអាន' : 'min read' %></span>
+                              </div>
+                            </a>
+                          </div>
+                          <% }) %>
+                      </div>
+                      <button class="carousel-nav carousel-prev" data-carousel-prev aria-label="Previous">&#8249;</button>
+                      <button class="carousel-nav carousel-next" data-carousel-next aria-label="Next">&#8250;</button>
+                      <div class="carousel-dots" data-carousel-dots>
+                        <% featured.forEach(function(f, fi) { %>
+                          <button class="carousel-dot <%= fi === 0 ? 'active' : '' %>" data-carousel-dot="<%= fi %>"
+                            aria-label="Slide <%= fi + 1 %>"></button>
+                          <% }) %>
+                      </div>
+                    </div>
+
+                    <% } else if (heroStyle==='mosaic' && featured && featured.length> 0) { %>
+                    <div class="hero-mosaic">
+                      <% if (featured.length > 0) { %>
+                        <a href="/article/<%= featured[0].slug %>" class="hero-mosaic-tall">
+                          <img src="<%= featured[0].image_url %>" alt="<%= featured[0][`title_${lang}`] %>">
+                          <div class="hero-overlay" style="padding: 26px;">
+                            <span class="hero-category badge-cat-<%= featured[0].category_slug %>">
+                              <%= featured[0][`category_name_${lang}`] %>
+                            </span>
+                            <h2 class="hero-title" style="font-size: 1.5rem; line-height: 1.3; margin-top: 10px;">
+                              <%= featured[0][`title_${lang}`] %>
+                            </h2>
+                            <span class="hero-meta" style="margin-top: 8px; font-size: 0.85rem;"><i class="fas fa-calendar-days"></i> <%= new
+                                Date(featured[0].created_at).toLocaleDateString(lang==='km' ? 'km-KH' : 'en-US' , {
+                                year: 'numeric' , month: 'short' , day: 'numeric' }) %></span>
+                          </div>
+                        </a>
+                        <% } %>
+                        <div class="hero-mosaic-col">
+                          <% if (featured.length > 1) { %>
+                            <a href="/article/<%= featured[1].slug %>" class="hero-mosaic-wide">
+                              <img src="<%= featured[1].image_url %>" alt="<%= featured[1][`title_${lang}`] %>">
+                              <div class="hero-overlay" style="padding: 20px;">
+                                <span class="hero-category badge-cat-<%= featured[1].category_slug %>">
+                                  <%= featured[1][`category_name_${lang}`] %>
+                                </span>
+                                <h3 style="font-size: 1.15rem; line-height: 1.3; margin-top: 6px; color: #fff;">
+                                  <%= featured[1][`title_${lang}`] %>
+                                </h3>
+                              </div>
+                            </a>
+                            <% } %>
+                            <div class="hero-mosaic-minis">
+                              <% featured.slice(2, 4).forEach(function(f) { %>
+                                <a href="/article/<%= f.slug %>" class="hero-mosaic-mini">
+                                  <img src="<%= f.image_url %>" alt="<%= f[`title_${lang}`] %>">
+                                  <span class="hero-mini-title"><%= f[`title_${lang}`] %></span>
+                                </a>
+                                <% }) %>
+                            </div>
+                        </div>
+                    </div>
+
+                    <% } else if (heroStyle==='hero_2x2' && featured && featured.length> 0) { %>
+                    <div class="hero-2x2">
+                      <% featured.slice(0, 4).forEach(function(f) { %>
+                        <a href="/article/<%= f.slug %>" class="hero-2x2-card">
+                          <img src="<%= f.image_url %>" alt="<%= f[`title_${lang}`] %>">
+                          <div class="hero-overlay" style="padding: 22px;">
+                            <span class="hero-category badge-cat-<%= f.category_slug %>">
+                              <%= f[`category_name_${lang}`] %>
+                            </span>
+                            <h3 style="font-size: 1.2rem; line-height: 1.3; margin-top: 8px; color: #fff;">
+                              <%= f[`title_${lang}`] %>
+                            </h3>
+                            <span class="hero-meta" style="margin-top: 6px; font-size: 0.8rem;"><i class="fas fa-calendar-days"></i> <%= new
+                                Date(f.created_at).toLocaleDateString(lang==='km' ? 'km-KH' : 'en-US' , { year:
+                                'numeric' , month: 'short' , day: 'numeric' }) %></span>
+                          </div>
+                        </a>
+                        <% }) %>
+                    </div>
+
+                    <% } else { %>
                     <div class="hero-grid">
                       <% if (featured && featured.length> 0) { %>
                         <a href="/article/<%= featured[0].slug %>" class="hero-main">
@@ -68,7 +165,7 @@
                             <h2 class="hero-title">
                               <%= featured[0][`title_${lang}`] %>
                             </h2>
-                            <span class="hero-meta">📅 <%= new
+                            <span class="hero-meta"><i class="fas fa-calendar-days"></i> <%= new
                                 Date(featured[0].created_at).toLocaleDateString(lang==='km' ? 'km-KH' : 'en-US' , {
                                 weekday: 'long' , year: 'numeric' , month: 'long' , day: 'numeric' }) %></span>
                           </div>
@@ -119,7 +216,7 @@
                       <span class="article-card-date">&bull; <%= new
                           Date(spotlight.created_at).toLocaleDateString(lang==='km' ? 'km-KH' : 'en-US' , {
                           year: 'numeric' , month: 'short' , day: 'numeric' }) %></span>
-                      <span class="article-card-views">&bull; 👁️ <%= spotlight.views_count || 120 %></span>
+                      <span class="article-card-views">&bull; <i class="fas fa-eye"></i> <%= spotlight.views_count || 120 %></span>
                     </div>
                     <h3 class="article-card-title">
                       <a href="/article/<%= spotlight.slug %>">
@@ -133,7 +230,7 @@
                       <a href="/article/<%= spotlight.slug %>" class="read-more">
                         <%= t('common.read_more') %> &rarr;
                       </a>
-                      <span class="read-time">⏱️ <%= spotlight.read_time_minutes || 3 %> min read</span>
+                      <span class="read-time"><i class="fas fa-stopwatch"></i> <%= spotlight.read_time_minutes || 3 %> min read</span>
                     </div>
                   </div>
                 </article>
@@ -213,6 +310,173 @@
                             <% }) %>
                         </div>
 
+                        <% } else if (block.style==='featured_top' ) { %>
+                          <!-- Featured Top: 1 wide story + grid below -->
+                          <% var featList=catArticles.slice(0, block.limit || 7); %>
+                          <% if (featList.length > 0) { %>
+                            <a href="/article/<%= featList[0].slug %>" class="hero-main"
+                              style="height: 330px; margin-bottom: 20px;">
+                              <img src="<%= featList[0].image_url %>" alt="<%= featList[0][`title_${lang}`] %>">
+                              <div class="hero-overlay" style="padding: 30px;">
+                                <span class="hero-category badge-cat-<%= featList[0].category_slug %>">
+                                  <%= featList[0][`category_name_${lang}`] %>
+                                </span>
+                                <h3 style="font-size: 1.65rem; line-height: 1.35; margin-top: 10px; color: #ffffff;">
+                                  <%= featList[0][`title_${lang}`] %>
+                                </h3>
+                                <p class="article-card-excerpt"
+                                  style="color: rgba(255,255,255,0.85); margin-top: 8px; font-size: 0.95rem; -webkit-line-clamp: 2;">
+                                  <%= featList[0][`content_${lang}`].replace(/<[^>]*>/g, '').substring(0, 160) %>...
+                                </p>
+                              </div>
+                            </a>
+                            <div class="grid grid-cols-2 gap-6" style="margin-bottom: 24px;">
+                              <% featList.slice(1).forEach(function(a) { %>
+                                <article class="card-template-standard">
+                                  <a href="/article/<%= a.slug %>">
+                                    <img src="<%= a.image_url %>" alt="<%= a[`title_${lang}`] %>"
+                                      class="article-card-img">
+                                  </a>
+                                  <div class="article-card-body">
+                                    <div class="article-card-meta">
+                                      <span class="article-card-category badge-cat-<%= a.category_slug %>">
+                                        <%= a[`category_name_${lang}`] %>
+                                      </span>
+                                      <span class="article-card-date">&bull; <%= new
+                                          Date(a.created_at).toLocaleDateString(lang==='km' ? 'km-KH' : 'en-US' , {
+                                          year: 'numeric' , month: 'short' , day: 'numeric' }) %></span>
+                                    </div>
+                                    <h3 class="article-card-title">
+                                      <a href="/article/<%= a.slug %>">
+                                        <%= a[`title_${lang}`] %>
+                                      </a>
+                                    </h3>
+                                    <p class="article-card-excerpt">
+                                      <%= a[`content_${lang}`].replace(/<[^>]*>/g, '').substring(0, 110) %>...
+                                    </p>
+                                    <div class="article-card-footer">
+                                      <a href="/article/<%= a.slug %>" class="read-more">
+                                        <%= t('common.read_more') %> &rarr;
+                                      </a>
+                                    </div>
+                                  </div>
+                                </article>
+                                <% }) %>
+                            </div>
+                            <% } %>
+                        <% } else if (block.style==='big_first' ) { %>
+                          <!-- Big First: 1 wide horizontal feature + compact rows below -->
+                          <% var bigList=catArticles.slice(0, block.limit || 5); %>
+                          <% if (bigList.length > 0) { %>
+                            <article class="card-template-wide" style="margin-bottom: 18px;">
+                              <a href="/article/<%= bigList[0].slug %>" class="card-img-link">
+                                <img src="<%= bigList[0].image_url %>" alt="<%= bigList[0][`title_${lang}`] %>"
+                                  class="card-img">
+                              </a>
+                              <div class="article-card-body">
+                                <div class="article-card-meta">
+                                  <span class="article-card-category badge-cat-<%= bigList[0].category_slug %>">
+                                    <%= bigList[0][`category_name_${lang}`] %>
+                                  </span>
+                                  <span class="article-card-date">&bull; <i class="fas fa-calendar-days"></i> <%= new
+                                      Date(bigList[0].created_at).toLocaleDateString(lang==='km' ? 'km-KH' : 'en-US'
+                                      , { year: 'numeric' , month: 'short' , day: 'numeric' }) %></span>
+                                </div>
+                                <h3 class="article-card-title">
+                                  <a href="/article/<%= bigList[0].slug %>">
+                                    <%= bigList[0][`title_${lang}`] %>
+                                  </a>
+                                </h3>
+                                <p class="article-card-excerpt">
+                                  <%= bigList[0][`content_${lang}`].replace(/<[^>]*>/g, '').substring(0, 180) %>...
+                                </p>
+                              </div>
+                            </article>
+                            <div class="big-first-rows">
+                              <% bigList.slice(1).forEach(function(a) { %>
+                                <a href="/article/<%= a.slug %>" class="big-first-row">
+                                  <span class="big-first-thumb">
+                                    <img src="<%= a.image_url %>" alt="<%= a[`title_${lang}`] %>">
+                                  </span>
+                                  <span class="big-first-info">
+                                    <span class="article-card-category badge-cat-<%= a.category_slug %>">
+                                      <%= a[`category_name_${lang}`] %>
+                                    </span>
+                                    <span class="big-first-row-title"><%= a[`title_${lang}`] %></span>
+                                    <span class="big-first-row-meta"><i class="fas fa-calendar-days"></i> <%= new
+                                        Date(a.created_at).toLocaleDateString(lang==='km' ? 'km-KH' : 'en-US' , {
+                                        year: 'numeric' , month: 'short' , day: 'numeric' }) %> &bull; <i class="fas fa-stopwatch"></i> <%= a.read_time_minutes
+                                        || 3 %>
+                                        <%= lang==='km' ? 'នាទីអាន' : 'min read' %></span>
+                                  </span>
+                                </a>
+                                <% }) %>
+                            </div>
+                            <% } %>
+
+                        <% } else if (block.style==='horizontal_scroll' ) { %>
+                          <!-- Horizontal Scroll: swipeable strip of compact cards -->
+                          <div class="hscroll-wrap" data-hscroll>
+                            <button type="button" class="hscroll-arrow hscroll-prev" data-hscroll-prev
+                              aria-label="Previous">&#8249;</button>
+                            <div class="hscroll-track" data-hscroll-track>
+                              <% catArticles.slice(0, block.limit || 8).forEach(function(a) { %>
+                                <article class="card-template-standard hscroll-card">
+                                  <a href="/article/<%= a.slug %>">
+                                    <img src="<%= a.image_url %>" alt="<%= a[`title_${lang}`] %>"
+                                      class="article-card-img">
+                                  </a>
+                                  <div class="article-card-body">
+                                    <div class="article-card-meta">
+                                      <span class="article-card-category badge-cat-<%= a.category_slug %>">
+                                        <%= a[`category_name_${lang}`] %>
+                                      </span>
+                                    </div>
+                                    <h3 class="article-card-title" style="-webkit-line-clamp: 3;">
+                                      <a href="/article/<%= a.slug %>">
+                                        <%= a[`title_${lang}`] %>
+                                      </a>
+                                    </h3>
+                                  </div>
+                                </article>
+                                <% }) %>
+                            </div>
+                            <button type="button" class="hscroll-arrow hscroll-next" data-hscroll-next
+                              aria-label="Next">&#8250;</button>
+                          </div>
+
+                        <% } else if (block.style==='masonry' ) { %>
+                          <!-- Masonry: mixed card heights for a magazine feel -->
+                          <div class="masonry-grid">
+                            <% catArticles.slice(0, block.limit || 6).forEach(function(a, mi) { %>
+                              <article class="card-template-standard masonry-card <%= mi % 3 === 0 ? 'masonry-tall' :
+                                (mi % 3 === 1 ? 'masonry-wide' : '') %>">
+                                <a href="/article/<%= a.slug %>">
+                                  <img src="<%= a.image_url %>" alt="<%= a[`title_${lang}`] %>"
+                                    class="article-card-img">
+                                </a>
+                                <div class="article-card-body">
+                                  <div class="article-card-meta">
+                                    <span class="article-card-category badge-cat-<%= a.category_slug %>">
+                                      <%= a[`category_name_${lang}`] %>
+                                    </span>
+                                    <span class="article-card-date">&bull; <i class="fas fa-calendar-days"></i> <%= new
+                                        Date(a.created_at).toLocaleDateString(lang==='km' ? 'km-KH' : 'en-US' , {
+                                        year: 'numeric' , month: 'short' , day: 'numeric' }) %></span>
+                                  </div>
+                                  <h3 class="article-card-title">
+                                    <a href="/article/<%= a.slug %>">
+                                      <%= a[`title_${lang}`] %>
+                                    </a>
+                                  </h3>
+                                  <p class="article-card-excerpt">
+                                    <%= a[`content_${lang}`].replace(/<[^>]*>/g, '').substring(0, 120) %>...
+                                  </p>
+                                </div>
+                              </article>
+                              <% }) %>
+                          </div>
+
                         <% } else { %>
                           <!-- Default 2-Col Grid -->
                           <div class="grid grid-cols-2 gap-6" style="margin-bottom: 24px;">
@@ -273,8 +537,126 @@
                         </div>
                         <% } %>
 
-                          <!-- BLOCK TYPE: NEWSLETTER CTA -->
-                          <% } else if (block.type==='newsletter' ) { %>
+                          <!-- BLOCK TYPE: LATEST HEADLINES TICKER -->
+                          <% } else if (block.type==='ticker' && articles && articles.length> 0) { %>
+                            <% var tickerStyle=block.style || ((typeof siteSettings !=='undefined' && siteSettings &&
+                              siteSettings.ticker_style) || 'marquee' ) ; %>
+                            <% var tickerItems=articles.slice(0, block.limit || 10); %>
+                            <section class="section block-section block-ticker">
+                              <div class="container">
+                                <div class="ticker-box ticker-style-<%= tickerStyle %>" <%= tickerStyle === 'slide' ?
+                                  'data-ticker-slide' : '' %>>
+                                  <span class="ticker-label">
+                                    <%= lang==='km' ? (block.title_km || 'ព័ត៌មានចុងក្រោយ' ) : (block.title_en
+                                      || 'LATEST HEADLINES' ) %>
+                                  </span>
+                                  <% if (tickerStyle === 'static') { %>
+                                    <div class="ticker-track ticker-static">
+                                      <% tickerItems.forEach(function(a, ti) { %>
+                                        <a class="ticker-text" href="/article/<%= a.slug %>">
+                                          <%= a[`title_${lang}`] %></a>
+                                        <% if (ti < tickerItems.length - 1) { %><span class="ticker-sep">•</span><% } %>
+                                      <% }) %>
+                                    </div>
+                                  <% } else if (tickerStyle === 'slide') { %>
+                                    <div class="ticker-track ticker-slide">
+                                      <% tickerItems.forEach(function(a, si) { %>
+                                        <a class="ticker-slide-item <%= si === 0 ? 'active' : '' %>"
+                                          href="/article/<%= a.slug %>">
+                                          <%= a[`title_${lang}`] %></a>
+                                      <% }) %>
+                                    </div>
+                                  <% } else { %>
+                                    <div class="ticker-track" data-ticker-track>
+                                      <% for (var tg = 0; tg < 2; tg++) { %>
+                                        <span class="ticker-text" <%= tg === 1 ? 'aria-hidden="true"' : '' %>>
+                                          <% tickerItems.forEach(function(a, ti) { %>
+                                            <a href="/article/<%= a.slug %>"><%= a[`title_${lang}`] %></a><% if
+                                              (ti < tickerItems.length - 1) { %> • <% } %>
+                                          <% }) %> •
+                                        </span>
+                                      <% } %>
+                                    </div>
+                                  <% } %>
+                                </div>
+                              </div>
+                            </section>
+
+                            <!-- BLOCK TYPE: TOP HEADLINES NUMBERED LIST -->
+                            <% } else if (block.type==='headlines' && articles && articles.length> 0) { %>
+                              <section class="section block-section block-headlines">
+                                <div class="container">
+                                  <div class="section-header">
+                                    <h2 class="section-title">
+                                      <%= lang==='km' ? (block.title_km || 'កំពូលព័ត៌មាន' ) : (block.title_en
+                                        || 'Top Headlines' ) %>
+                                    </h2>
+                                  </div>
+                                  <ol class="headlines-list">
+                                    <% (block.limit ? articles.slice(0, block.limit) : articles.slice(0, 10)).forEach(function(a,
+                                      idx) { %>
+                                      <li class="headlines-item">
+                                        <span class="headlines-number"><%= idx + 1 %></span>
+                                        <a href="/article/<%= a.slug %>" class="headlines-link">
+                                          <%= a[`title_${lang}`] %>
+                                        </a>
+                                        <span class="headlines-cat badge-cat-<%= a.category_slug %>">
+                                          <%= a[`category_name_${lang}`] %>
+                                        </span>
+                                      </li>
+                                      <% }) %>
+                                  </ol>
+                                </div>
+                              </section>
+
+                              <!-- BLOCK TYPE: TAG CLOUD -->
+                              <% } else if (block.type==='tags' && tags && tags.length> 0) { %>
+                                <section class="section block-section block-tags">
+                                  <div class="container">
+                                    <div class="section-header">
+                                      <h2 class="section-title">
+                                        <%= lang==='km' ? (block.title_km || 'ស្លាកព័ត៌មានពេញនិយម' ) : (block.title_en
+                                          || 'Popular Tags' ) %>
+                                      </h2>
+                                    </div>
+                                    <div class="tag-cloud">
+                                      <% tags.slice(0, block.limit || 20).forEach(function(tag) { %>
+                                        <a href="/tag/<%= tag.slug %>" class="tag-chip">
+                                          <%= tag[`name_${lang}`] %>
+                                        </a>
+                                        <% }) %>
+                                    </div>
+                                  </div>
+                                </section>
+
+                                <!-- BLOCK TYPE: SITE STATS STRIP -->
+                                <% } else if (block.type==='stats' && articles) { %>
+                                  <% var totalViews=articles.reduce(function(s, a) { return s + (a.views_count || 0); }, 0); %>
+                                  <section class="section block-section block-stats">
+                                    <div class="container">
+                                      <div class="stats-strip">
+                                        <div class="stats-item">
+                                          <span class="stats-number"><%= articles.length.toLocaleString() %></span>
+                                          <span class="stats-label"><%= lang==='km' ? 'អត្ថបទសរុប' : 'Total Articles' %></span>
+                                        </div>
+                                        <div class="stats-item">
+                                          <span class="stats-number"><%= (typeof categories !== 'undefined' && categories) ? categories.length : 0 %></span>
+                                          <span class="stats-label"><%= lang==='km' ? 'ប្រភេទព័ត៌មាន' : 'Categories' %></span>
+                                        </div>
+                                        <div class="stats-item">
+                                          <span class="stats-number"><%= (typeof tags !== 'undefined' && tags) ? tags.length : 0 %></span>
+                                          <span class="stats-label"><%= lang==='km' ? 'ស្លាកព័ត៌មាន' : 'Tags' %></span>
+                                        </div>
+                                        <div class="stats-item">
+                                          <span class="stats-number"><%= totalViews.toLocaleString() %></span>
+                                          <span class="stats-label"><%= lang==='km' ? 'ការទស្សនាសរុប' : 'Total Views' %></span>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </section>
+
+                                <!-- BLOCK TYPE: NEWSLETTER CTA -->
+                                <% } else if (block.type==='newsletter' ) { %>
                             <section class="section block-section block-newsletter"
                               style="background: linear-gradient(135deg, var(--primary-color, #1e3a8a), #0f172a); color: white; padding: 48px 0; margin: 32px 0;">
                               <div class="container" style="text-align: center; max-width: 680px;">
@@ -288,15 +670,17 @@
                                     : 'Get breaking news updates and daily highlights delivered straight to your inbox.'
                                     %>
                                 </p>
-                                <form onsubmit="event.preventDefault(); alert('Subscribed successfully!');"
+                                <form class="js-newsletter-form" novalidate
                                   style="display: flex; gap: 12px; justify-content: center;">
-                                  <input type="email" placeholder="Your email address..." required
+                                  <input type="email" placeholder="<%= t('newsletter.placeholder') %>" required
+                                    class="js-newsletter-input"
                                     style="padding: 12px 18px; border-radius: 30px; border: none; width: 320px; font-size: 0.95rem;">
-                                  <button type="submit"
+                                  <button type="submit" class="js-newsletter-btn"
                                     style="background: var(--accent-color, #dc2626); color: white; border: none; padding: 12px 28px; border-radius: 30px; font-weight: 700; cursor: pointer; transition: transform 0.2s;">
-                                    Subscribe
+                                    <%= t('newsletter.subscribe') %>
                                   </button>
                                 </form>
+                                <p class="js-newsletter-msg" style="display: none; margin-top: 12px; font-weight: 700; font-size: 0.9rem;"></p>
                               </div>
                             </section>
                             <% } %>

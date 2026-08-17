@@ -1,0 +1,61 @@
+<div class="admin-page">
+  <div class="admin-page-head">
+    <h1 class="admin-page-title"><i class="fas fa-tags"></i> <%= t('admin.tags') %></h1>
+    <a href="/admin/tags/edit/0" class="btn btn-primary"><i class="fas fa-plus"></i> Add Tag</a>
+  </div>
+
+  <% if (typeof tag !== 'undefined' && tag) { %>
+    <div class="admin-form-wrapper">
+      <h2><%= tag.id ? 'Edit Tag' : 'Add Tag' %></h2>
+      <form method="POST" action="/admin/tags/save" class="admin-form">
+        <input type="hidden" name="id" value="<%= tag.id %>">
+        <div class="form-group">
+          <label><%= t('labels.name_en') %></label>
+          <input type="text" name="name_en" value="<%= tag.name_en || '' %>" class="form-control" placeholder="Technology" required>
+        </div>
+        <div class="form-group">
+          <label><%= t('labels.name_km') %></label>
+          <input type="text" name="name_km" value="<%= tag.name_km || '' %>" class="form-control" placeholder="បច្ចេកវិទ្យា" required>
+        </div>
+        <div class="form-group">
+          <label><%= t('labels.slug') %> <span style="font-weight: 400; color: #94a3b8;">(leave blank to auto-generate)</span></label>
+          <input type="text" name="slug" value="<%= tag.slug || '' %>" class="form-control" placeholder="technology">
+        </div>
+        <button type="submit" class="btn btn-primary"><%= t('labels.save') %></button>
+        <a href="/admin/tags" class="btn"><%= t('labels.cancel') %></a>
+      </form>
+    </div>
+  <% } else { %>
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th><%= t('labels.name_en') %></th>
+          <th><%= t('labels.name_km') %></th>
+          <th><%= t('labels.slug') %></th>
+          <th><i class="fas fa-newspaper"></i> Articles</th>
+          <th><%= t('labels.action') %></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if (tags && tags.length > 0) { %>
+          <% tags.forEach(function(tagRow) { %>
+            <tr>
+              <td><%= tagRow.id %></td>
+              <td><strong><%= tagRow.name_en %></strong></td>
+              <td><%= tagRow.name_km %></td>
+              <td><code><%= tagRow.slug %></code></td>
+              <td><span class="badge-type" style="background: #eff6ff; color: #1d4ed8;"><%= tagRow.article_count || 0 %></span></td>
+              <td>
+                <a href="/admin/tags/edit/<%= tagRow.id %>" class="btn btn-sm"><%= t('labels.edit') %></a>
+                <a href="/admin/tags/delete/<%= tagRow.id %>" class="btn btn-sm btn-danger" onclick="return confirm('Delete tag &quot;<%= tagRow.name_en %>&quot;? It will be removed from all articles.')"><%= t('labels.delete') %></a>
+              </td>
+            </tr>
+          <% }) %>
+        <% } else { %>
+          <tr><td colspan="6" style="text-align: center; padding: 32px; color: #64748b;">No tags yet. Add your first tag to start organizing articles.</td></tr>
+        <% } %>
+      </tbody>
+    </table>
+  <% } %>
+</div>

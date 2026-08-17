@@ -1,0 +1,35 @@
+<div class="admin-page">
+  <div class="admin-page-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+    <h1 style="font-size: 1.75rem; font-weight: 800; color: #0f172a; margin: 0;"><i class="fas fa-envelope-open-text"></i> <%= t('admin.subscribers') %></h1>
+    <span style="background: #eff6ff; color: #1d4ed8; padding: 6px 16px; border-radius: 20px; font-weight: 700; font-size: 0.9rem;"><%= subscribers.length %> <%= t('admin.stats_subscribers') %></span>
+  </div>
+
+  <% if (subscribers.length === 0) { %>
+    <div style="background: #ffffff; border-radius: 12px; padding: 40px; text-align: center; color: #64748b; border: 1px solid #e2e8f0;">
+      <%= t('admin.no_subscribers') %>
+    </div>
+  <% } else { %>
+    <div style="background: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0; overflow: hidden;">
+      <table class="admin-table" style="margin: 0;">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th><%= t('labels.email') %></th>
+            <th><%= t('labels.date') %></th>
+            <th><%= t('labels.action') %></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% subscribers.forEach(function(s, i) { %>
+            <tr>
+              <td><%= i + 1 %></td>
+              <td><strong><%= s.email %></strong></td>
+              <td><%= new Date(s.created_at).toLocaleString(lang === 'km' ? 'km-KH' : 'en-US') %></td>
+              <td><a href="/admin/subscribers/delete/<%= s.id %>" onclick="return confirm('Delete this subscriber?')" style="color: #dc2626;"><i class="fas fa-trash"></i> <%= t('labels.delete') %></a></td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  <% } %>
+</div>

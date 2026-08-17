@@ -1,10 +1,20 @@
 <section class="search-section">
   <div class="container">
     <h1 class="section-title"><%= t('nav.search') %></h1>
-    <form action="/search" method="GET" class="search-box">
-      <input type="text" name="q" value="<%= query %>" placeholder="<%= t('common.search_placeholder') %>" autofocus>
-      <button type="submit"><%= t('nav.search') %></button>
-    </form>
+    <div class="search-suggest-wrap">
+      <form action="/search" method="GET" class="search-box" autocomplete="off">
+        <input type="text" name="q" id="searchInput" value="<%= query %>" placeholder="<%= t('common.search_placeholder') %>" autofocus>
+        <button type="submit"><%= t('nav.search') %></button>
+      </form>
+      <div class="search-suggest" id="searchSuggest" style="display: none;"></div>
+    </div>
+
+    <% if (query) { %>
+      <div style="margin: 20px 0 8px; color: #64748b; font-size: 0.92rem;">
+        <strong style="color: #0f172a;"><%= articles.length %></strong> <%= lang==='km' ? 'លទ្ធផលសម្រាប់' : 'results for' %> "<strong style="color: var(--primary-color, #1e3a8a);"><%= query %></strong>"
+      </div>
+    <% } %>
+
     <% if (query && articles && articles.length > 0) { %>
       <div class="grid grid-cols-3 gap-6">
         <% articles.forEach(function(a) { %>
@@ -28,11 +38,63 @@
           </article>
         <% }) %>
       </div>
+
+      <% if (pagination && pagination.totalPages > 1) { %>
+        <nav class="pagination" style="display: flex; justify-content: center; align-items: center; gap: 8px; margin: 36px 0 12px; flex-wrap: wrap;">
+          <% var basePath = '/search?q=' + encodeURIComponent(query); %>
+          <% if (pagination.current > 1) { %>
+            <a href="<%= basePath %>&page=<%= pagination.current - 1 %>" class="page-link"><%= t('common.prev') %></a>
+          <% } %>
+          <% pagination.pages.forEach(function(p) { %>
+            <a href="<%= basePath %>&page=<%= p %>" class="page-link <%= p === pagination.current ? 'active' : '' %>"><%= p %></a>
+          <% }) %>
+          <% if (pagination.current < pagination.totalPages) { %>
+            <a href="<%= basePath %>&page=<%= pagination.current + 1 %>" class="page-link"><%= t('common.next') %></a>
+          <% } %>
+        </nav>
+      <% } %>
     <% } else if (query) { %>
       <div style="text-align:center; padding:60px 0; color:#64748b;">
-        <p style="font-size:1.1rem; font-weight:600;">No results found for "<%= query %>"</p>
-        <p style="margin-top:8px;">Try searching with different keywords.</p>
+        <p style="font-size:1.1rem; font-weight:600;"><i class="fas fa-inbox"></i> <%= lang==='km' ? 'រកមិនឃើញលទ្ធផលសម្រាប់' : 'No results found for' %> "<%= query %>"</p>
+        <p style="margin-top:8px;"><%= lang==='km' ? 'សូមសាកល្បងស្វែងរកជាមួយពាក្យគន្លឹះផ្សេងទៀត។' : 'Try searching with different keywords.' %></p>
       </div>
     <% } %>
   </div>
 </section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    var input = document.getElementById('searchInput');
+    var suggest = document.getElementById('searchSuggest');
+    if (!input || !suggest) return;
+    var timer = null;
+
+    input.addEventListener('input', function () {
+      clearTimeout(timer);
+      var q = input.value.trim();
+      if (q.length < 2) { suggest.style.display = 'none'; return; }
+      timer = setTimeout(function () {
+        fetch('/api/search?q=' + encodeURIComponent(q))
+          .then(function (r) { return r.json(); })
+          .then(function (data) {
+            if (!data || data.length === 0) { suggest.style.display = 'none'; return; }
+            suggest.innerHTML = data.slice(0, 6).map(function (a) {
+              var title = a.title_en || a.title_km;
+              return '<a href="/article/' + a.slug + '" class="suggest-item">' +
+                '<span class="suggest-icon"><i class="fas fa-newspaper"></i></span>' +
+                '<span class="suggest-title">' + title + '</span>' +
+                '<span class="suggest-cat">' + (a.name_en || '') + '</span></a>';
+            }).join('');
+            suggest.style.display = 'block';
+          })
+          .catch(function () { suggest.style.display = 'none'; });
+      }, 250);
+    });
+
+    document.addEventListener('click', function (e) {
+      if (!suggest.contains(e.target) && e.target !== input) {
+        suggest.style.display = 'none';
+      }
+    });
+  });
+</script>

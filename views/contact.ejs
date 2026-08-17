@@ -1,0 +1,78 @@
+<section class="section" style="padding: 40px 0;">
+  <div class="container">
+    <nav class="breadcrumb" style="display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: #64748b; margin-bottom: 24px; background: #ffffff; padding: 10px 16px; border-radius: 30px; border: 1px solid #e2e8f0; width: fit-content;">
+      <a href="/" style="color: var(--primary-color, #1e3a8a); font-weight: 600;"><%= t('nav.home') %></a>
+      <span>&rsaquo;</span>
+      <span style="color: #94a3b8;"><%= t('nav.contact') %></span>
+    </nav>
+
+    <div class="section-header" style="margin-bottom: 28px;">
+      <h1 class="section-title" style="font-size: 2rem; font-weight: 900; color: #0f172a;"><%= t('contact.title') %></h1>
+      <p style="color: #64748b; margin-top: 8px; max-width: 640px;"><%= t('contact.subtitle') %></p>
+    </div>
+
+    <% if (success === '1') { %>
+      <div style="background-color: #dcfce7; border: 1px solid #86efac; color: #166534; padding: 14px 18px; border-radius: 8px; margin-bottom: 24px; display: flex; align-items: center; gap: 10px; font-weight: 500;">
+        <span><i class="fas fa-circle-check"></i></span> <%= t('contact.success') %>
+      </div>
+    <% } else if (success === 'error') { %>
+      <div style="background-color: #fee2e2; border: 1px solid #fca5a5; color: #991b1b; padding: 14px 18px; border-radius: 8px; margin-bottom: 24px; font-weight: 500;">
+        <i class="fas fa-triangle-exclamation"></i> Please fill in your name, email and message.
+      </div>
+    <% } %>
+
+    <div style="display: grid; grid-template-columns: 1fr 1.6fr; gap: 28px; align-items: start;" class="contact-layout-grid">
+      <!-- Contact Info Cards -->
+      <div style="display: flex; flex-direction: column; gap: 16px;">
+        <% var contactInfo = []; %>
+        <% if (typeof siteSettings !== 'undefined' && siteSettings) {
+          contactInfo.push({ icon: '<i class="fas fa-location-dot"></i>', label: t('contact.address'), value: lang === 'km' ? siteSettings.contact_address_km : siteSettings.contact_address_en });
+          contactInfo.push({ icon: '<i class="fas fa-phone"></i>', label: t('contact.phone'), value: siteSettings.contact_phone });
+          contactInfo.push({ icon: '<i class="fas fa-envelope"></i>', label: t('contact.email_label'), value: siteSettings.contact_email });
+          contactInfo.push({ icon: '<i class="fas fa-clock"></i>', label: t('contact.office_hours'), value: t('contact.office_hours_value') });
+        } %>
+        <% contactInfo.forEach(function(info) { %>
+          <div style="background: #ffffff; border-radius: 14px; padding: 20px; border: 1px solid #e2e8f0; box-shadow: 0 2px 8px rgba(0,0,0,0.02); display: flex; gap: 14px; align-items: flex-start;">
+            <span style="font-size: 1.5rem; line-height: 1;"><%- info.icon %></span>
+            <div>
+              <strong style="display: block; color: #0f172a; margin-bottom: 4px;"><%= info.label %></strong>
+              <span style="color: #475569; font-size: 0.95rem;"><%= info.value || '—' %></span>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+
+      <!-- Contact Form -->
+      <form action="/contact" method="POST" class="contact-form"
+        style="background: #ffffff; border-radius: 16px; padding: 32px; border: 1px solid #e2e8f0; box-shadow: 0 4px 20px -4px rgba(15,23,42,0.04);">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+          <div>
+            <label for="contactName" style="display: block; font-weight: 600; margin-bottom: 6px; font-size: 0.9rem; color: #1e293b;"><%= t('contact.name') %> *</label>
+            <input type="text" id="contactName" name="name" required
+              style="width: 100%; padding: 11px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.95rem;" placeholder="Sok Dara">
+          </div>
+          <div>
+            <label for="contactEmail" style="display: block; font-weight: 600; margin-bottom: 6px; font-size: 0.9rem; color: #1e293b;"><%= t('contact.email') %> *</label>
+            <input type="email" id="contactEmail" name="email" required
+              style="width: 100%; padding: 11px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.95rem;" placeholder="you@example.com">
+          </div>
+        </div>
+        <div style="margin-bottom: 16px;">
+          <label for="contactSubject" style="display: block; font-weight: 600; margin-bottom: 6px; font-size: 0.9rem; color: #1e293b;"><%= t('contact.subject') %></label>
+          <input type="text" id="contactSubject" name="subject"
+            style="width: 100%; padding: 11px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.95rem;" placeholder="General inquiry">
+        </div>
+        <div style="margin-bottom: 20px;">
+          <label for="contactMessage" style="display: block; font-weight: 600; margin-bottom: 6px; font-size: 0.9rem; color: #1e293b;"><%= t('contact.message') %> *</label>
+          <textarea id="contactMessage" name="message" rows="6" required
+            style="width: 100%; padding: 11px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.95rem; resize: vertical;"
+            placeholder="Write your message here..."></textarea>
+        </div>
+        <button type="submit" class="btn"
+          style="background: var(--primary-color, #1e3a8a); color: white; border: none; padding: 13px 32px; border-radius: 8px; font-weight: 700; font-size: 0.95rem; cursor: pointer; transition: opacity 0.2s;">
+          <i class="fas fa-paper-plane"></i> <%= t('contact.send') %>
+        </button>
+      </form>
+    </div>
+  </div>
+</section>

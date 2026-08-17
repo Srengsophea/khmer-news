@@ -38,4 +38,32 @@ router.post('/ads/click/:id', (req, res) => {
   });
 });
 
+router.post('/newsletter/subscribe', (req, res) => {
+  const db = getDb();
+  const email = (req.body.email || '').trim().toLowerCase();
+  if (!email || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
+    return res.status(400).json({ error: 'invalid', message: 'Invalid email address' });
+  }
+  db.run(`INSERT OR IGNORE INTO subscribers (email) VALUES (?)`, [email], function (err) {
+    if (err) return res.status(500).json({ error: 'db', message: 'Database error' });
+    res.json({ success: true, existed: this.changes === 0 });
+  });
+});
+
+router.get('/tags', (req, res) => {
+  const db = getDb();
+  db.all(`SELECT t.*, (SELECT COUNT(*) FROM article_tags at WHERE at.tag_id = t.id) as count FROM tags t ORDER BY count DESC, t.name_en`, [], (err, tags) => {
+    res.json(tags || []);
+  });
+});
+
+router.get('/trending', (req, res) => {
+  const db = getDb();
+  db.all(
+    `SELECT a.id, a.title_km, a.title_en, a.slug, a.views_count, c.slug as category_slug FROM articles a LEFT JOIN categories c ON a.category_id = c.id ORDER BY COALESCE(a.views_count, 0) DESC LIMIT 10`,
+    [],
+    (err, articles) => res.json(articles || [])
+  );
+});
+
 module.exports = router;

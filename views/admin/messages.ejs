@@ -1,0 +1,39 @@
+<div class="admin-page">
+  <div class="admin-page-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+    <h1 style="font-size: 1.75rem; font-weight: 800; color: #0f172a; margin: 0;"><i class="fas fa-envelope"></i> <%= t('admin.messages') %></h1>
+    <span style="background: #eff6ff; color: #1d4ed8; padding: 6px 16px; border-radius: 20px; font-weight: 700; font-size: 0.9rem;"><%= messages.length %> <%= t('admin.stats_messages') %></span>
+  </div>
+
+  <% if (messages.length === 0) { %>
+    <div style="background: #ffffff; border-radius: 12px; padding: 40px; text-align: center; color: #64748b; border: 1px solid #e2e8f0;">
+      <%= t('admin.no_messages') %>
+    </div>
+  <% } else { %>
+    <div style="display: flex; flex-direction: column; gap: 16px;">
+      <% messages.forEach(function(m) { %>
+        <div style="background: #ffffff; border-radius: 12px; padding: 20px; border: 1px solid <%= m.is_read ? '#e2e8f0' : '#bfdbfe' %>; box-shadow: 0 2px 6px rgba(0,0,0,0.02); <%= m.is_read ? '' : 'border-left: 4px solid #2563eb;' %>">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 8px;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <strong style="font-size: 1.05rem; color: #0f172a;"><%= m.name %></strong>
+              <% if (!m.is_read) { %>
+                <span style="background: #2563eb; color: white; font-size: 0.7rem; font-weight: 700; padding: 2px 10px; border-radius: 12px;">NEW</span>
+              <% } %>
+              <span style="color: #64748b; font-size: 0.85rem;">&lt;<%= m.email %>&gt;</span>
+            </div>
+            <span style="color: #94a3b8; font-size: 0.82rem;"><%= new Date(m.created_at).toLocaleString(lang === 'km' ? 'km-KH' : 'en-US') %></span>
+          </div>
+          <% if (m.subject) { %>
+            <div style="font-weight: 700; color: #334155; margin-bottom: 8px;"><i class="fas fa-thumbtack"></i> <%= m.subject %></div>
+          <% } %>
+          <p style="color: #475569; font-size: 0.95rem; line-height: 1.7; background: #f8fafc; padding: 14px; border-radius: 8px; margin-bottom: 12px;"><%= m.message %></p>
+          <div style="display: flex; gap: 12px;">
+            <% if (!m.is_read) { %>
+              <a href="/admin/messages/read/<%= m.id %>" style="color: #2563eb; font-weight: 600; font-size: 0.88rem;"><i class="fas fa-circle-check"></i> <%= t('admin.mark_read') %></a>
+            <% } %>
+            <a href="/admin/messages/delete/<%= m.id %>" onclick="return confirm('Delete this message?')" style="color: #dc2626; font-weight: 600; font-size: 0.88rem;"><i class="fas fa-trash"></i> <%= t('labels.delete') %></a>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+  <% } %>
+</div>

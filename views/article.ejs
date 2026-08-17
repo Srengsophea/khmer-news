@@ -33,36 +33,44 @@
 
             <div class="article-meta-row"
               style="display: flex; flex-wrap: wrap; gap: 16px; align-items: center; padding: 14px 0; border-top: 1px solid #f1f5f9; border-bottom: 1px solid #f1f5f9; font-size: 0.88rem; color: #475569;">
-              <span style="display: flex; align-items: center; gap: 6px;">✍️ <strong>
+              <span style="display: flex; align-items: center; gap: 6px;"><i class="fas fa-user-pen"></i> <strong>
                   <%= article.author_name || 'Khmer News Desk' %>
                 </strong></span>
               <span>&bull;</span>
-              <span>📅 <%= new Date(article.created_at).toLocaleDateString(lang==='km' ? 'km-KH' : 'en-US' , {
+              <span><i class="fas fa-calendar-days"></i> <%= new Date(article.created_at).toLocaleDateString(lang==='km' ? 'km-KH' : 'en-US' , {
                   weekday: 'long' , year: 'numeric' , month: 'long' , day: 'numeric' }) %></span>
               <span>&bull;</span>
-              <span>⏱️ <%= article.read_time_minutes || 3 %>
+              <span><i class="fas fa-stopwatch"></i> <%= article.read_time_minutes || 3 %>
                   <%= lang==='km' ? 'នាទីអាន' : 'min read' %></span>
               <span>&bull;</span>
-              <span>👁️ <%= article.views_count || 120 %>
+              <span><i class="fas fa-eye"></i> <%= article.views_count || 120 %>
                   <%= lang==='km' ? 'ការទស្សនា' : 'views' %></span>
             </div>
 
-            <!-- Social Share Bar -->
-            <div class="share-toolbar" style="display: flex; align-items: center; gap: 12px; margin-top: 16px;">
-              <span style="font-weight: 700; font-size: 0.85rem; color: #64748b;">
-                <%= lang==='km' ? 'ចែករំលែក៖' : 'Share:' %>
-              </span>
-              <a href="https://www.facebook.com/sharer/sharer.php?u=<%= encodeURIComponent('http://localhost:3000/article/' + article.slug) %>"
-                target="_blank" class="share-btn share-fb"
-                style="background: #1877f2; color: white; padding: 7px 18px; border-radius: 30px; font-size: 0.82rem; font-weight: 700; text-decoration: none; display: flex; align-items: center; gap: 6px;">Facebook</a>
-              <a href="https://t.me/share/url?url=<%= encodeURIComponent('http://localhost:3000/article/' + article.slug) %>&text=<%= encodeURIComponent(article[`title_${lang}`]) %>"
-                target="_blank" class="share-btn share-tg"
-                style="background: #229ed9; color: white; padding: 7px 18px; border-radius: 30px; font-size: 0.82rem; font-weight: 700; text-decoration: none; display: flex; align-items: center; gap: 6px;">Telegram</a>
-              <button type="button"
-                onclick="navigator.clipboard.writeText(window.location.href); alert('<%= lang === 'km' ? 'បានចម្លងតំណភ្ជាប់!' : 'Link copied to clipboard!' %>');"
-                class="share-btn share-copy"
-                style="background: #f1f5f9; color: #1e293b; border: 1px solid #cbd5e1; padding: 7px 18px; border-radius: 30px; font-size: 0.82rem; font-weight: 700; cursor: pointer;">📋
-                Copy Link</button>
+            <!-- Reading Tools + Social Share Bar -->
+            <div class="article-tools-row" style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin-top: 16px;">
+              <div class="share-toolbar" style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                <span style="font-weight: 700; font-size: 0.85rem; color: #64748b;">
+                  <%= lang==='km' ? 'ចែករំលែក៖' : 'Share:' %>
+                </span>
+                <a href="#" target="_blank" rel="noopener" data-share="facebook" class="share-btn share-fb"
+                  style="background: #1877f2; color: white; padding: 7px 14px; border-radius: 30px; font-size: 0.8rem; font-weight: 700; text-decoration: none;">Facebook</a>
+                <a href="#" target="_blank" rel="noopener" data-share="telegram" class="share-btn share-tg"
+                  style="background: #229ed9; color: white; padding: 7px 14px; border-radius: 30px; font-size: 0.8rem; font-weight: 700; text-decoration: none;">Telegram</a>
+                <a href="#" target="_blank" rel="noopener" data-share="twitter" class="share-btn share-x"
+                  style="background: #000000; color: white; padding: 7px 14px; border-radius: 30px; font-size: 0.8rem; font-weight: 700; text-decoration: none;">𝕏 Post</a>
+                <a href="#" target="_blank" rel="noopener" data-share="whatsapp" class="share-btn share-wa"
+                  style="background: #25d366; color: white; padding: 7px 14px; border-radius: 30px; font-size: 0.8rem; font-weight: 700; text-decoration: none;">WhatsApp</a>
+                <button type="button" data-copy-link
+                  class="share-btn share-copy"
+                  style="background: #f1f5f9; color: #1e293b; border: 1px solid #cbd5e1; padding: 7px 14px; border-radius: 30px; font-size: 0.8rem; font-weight: 700; cursor: pointer;"><i class="fas fa-clipboard"></i> Copy</button>
+              </div>
+              <div class="reading-tools" style="display: flex; align-items: center; gap: 8px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 30px; padding: 4px 8px;">
+                <button type="button" data-font="-1" class="font-btn" title="Decrease font size" aria-label="Decrease font size">A−</button>
+                <span class="font-indicator" style="font-size: 0.8rem; font-weight: 700; color: #64748b;">A</span>
+                <button type="button" data-font="1" class="font-btn" title="Increase font size" aria-label="Increase font size">A+</button>
+                <button type="button" onclick="window.print()" class="font-btn" title="Print article" aria-label="Print article"><i class="fas fa-print"></i></button>
+              </div>
             </div>
           </div>
 
@@ -115,8 +123,129 @@
                             <% } %>
                               <% } %>
 
+          <!-- Article Tags -->
+          <% if (tags && tags.length > 0) { %>
+            <div class="article-tags-row" style="margin-top: 32px; padding-top: 20px; border-top: 1px solid #e2e8f0; display: flex; flex-wrap: wrap; align-items: center; gap: 8px;">
+              <span style="font-weight: 700; font-size: 0.88rem; color: #64748b;"><i class="fas fa-tags"></i> <%= t('labels.tags') %>:</span>
+              <% tags.forEach(function(tag) { %>
+                <a href="/tag/<%= tag.slug %>" class="tag-chip" style="font-size: 0.82rem;"><%= tag[`name_${lang}`] %></a>
+              <% }) %>
+            </div>
+          <% } %>
+
+          <!-- Prev / Next Article Navigation -->
+          <div class="article-prevnext" style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 28px;">
+            <% if (prevArticle) { %>
+              <a href="/article/<%= prevArticle.slug %>" class="prevnext-card prevnext-prev" style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px; text-decoration: none; transition: all 0.2s; display: block;">
+                <span style="font-size: 0.78rem; font-weight: 700; color: #64748b;">← <%= lang==='km' ? 'អត្ថបទមុន' : 'Previous Article' %></span>
+                <span style="display: block; font-weight: 700; color: #0f172a; margin-top: 6px; font-size: 0.95rem; line-height: 1.4;"><%= prevArticle[`title_${lang}`] %></span>
+              </a>
+            <% } else { %>
+              <div></div>
+            <% } %>
+            <% if (nextArticle) { %>
+              <a href="/article/<%= nextArticle.slug %>" class="prevnext-card prevnext-next" style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px; text-decoration: none; transition: all 0.2s; display: block; text-align: right;">
+                <span style="font-size: 0.78rem; font-weight: 700; color: #64748b;"><%= lang==='km' ? 'អត្ថបទបន្ទាប់' : 'Next Article' %> →</span>
+                <span style="display: block; font-weight: 700; color: #0f172a; margin-top: 6px; font-size: 0.95rem; line-height: 1.4;"><%= nextArticle[`title_${lang}`] %></span>
+              </a>
+            <% } %>
+          </div>
+
           </div>
         </article>
+
+        <!-- ARTICLE PAGE BLOCKS (ordered sections configured in Layout Studio) -->
+        <% if (typeof articleBlocks !== 'undefined' && articleBlocks) { %>
+          <% articleBlocks.forEach(function(block) { %>
+            <% if (!block.enabled) return; %>
+            <% if (block.type === 'ad_slot' && typeof getAd === 'function') { %>
+              <% var artAd = getAd(block.position_slot || 'article_bottom'); %>
+              <% if (artAd) { %>
+                <div class="block-section block-ad" style="margin: 28px 0; text-align: center; overflow: hidden;">
+                  <% if (artAd.ad_type === 'html' && artAd.html_code) { %>
+                    <%- artAd.html_code %>
+                  <% } else { %>
+                    <a href="<%= artAd.link_url || '#' %>" target="_blank" onclick="fetch('/api/ads/click/<%= artAd.id %>', {method:'POST'})">
+                      <img src="<%= artAd.image_url %>" alt="<%= artAd.title %>" style="max-width: 100%; border-radius: 8px; max-height: 120px; object-fit: contain;">
+                    </a>
+                  <% } %>
+                </div>
+              <% } %>
+            <% } %>
+          <% }) %>
+        <% } %>
+
+        <% if (typeof articleBlocks === 'undefined' || !articleBlocks || articleBlocks.some(function(b) { return b.enabled && b.type === 'article_comments'; })) { %>
+        <!-- COMMENTS SECTION -->
+        <div id="comments" class="comments-section"
+          style="margin-top: 28px; background: #ffffff; border-radius: 16px; padding: 32px; border: 1px solid #e2e8f0; box-shadow: 0 4px 20px -4px rgba(15,23,42,0.04);">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h3 style="font-size: 1.3rem; font-weight: 800; color: #0f172a; margin: 0;"><i class="fas fa-comments"></i> <%= t('comments.title') %> <span
+                style="font-size: 0.85rem; color: #64748b; font-weight: 600;">(<%= comments.length %> <%= t('comments.count')
+                  %>)</span></h3>
+          </div>
+
+          <% if (commentSuccess) { %>
+            <div style="background-color: #dcfce7; border: 1px solid #86efac; color: #166534; padding: 12px 16px; border-radius: 8px; margin-bottom: 20px; font-weight: 500;"><i class="fas fa-circle-check"></i> <%= t('comments.success') %></div>
+          <% } else if (commentError) { %>
+            <div style="background-color: #fee2e2; border: 1px solid #fca5a5; color: #991b1b; padding: 12px 16px; border-radius: 8px; margin-bottom: 20px; font-weight: 500;"><i class="fas fa-triangle-exclamation"></i> <%= t('comments.error') %></div>
+          <% } %>
+
+          <!-- Comment list -->
+          <% if (comments && comments.length > 0) { %>
+            <div class="comment-list" style="display: flex; flex-direction: column; gap: 18px; margin-bottom: 28px;">
+              <% comments.forEach(function(c) { %>
+                <div class="comment-item" style="display: flex; gap: 14px; padding-bottom: 18px; border-bottom: 1px solid #f1f5f9;">
+                  <span class="comment-avatar"
+                    style="width: 42px; height: 42px; border-radius: 50%; background: var(--primary-color, #1e3a8a); color: white; font-weight: 800; display: inline-flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0;"><%= (c.name || '?').charAt(0).toUpperCase() %></span>
+                  <div style="flex: 1;">
+                    <div style="display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; margin-bottom: 6px;">
+                      <strong style="color: #0f172a; font-size: 0.95rem;"><%= c.name %></strong>
+                      <span style="color: #94a3b8; font-size: 0.8rem;">• <%= new
+                          Date(c.created_at).toLocaleDateString(lang==='km' ? 'km-KH' : 'en-US' , { year: 'numeric' ,
+                          month: 'long' , day: 'numeric' }) %></span>
+                    </div>
+                    <p style="color: #334155; font-size: 0.95rem; line-height: 1.7; margin: 0;"><%= c.content %></p>
+                  </div>
+                </div>
+                <% }) %>
+            </div>
+            <% } else { %>
+              <p style="color: #64748b; font-size: 0.95rem; text-align: center; padding: 16px 0; margin-bottom: 20px;"><i class="fas fa-comments"></i> <%= t('comments.no_comments') %></p>
+              <% } %>
+
+                <!-- Comment form -->
+                <form action="/article/<%= article.slug %>/comment" method="POST" class="comment-form"
+                  style="background: #f8fafc; border-radius: 12px; padding: 24px;">
+                  <h4 style="font-size: 1.05rem; font-weight: 800; color: #0f172a; margin: 0 0 16px;"><i class="fas fa-pen-nib"></i> <%= t('comments.leave') %></h4>
+                  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px;">
+                    <div>
+                      <label style="display: block; font-weight: 600; margin-bottom: 6px; font-size: 0.88rem; color: #1e293b;"><%= t('comments.name') %> *</label>
+                      <input type="text" name="name" required
+                        style="width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.92rem;"
+                        placeholder="Sok Dara">
+                    </div>
+                    <div>
+                      <label style="display: block; font-weight: 600; margin-bottom: 6px; font-size: 0.88rem; color: #1e293b;"><%= t('comments.email') %> *</label>
+                      <input type="email" name="email" required
+                        style="width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.92rem;"
+                        placeholder="you@example.com">
+                    </div>
+                  </div>
+                  <div style="margin-bottom: 14px;">
+                    <label style="display: block; font-weight: 600; margin-bottom: 6px; font-size: 0.88rem; color: #1e293b;"><%= t('comments.content') %> *</label>
+                    <textarea name="content" rows="4" required
+                      style="width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.92rem; resize: vertical;"
+                      placeholder="<%= t('comments.placeholder') %>"></textarea>
+                  </div>
+                  <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap;">
+                    <span style="color: #94a3b8; font-size: 0.8rem;"><i class="fas fa-lock"></i> <%= t('comments.email_note') %></span>
+                    <button type="submit"
+                      style="background: var(--primary-color, #1e3a8a); color: white; border: none; padding: 11px 28px; border-radius: 8px; font-weight: 700; font-size: 0.92rem; cursor: pointer;"><i class="fas fa-paper-plane"></i> <%= t('comments.submit') %></button>
+                  </div>
+                </form>
+        </div>
+        <% } %>
       </div>
 
       <!-- SIDEBAR WIDGETS -->
@@ -127,7 +256,7 @@
           style="background: #ffffff; border-radius: 16px; padding: 24px; border: 1px solid #e2e8f0; box-shadow: 0 2px 8px rgba(0,0,0,0.02);">
           <h3 class="widget-title"
             style="font-size: 1.15rem; font-weight: 800; color: #0f172a; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 2px solid var(--accent-color, #dc2626);">
-            📂 <%= t('admin.categories') %>
+            <i class="fas fa-folder"></i> <%= t('admin.categories') %>
           </h3>
           <ul class="category-list"
             style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px;">
@@ -137,7 +266,7 @@
                   <a href="/category/<%= c.slug %>"
                     style="display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; border-radius: 8px; background: #f8fafc; color: #1e293b; font-weight: 600; text-decoration: none; transition: all 0.2s;">
                     <span style="display: flex; align-items: center; gap: 8px;">
-                      <span>📰</span>
+                      <span><i class="fas fa-newspaper"></i></span>
                       <span>
                         <%= c[`name_${lang}`] %>
                       </span>
@@ -156,12 +285,12 @@
           style="background: #ffffff; border-radius: 16px; padding: 24px; border: 1px solid #e2e8f0; box-shadow: 0 2px 8px rgba(0,0,0,0.02);">
           <h3 class="widget-title"
             style="font-size: 1.15rem; font-weight: 800; color: #0f172a; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 2px solid var(--primary-color, #1e3a8a);">
-            🔥 <%= lang==='km' ? 'ព័ត៌មានពេញនិយម' : 'Trending Stories' %>
+            <i class="fas fa-fire"></i> <%= lang==='km' ? 'ព័ត៌មានពេញនិយម' : 'Trending Stories' %>
           </h3>
           <ul class="trending-list"
             style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 14px;">
-            <% if (articles && articles.length> 0) { %>
-              <% articles.slice(0, 5).forEach(function(a, idx) { %>
+            <% if (typeof trending !== 'undefined' && trending && trending.length> 0) { %>
+              <% trending.slice(0, 5).forEach(function(a, idx) { %>
                 <li class="trending-item" style="display: flex; gap: 12px; align-items: flex-start;">
                   <span class="trending-number"
                     style="background: <%= idx === 0 ? '#b91c1c' : (idx === 1 ? '#d97706' : '#1e3a8a') %>; color: white; font-weight: 800; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; flex-shrink: 0;">
@@ -177,6 +306,22 @@
                   <% } %>
           </ul>
         </div>
+
+        <!-- SIDEBAR WIDGET 3: TAG CLOUD -->
+        <% if (typeof allTags !== 'undefined' && allTags && allTags.length > 0) { %>
+          <div class="sidebar-widget"
+            style="background: #ffffff; border-radius: 16px; padding: 24px; border: 1px solid #e2e8f0; box-shadow: 0 2px 8px rgba(0,0,0,0.02);">
+            <h3 class="widget-title"
+              style="font-size: 1.15rem; font-weight: 800; color: #0f172a; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 2px solid var(--accent-color, #dc2626);">
+              <i class="fas fa-tags"></i> <%= t('tags.cloud_title') %>
+            </h3>
+            <div class="tag-cloud" style="display: flex; flex-wrap: wrap; gap: 8px;">
+              <% allTags.slice(0, 15).forEach(function(tag) { %>
+                <a href="/tag/<%= tag.slug %>" class="tag-chip" style="font-size: 0.8rem;"><%= tag[`name_${lang}`] %></a>
+              <% }) %>
+            </div>
+          </div>
+        <% } %>
 
         <!-- DYNAMIC AD SLOT: Sidebar Ad Banner -->
         <% if (typeof getAd==='function' ) { %>
@@ -202,6 +347,7 @@
   </div>
 </section>
 
+<% if (typeof articleBlocks === 'undefined' || !articleBlocks || articleBlocks.some(function(b) { return b.enabled && b.type === 'article_related'; })) { %>
 <!-- RELATED ARTICLES SECTION -->
 <section class="related-section" style="background: #f8fafc; padding: 48px 0; border-top: 1px solid #e2e8f0;">
   <div class="container">
@@ -248,6 +394,7 @@
     </div>
   </div>
 </section>
+<% } %>
 
 <script>
   window.addEventListener('scroll', function () {
@@ -258,5 +405,47 @@
     if (bar) {
       bar.style.width = scrolled + '%';
     }
+  });
+
+  document.addEventListener('DOMContentLoaded', function () {
+    var pageUrl = encodeURIComponent(window.location.href);
+    var pageTitle = encodeURIComponent(document.title);
+
+    // Share links
+    var shareMap = {
+      facebook: 'https://www.facebook.com/sharer/sharer.php?u=' + pageUrl,
+      telegram: 'https://t.me/share/url?url=' + pageUrl + '&text=' + pageTitle,
+      twitter: 'https://twitter.com/intent/tweet?url=' + pageUrl + '&text=' + pageTitle,
+      whatsapp: 'https://wa.me/?text=' + pageTitle + '%20' + pageUrl
+    };
+    document.querySelectorAll('[data-share]').forEach(function (el) {
+      var key = el.getAttribute('data-share');
+      if (shareMap[key]) {
+        el.setAttribute('href', shareMap[key]);
+      }
+    });
+
+    // Copy link
+    document.querySelectorAll('[data-copy-link]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        navigator.clipboard.writeText(window.location.href).then(function () {
+          btn.innerHTML = '<i class="fas fa-check"></i> <%= lang === 'km' ? 'បានចម្លង' : 'Copied' %>';
+          setTimeout(function () { btn.innerHTML = '<i class="fas fa-clipboard"></i> Copy'; }, 2000);
+        });
+      });
+    });
+
+    // Font size controls
+    var content = document.querySelector('.article-content');
+    var fontLevel = 0;
+    document.querySelectorAll('[data-font]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        if (!content) return;
+        var dir = parseInt(btn.getAttribute('data-font'), 10);
+        fontLevel = Math.max(-2, Math.min(3, fontLevel + dir));
+        content.style.fontSize = (1.12 + fontLevel * 0.08) + 'rem';
+        content.style.lineHeight = (2.0 - fontLevel * 0.06).toFixed(2);
+      });
+    });
   });
 </script>

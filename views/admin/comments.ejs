@@ -1,0 +1,49 @@
+<div class="admin-page">
+  <div class="admin-page-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+    <h1 style="font-size: 1.75rem; font-weight: 800; color: #0f172a; margin: 0;"><i class="fas fa-comments"></i> <%= t('comments.moderation_title') %></h1>
+    <div style="display: flex; gap: 10px;">
+      <% if (pendingCount > 0) { %>
+        <span style="background: #fef3c7; color: #92400e; padding: 6px 16px; border-radius: 20px; font-weight: 700; font-size: 0.9rem;">⏳ <%= pendingCount %> <%= t('comments.pending') %></span>
+      <% } %>
+      <span style="background: #eff6ff; color: #1d4ed8; padding: 6px 16px; border-radius: 20px; font-weight: 700; font-size: 0.9rem;"><%= comments.length %> <%= t('comments.count') %></span>
+    </div>
+  </div>
+
+  <% if (comments.length === 0) { %>
+    <div style="background: #ffffff; border-radius: 12px; padding: 40px; text-align: center; color: #64748b; border: 1px solid #e2e8f0;">
+      <%= t('comments.no_comments') %>
+    </div>
+  <% } else { %>
+    <div style="display: flex; flex-direction: column; gap: 16px;">
+      <% comments.forEach(function(cm) { %>
+        <div style="background: #ffffff; border-radius: 12px; padding: 20px; border: 1px solid <%= cm.is_approved ? '#e2e8f0' : '#fde68a' %>; box-shadow: 0 2px 6px rgba(0,0,0,0.02); <%= cm.is_approved ? '' : 'border-left: 4px solid #f59e0b;' %>">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; flex-wrap: wrap;">
+            <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+              <span style="width: 36px; height: 36px; border-radius: 50%; background: var(--primary-color, #1e3a8a); color: white; font-weight: 800; display: inline-flex; align-items: center; justify-content: center; font-size: 0.95rem; flex-shrink: 0;"><%= (cm.name || '?').charAt(0).toUpperCase() %></span>
+              <div>
+                <strong style="color: #0f172a; display: block;"><%= cm.name %></strong>
+                <span style="color: #94a3b8; font-size: 0.8rem;"><%= new Date(cm.created_at).toLocaleString(lang === 'km' ? 'km-KH' : 'en-US') %></span>
+              </div>
+              <% if (cm.is_approved) { %>
+                <span style="background: #dcfce7; color: #166534; font-size: 0.72rem; font-weight: 700; padding: 2px 10px; border-radius: 12px;"><i class="fas fa-circle-check"></i> <%= t('comments.approved') %></span>
+              <% } else { %>
+                <span style="background: #fef3c7; color: #92400e; font-size: 0.72rem; font-weight: 700; padding: 2px 10px; border-radius: 12px;">⏳ <%= t('comments.pending') %></span>
+              <% } %>
+            </div>
+            <div style="display: flex; gap: 12px;">
+              <a href="/admin/comments/approve/<%= cm.id %>" style="color: <%= cm.is_approved ? '#d97706' : '#2563eb' %>; font-weight: 600; font-size: 0.88rem;"><%= cm.is_approved ? t('comments.unapprove') : t('comments.approve') %></a>
+              <a href="/admin/comments/delete/<%= cm.id %>" onclick="return confirm('Delete this comment?')" style="color: #dc2626; font-weight: 600; font-size: 0.88rem;"><i class="fas fa-trash"></i> <%= t('comments.delete') %></a>
+            </div>
+          </div>
+          <p style="color: #475569; font-size: 0.95rem; line-height: 1.7; background: #f8fafc; padding: 14px; border-radius: 8px; margin: 14px 0 10px;"><%= cm.content %></p>
+          <% if (cm.article_title_en || cm.article_title_km) { %>
+            <div style="font-size: 0.82rem; color: #64748b;">
+              <%= t('comments.on_article') %>:
+              <a href="/article/<%= cm.article_slug %>" target="_blank" style="color: var(--primary-color, #1e3a8a); font-weight: 600;"><%= cm.article_title_en || cm.article_title_km %></a>
+            </div>
+          <% } %>
+        </div>
+      <% }) %>
+    </div>
+  <% } %>
+</div>

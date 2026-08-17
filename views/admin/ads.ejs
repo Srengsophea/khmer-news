@@ -1,17 +1,17 @@
 <div class="admin-page">
   <div class="admin-page-head" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
     <div>
-      <h1 class="admin-page-title" style="font-size: 1.75rem; font-weight: 800; color: #0f172a; margin: 0;">📣 Professional Ads Manager</h1>
+      <h1 class="admin-page-title" style="font-size: 1.75rem; font-weight: 800; color: #0f172a; margin: 0;"><i class="fas fa-bullhorn"></i> Professional Ads Manager</h1>
       <p style="color: #64748b; margin-top: 4px; font-size: 0.95rem;">Manage banner campaigns, Google AdSense codes, and placement slots across your news website.</p>
     </div>
     <a href="/admin/ads/edit/0" class="btn btn-primary" style="display: flex; align-items: center; gap: 8px;">
-      ➕ Add New Ad Campaign
+      <i class="fas fa-plus"></i> Add New Ad Campaign
     </a>
   </div>
 
   <% if (typeof ad !== 'undefined' && ad) { %>
     <div class="admin-form-wrapper" style="background: #ffffff; border-radius: 12px; padding: 32px; border: 1px solid #e2e8f0; box-shadow: 0 1px 3px rgba(0,0,0,0.05); margin-bottom: 32px;">
-      <h2 style="font-size: 1.3rem; font-weight: 700; color: #1e293b; margin-bottom: 20px;"><%= ad.id ? '✏️ Edit Advertisement Campaign' : '➕ Create New Advertisement' %></h2>
+      <h2 style="font-size: 1.3rem; font-weight: 700; color: #1e293b; margin-bottom: 20px;"><% if (ad.id) { %><i class="fas fa-pen"></i> Edit Advertisement Campaign<% } else { %><i class="fas fa-plus"></i> Create New Advertisement<% } %></h2>
       <form method="POST" action="/admin/ads/save" class="admin-form">
         <input type="hidden" name="id" value="<%= ad.id || '' %>">
         
@@ -23,13 +23,13 @@
           <div class="form-group">
             <label style="font-weight: 600;">Ad Slot Position</label>
             <select name="position" class="form-control" required style="width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 6px;">
-              <option value="header_top" <%= ad.position === 'header_top' || ad.position === 'header' ? 'selected' : '' %>>📌 Header Top Banner (Next to Logo / Above Nav)</option>
-              <option value="homepage_hero_right" <%= ad.position === 'homepage_hero_right' ? 'selected' : '' %>>📌 Homepage Hero Right Side Banner</option>
-              <option value="homepage_mid_banner" <%= ad.position === 'homepage_mid_banner' ? 'selected' : '' %>>📌 Homepage Mid-Content Wide Leaderboard (728x90)</option>
-              <option value="homepage_bottom_banner" <%= ad.position === 'homepage_bottom_banner' ? 'selected' : '' %>>📌 Homepage Bottom Footer Banner</option>
-              <option value="sidebar" <%= ad.position === 'sidebar' ? 'selected' : '' %>>📌 Sidebar Rectangle Widget (300x250)</option>
-              <option value="article_inline" <%= ad.position === 'article_inline' || ad.position === 'inline' ? 'selected' : '' %>>📌 Article Page Inline Content (Within Body)</option>
-              <option value="article_bottom" <%= ad.position === 'article_bottom' ? 'selected' : '' %>>📌 Article Page Bottom Recommendation Banner</option>
+              <option value="header_top" <%= ad.position === 'header_top' || ad.position === 'header' ? 'selected' : '' %>><i class="fas fa-thumbtack"></i> Header Top Banner (Next to Logo / Above Nav)</option>
+              <option value="homepage_hero_right" <%= ad.position === 'homepage_hero_right' ? 'selected' : '' %>><i class="fas fa-thumbtack"></i> Homepage Hero Right Side Banner</option>
+              <option value="homepage_mid_banner" <%= ad.position === 'homepage_mid_banner' ? 'selected' : '' %>><i class="fas fa-thumbtack"></i> Homepage Mid-Content Wide Leaderboard (728x90)</option>
+              <option value="homepage_bottom_banner" <%= ad.position === 'homepage_bottom_banner' ? 'selected' : '' %>><i class="fas fa-thumbtack"></i> Homepage Bottom Footer Banner</option>
+              <option value="sidebar" <%= ad.position === 'sidebar' ? 'selected' : '' %>><i class="fas fa-thumbtack"></i> Sidebar Rectangle Widget (300x250)</option>
+              <option value="article_inline" <%= ad.position === 'article_inline' || ad.position === 'inline' ? 'selected' : '' %>><i class="fas fa-thumbtack"></i> Article Page Inline Content (Within Body)</option>
+              <option value="article_bottom" <%= ad.position === 'article_bottom' ? 'selected' : '' %>><i class="fas fa-thumbtack"></i> Article Page Bottom Recommendation Banner</option>
             </select>
           </div>
         </div>
@@ -74,7 +74,7 @@
         </div>
 
         <div style="display: flex; gap: 12px;">
-          <button type="submit" class="btn btn-primary" style="padding: 10px 24px; font-weight: 700;">💾 Save Advertisement</button>
+          <button type="submit" class="btn btn-primary" style="padding: 10px 24px; font-weight: 700;"><i class="fas fa-floppy-disk"></i> Save Advertisement</button>
           <a href="/admin/ads" class="btn btn-outline" style="padding: 10px 20px;">Cancel</a>
         </div>
       </form>

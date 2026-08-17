@@ -1,51 +1,440 @@
 <section class="section">
   <div class="container">
-    <div class="category-header">
-      <h1>
-        <%= category[`name_${lang}`] %>
-      </h1>
-      <p>
-        <%= t('about.content') %>
-      </p>
+    <nav class="breadcrumb" style="display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: #64748b; margin-bottom: 24px; background: #ffffff; padding: 10px 16px; border-radius: 30px; border: 1px solid #e2e8f0; width: fit-content;">
+      <a href="/" style="color: var(--primary-color, #1e3a8a); font-weight: 600;"><%= t('nav.home') %></a>
+      <span>&rsaquo;</span>
+      <span style="color: #94a3b8;"><%= category[`name_${lang}`] %></span>
+    </nav>
+
+    <div class="category-header" style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 16px; margin-bottom: 24px;">
+      <div>
+        <h1 style="font-size: 1.9rem; font-weight: 900; color: #0f172a; margin: 0;">
+          <%= category[`name_${lang}`] %>
+        </h1>
+        <% if (pagination && pagination.totalPages > 0) { %>
+          <p style="color: #64748b; margin: 6px 0 0; font-size: 0.9rem;"><%= articles.length %> <%= lang==='km' ? 'អត្ថបទ' : 'articles' %></p>
+        <% } %>
+      </div>
+
+      <!-- Grid / List View Toggle -->
+      <div class="view-toggle" data-view-toggle style="display: flex; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 30px; padding: 4px; gap: 4px;">
+        <button type="button" data-view="grid" class="view-toggle-btn active" aria-label="Grid view"><i class="fas fa-table-cells"></i> Grid</button>
+        <button type="button" data-view="list" class="view-toggle-btn" aria-label="List view"><i class="fas fa-bars"></i> List</button>
+      </div>
     </div>
-    <% if (articles && articles.length> 0) { %>
-      <div class="grid grid-cols-3 gap-6">
-        <% articles.forEach(function(a) { %>
-          <article class="card-template-standard">
-            <a href="/article/<%= a.slug %>">
-              <img src="<%= a.image_url %>" alt="<%= a[`title_${lang}`] %>" class="article-card-img">
-            </a>
-            <div class="article-card-body">
-              <div class="article-card-meta">
-                <span class="article-card-category badge-cat-<%= category.slug %>">
-                  <%= category[`name_${lang}`] %>
-                </span>
+
+    <% if (typeof categoryBlocks !== 'undefined' && categoryBlocks && categoryBlocks.length > 0) { %>
+      <% categoryBlocks.forEach(function(block) { %>
+        <% if (!block.enabled) return; %>
+
+        <% if (block.type === 'category') { %>
+          <% var catArticles = (articles || []).slice(0, block.limit || 9); %>
+          <section class="block-section block-category">
+            <% if (block.title_km || block.title_en) { %>
+              <div class="section-header">
+                <h2 class="section-title">
+                  <%= lang==='km' ? (block.title_km || 'អត្ថបទ') : (block.title_en || 'Articles') %>
+                </h2>
               </div>
-              <h3 class="article-card-title">
-                <a href="/article/<%= a.slug %>">
-                  <%= a[`title_${lang}`] %>
-                </a>
-              </h3>
-              <p class="article-card-excerpt">
-                <%= a[`content_${lang}`].replace(/<[^>]*>/g, '').substring(0, 160) %>...
-              </p>
-              <div class="article-card-footer">
-                <span class="article-card-date">
-                  <%= new Date(a.created_at).toLocaleDateString(lang==='km' ? 'km-KH' : 'en-US' , { year: 'numeric' ,
-                    month: 'short' , day: 'numeric' }) %>
-                </span>
-                <a href="/article/<%= a.slug %>" class="read-more">
-                  <%= t('common.read_more') %> &rarr;
-                </a>
+            <% } %>
+
+            <% if (catArticles.length > 0) { %>
+              <% if (block.style === 'grid_3_col' || !block.style) { %>
+                <div class="grid grid-cols-3 gap-6" data-articles-grid>
+                  <% catArticles.forEach(function(a) { %>
+                    <article class="card-template-standard category-card">
+                      <a href="/article/<%= a.slug %>">
+                        <img src="<%= a.image_url %>" alt="<%= a[`title_${lang}`] %>" class="article-card-img">
+                      </a>
+                      <div class="article-card-body">
+                        <div class="article-card-meta">
+                          <span class="article-card-category badge-cat-<%= a.category_slug || category.slug %>">
+                            <%= a[`category_name_${lang}`] || category[`name_${lang}`] %>
+                          </span>
+                        </div>
+                        <h3 class="article-card-title">
+                          <a href="/article/<%= a.slug %>">
+                            <%= a[`title_${lang}`] %>
+                          </a>
+                        </h3>
+                        <p class="article-card-excerpt">
+                          <%= a[`content_${lang}`].replace(/<[^>]*>/g, '').substring(0, 160) %>...
+                        </p>
+                        <div class="article-card-footer">
+                          <span class="article-card-date">
+                            <i class="fas fa-calendar-days"></i> <%= new Date(a.created_at).toLocaleDateString(lang==='km' ? 'km-KH' : 'en-US' , { year: 'numeric' , month: 'short' , day: 'numeric' }) %>
+                          </span>
+                          <a href="/article/<%= a.slug %>" class="read-more">
+                            <%= t('common.read_more') %> &rarr;
+                          </a>
+                        </div>
+                      </div>
+                    </article>
+                  <% }) %>
+                </div>
+              <% } else if (block.style === 'list_view') { %>
+                <div class="grid grid-cols-1 gap-4" data-articles-grid>
+                  <% catArticles.forEach(function(a) { %>
+                    <article class="card-template-minimal">
+                      <div class="article-card-body">
+                        <div class="article-card-meta">
+                          <span class="article-card-category badge-cat-<%= a.category_slug || category.slug %>">
+                            <%= a[`category_name_${lang}`] || category[`name_${lang}`] %>
+                          </span>
+                          <span class="article-card-date">&bull; <i class="fas fa-calendar-days"></i> <%= new Date(a.created_at).toLocaleDateString(lang==='km' ? 'km-KH' : 'en-US' , { year: 'numeric' , month: 'short' , day: 'numeric' }) %></span>
+                        </div>
+                        <h3 class="article-card-title">
+                          <a href="/article/<%= a.slug %>">
+                            <%= a[`title_${lang}`] %>
+                          </a>
+                        </h3>
+                        <p class="article-card-excerpt" style="-webkit-line-clamp: 2;">
+                          <%= a[`content_${lang}`].replace(/<[^>]*>/g, '').substring(0, 160) %>...
+                        </p>
+                      </div>
+                    </article>
+                  <% }) %>
+                </div>
+              <% } else if (block.style === 'featured_top') { %>
+                <% var featList = catArticles; %>
+                <% if (featList.length > 0) { %>
+                  <a href="/article/<%= featList[0].slug %>" class="hero-main" style="height: 330px; margin-bottom: 20px;">
+                    <img src="<%= featList[0].image_url %>" alt="<%= featList[0][`title_${lang}`] %>">
+                    <div class="hero-overlay" style="padding: 30px;">
+                      <span class="hero-category badge-cat-<%= featList[0].category_slug %>">
+                        <%= featList[0][`category_name_${lang}`] %>
+                      </span>
+                      <h3 style="font-size: 1.65rem; line-height: 1.35; margin-top: 10px; color: #ffffff;">
+                        <%= featList[0][`title_${lang}`] %>
+                      </h3>
+                      <p class="article-card-excerpt" style="color: rgba(255,255,255,0.85); margin-top: 8px; font-size: 0.95rem; -webkit-line-clamp: 2;">
+                        <%= featList[0][`content_${lang}`].replace(/<[^>]*>/g, '').substring(0, 160) %>...
+                      </p>
+                    </div>
+                  </a>
+                  <div class="grid grid-cols-2 gap-6">
+                    <% featList.slice(1).forEach(function(a) { %>
+                      <article class="card-template-standard">
+                        <a href="/article/<%= a.slug %>">
+                          <img src="<%= a.image_url %>" alt="<%= a[`title_${lang}`] %>" class="article-card-img">
+                        </a>
+                        <div class="article-card-body">
+                          <div class="article-card-meta">
+                            <span class="article-card-category badge-cat-<%= a.category_slug %>">
+                              <%= a[`category_name_${lang}`] %>
+                            </span>
+                            <span class="article-card-date">&bull; <i class="fas fa-calendar-days"></i> <%= new Date(a.created_at).toLocaleDateString(lang==='km' ? 'km-KH' : 'en-US' , { year: 'numeric' , month: 'short' , day: 'numeric' }) %></span>
+                          </div>
+                          <h3 class="article-card-title">
+                            <a href="/article/<%= a.slug %>">
+                              <%= a[`title_${lang}`] %>
+                            </a>
+                          </h3>
+                          <p class="article-card-excerpt">
+                            <%= a[`content_${lang}`].replace(/<[^>]*>/g, '').substring(0, 110) %>...
+                          </p>
+                          <div class="article-card-footer">
+                            <a href="/article/<%= a.slug %>" class="read-more">
+                              <%= t('common.read_more') %> &rarr;
+                            </a>
+                          </div>
+                        </div>
+                      </article>
+                    <% }) %>
+                  </div>
+                <% } %>
+              <% } else if (block.style === 'big_first') { %>
+                <% var bigList = catArticles; %>
+                <% if (bigList.length > 0) { %>
+                  <article class="card-template-wide" style="margin-bottom: 18px;">
+                    <a href="/article/<%= bigList[0].slug %>" class="card-img-link">
+                      <img src="<%= bigList[0].image_url %>" alt="<%= bigList[0][`title_${lang}`] %>" class="card-img">
+                    </a>
+                    <div class="article-card-body">
+                      <div class="article-card-meta">
+                        <span class="article-card-category badge-cat-<%= bigList[0].category_slug %>">
+                          <%= bigList[0][`category_name_${lang}`] %>
+                        </span>
+                        <span class="article-card-date">&bull; <i class="fas fa-calendar-days"></i> <%= new Date(bigList[0].created_at).toLocaleDateString(lang==='km' ? 'km-KH' : 'en-US' , { year: 'numeric' , month: 'short' , day: 'numeric' }) %></span>
+                      </div>
+                      <h3 class="article-card-title">
+                        <a href="/article/<%= bigList[0].slug %>">
+                          <%= bigList[0][`title_${lang}`] %>
+                        </a>
+                      </h3>
+                      <p class="article-card-excerpt">
+                        <%= bigList[0][`content_${lang}`].replace(/<[^>]*>/g, '').substring(0, 180) %>...
+                      </p>
+                    </div>
+                  </article>
+                  <div class="big-first-rows">
+                    <% bigList.slice(1).forEach(function(a) { %>
+                      <a href="/article/<%= a.slug %>" class="big-first-row">
+                        <span class="big-first-thumb">
+                          <img src="<%= a.image_url %>" alt="<%= a[`title_${lang}`] %>">
+                        </span>
+                        <span class="big-first-info">
+                          <span class="article-card-category badge-cat-<%= a.category_slug %>">
+                            <%= a[`category_name_${lang}`] %>
+                          </span>
+                          <span class="big-first-row-title"><%= a[`title_${lang}`] %></span>
+                          <span class="big-first-row-meta"><i class="fas fa-calendar-days"></i> <%= new Date(a.created_at).toLocaleDateString(lang==='km' ? 'km-KH' : 'en-US' , { year: 'numeric' , month: 'short' , day: 'numeric' }) %> &bull; <i class="fas fa-stopwatch"></i> <%= a.read_time_minutes || 3 %> <%= lang==='km' ? 'នាទីអាន' : 'min read' %></span>
+                        </span>
+                      </a>
+                    <% }) %>
+                  </div>
+                <% } %>
+              <% } else if (block.style === 'horizontal_scroll') { %>
+                <div class="hscroll-wrap" data-hscroll>
+                  <button type="button" class="hscroll-arrow hscroll-prev" data-hscroll-prev aria-label="Previous">&#8249;</button>
+                  <div class="hscroll-track" data-hscroll-track>
+                    <% catArticles.forEach(function(a) { %>
+                      <article class="card-template-standard hscroll-card">
+                        <a href="/article/<%= a.slug %>">
+                          <img src="<%= a.image_url %>" alt="<%= a[`title_${lang}`] %>" class="article-card-img">
+                        </a>
+                        <div class="article-card-body">
+                          <div class="article-card-meta">
+                            <span class="article-card-category badge-cat-<%= a.category_slug %>">
+                              <%= a[`category_name_${lang}`] %>
+                            </span>
+                          </div>
+                          <h3 class="article-card-title" style="-webkit-line-clamp: 3;">
+                            <a href="/article/<%= a.slug %>">
+                              <%= a[`title_${lang}`] %>
+                            </a>
+                          </h3>
+                        </div>
+                      </article>
+                    <% }) %>
+                  </div>
+                  <button type="button" class="hscroll-arrow hscroll-next" data-hscroll-next aria-label="Next">&#8250;</button>
+                </div>
+              <% } else if (block.style === 'masonry') { %>
+                <div class="masonry-grid">
+                  <% catArticles.forEach(function(a, mi) { %>
+                    <article class="card-template-standard masonry-card <%= mi % 3 === 0 ? 'masonry-tall' : (mi % 3 === 1 ? 'masonry-wide' : '') %>">
+                      <a href="/article/<%= a.slug %>">
+                        <img src="<%= a.image_url %>" alt="<%= a[`title_${lang}`] %>" class="article-card-img">
+                      </a>
+                      <div class="article-card-body">
+                        <div class="article-card-meta">
+                          <span class="article-card-category badge-cat-<%= a.category_slug %>">
+                            <%= a[`category_name_${lang}`] %>
+                          </span>
+                          <span class="article-card-date">&bull; <i class="fas fa-calendar-days"></i> <%= new Date(a.created_at).toLocaleDateString(lang==='km' ? 'km-KH' : 'en-US' , { year: 'numeric' , month: 'short' , day: 'numeric' }) %></span>
+                        </div>
+                        <h3 class="article-card-title">
+                          <a href="/article/<%= a.slug %>">
+                            <%= a[`title_${lang}`] %>
+                          </a>
+                        </h3>
+                        <p class="article-card-excerpt">
+                          <%= a[`content_${lang}`].replace(/<[^>]*>/g, '').substring(0, 120) %>...
+                        </p>
+                      </div>
+                    </article>
+                  <% }) %>
+                </div>
+              <% } %>
+
+              <!-- Pagination -->
+              <% if (pagination && pagination.totalPages > 1) { %>
+                <nav class="pagination" style="display: flex; justify-content: center; align-items: center; gap: 8px; margin: 36px 0 12px; flex-wrap: wrap;">
+                  <% var basePath = (typeof isTagPage !== 'undefined' && isTagPage) ? '/tag/' + category.slug : '/category/' + category.slug; %>
+                  <% if (pagination.current > 1) { %>
+                    <a href="<%= basePath %>?page=<%= pagination.current - 1 %>" class="page-link"><%= t('common.prev') %></a>
+                  <% } %>
+                  <% pagination.pages.forEach(function(p) { %>
+                    <a href="<%= basePath %>?page=<%= p %>" class="page-link <%= p === pagination.current ? 'active' : '' %>"><%= p %></a>
+                  <% }) %>
+                  <% if (pagination.current < pagination.totalPages) { %>
+                    <a href="<%= basePath %>?page=<%= pagination.current + 1 %>" class="page-link"><%= t('common.next') %></a>
+                  <% } %>
+                </nav>
+              <% } %>
+            <% } else { %>
+              <div style="text-align: center; padding: 60px 0; color: #64748b;">
+                <p style="font-size: 1.1rem; font-weight: 600;"><i class="fas fa-inbox"></i> <%= t('common.no_articles') %></p>
+              </div>
+            <% } %>
+          </section>
+
+        <% } else if (block.type === 'ad_slot' && typeof getAd === 'function') { %>
+          <% var slotAd = getAd(block.position_slot || 'homepage_mid_banner'); %>
+          <% if (slotAd) { %>
+            <div class="block-section block-ad">
+              <div class="ad-container" style="margin: 28px 0; text-align: center; overflow: hidden; border-radius: 8px;">
+                <% if (slotAd.ad_type === 'html' && slotAd.html_code) { %>
+                  <%- slotAd.html_code %>
+                <% } else { %>
+                  <a href="<%= slotAd.link_url || '#' %>" target="_blank" onclick="fetch('/api/ads/click/<%= slotAd.id %>', {method:'POST'})">
+                    <img src="<%= slotAd.image_url %>" alt="<%= slotAd.title %>" style="max-width: 100%; border-radius: 8px; max-height: 120px; object-fit: contain;">
+                  </a>
+                <% } %>
               </div>
             </div>
-          </article>
-          <% }) %>
-      </div>
-      <% } else { %>
-        <p>
-          <%= t('common.no_articles') %>
-        </p>
+          <% } %>
+
+        <% } else if (block.type === 'headlines' && articles && articles.length > 0) { %>
+          <section class="section block-section block-headlines">
+            <div class="section-header">
+              <h2 class="section-title">
+                <%= lang==='km' ? (block.title_km || 'កំពូលព័ត៌មាន') : (block.title_en || 'Top Headlines') %>
+              </h2>
+            </div>
+            <ol class="headlines-list">
+              <% (block.limit ? articles.slice(0, block.limit) : articles.slice(0, 10)).forEach(function(a, idx) { %>
+                <li class="headlines-item">
+                  <span class="headlines-number"><%= idx + 1 %></span>
+                  <a href="/article/<%= a.slug %>" class="headlines-link">
+                    <%= a[`title_${lang}`] %>
+                  </a>
+                  <span class="headlines-cat badge-cat-<%= a.category_slug %>">
+                    <%= a[`category_name_${lang}`] %>
+                  </span>
+                </li>
+              <% }) %>
+            </ol>
+          </section>
+
+        <% } else if (block.type === 'tags' && typeof tags !== 'undefined' && tags && tags.length > 0) { %>
+          <section class="section block-section block-tags">
+            <div class="section-header">
+              <h2 class="section-title">
+                <%= lang==='km' ? (block.title_km || 'ស្លាកព័ត៌មានពេញនិយម') : (block.title_en || 'Popular Tags') %>
+              </h2>
+            </div>
+            <div class="tag-cloud" style="display: flex; flex-wrap: wrap; gap: 8px; justify-content: center;">
+              <% tags.slice(0, block.limit || 20).forEach(function(tag) { %>
+                <a href="/tag/<%= tag.slug %>" class="tag-chip"><%= tag[`name_${lang}`] %></a>
+              <% }) %>
+            </div>
+          </section>
+
+        <% } else if (block.type === 'stats' && articles) { %>
+          <% var totalViews = articles.reduce(function(s, a) { return s + (a.views_count || 0); }, 0); %>
+          <section class="section block-section block-stats">
+            <div class="stats-strip">
+              <div class="stats-item">
+                <span class="stats-number"><%= articles.length.toLocaleString() %></span>
+                <span class="stats-label"><%= lang==='km' ? 'អត្ថបទសរុប' : 'Total Articles' %></span>
+              </div>
+              <div class="stats-item">
+                <span class="stats-number"><%= (typeof categories !== 'undefined' && categories) ? categories.length : 0 %></span>
+                <span class="stats-label"><%= lang==='km' ? 'ប្រភេទព័ត៌មាន' : 'Categories' %></span>
+              </div>
+              <div class="stats-item">
+                <span class="stats-number"><%= (typeof tags !== 'undefined' && tags) ? tags.length : 0 %></span>
+                <span class="stats-label"><%= lang==='km' ? 'ស្លាកព័ត៌មាន' : 'Tags' %></span>
+              </div>
+              <div class="stats-item">
+                <span class="stats-number"><%= totalViews.toLocaleString() %></span>
+                <span class="stats-label"><%= lang==='km' ? 'ការទស្សនាសរុប' : 'Total Views' %></span>
+              </div>
+            </div>
+          </section>
+
+        <% } else if (block.type === 'newsletter') { %>
+          <section class="section block-section block-newsletter" style="background: linear-gradient(135deg, var(--primary-color, #1e3a8a), #0f172a); color: white; padding: 40px 32px; border-radius: 16px; margin: 32px 0; text-align: center;">
+            <h2 style="font-size: 1.5rem; font-weight: 800; margin-bottom: 8px; color: white;">
+              <%= lang==='km' ? (block.title_km || 'ជាវព័ត៌មានប្រចាំថ្ងៃ') : (block.title_en || 'Subscribe to Daily Newsletter') %>
+            </h2>
+            <p style="color: rgba(255,255,255,0.8); margin-bottom: 20px; max-width: 560px; margin-left: auto; margin-right: auto;">
+              <%= lang==='km' ? 'ទទួលព័ត៌មានទាន់ហេតុការណ៍ និងព័ត៌មានសំខាន់ៗជារៀងរាល់ថ្ងៃតាមសារអេឡិចត្រូនិចរបស់អ្នក' : 'Get breaking news updates and daily highlights delivered straight to your inbox.' %>
+            </p>
+            <form class="js-newsletter-form" novalidate style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+              <input type="email" placeholder="<%= t('newsletter.placeholder') %>" required class="js-newsletter-input" style="padding: 12px 18px; border-radius: 30px; border: none; width: 320px; max-width: 100%; font-size: 0.95rem;">
+              <button type="submit" class="js-newsletter-btn" style="background: var(--accent-color, #dc2626); color: white; border: none; padding: 12px 28px; border-radius: 30px; font-weight: 700; cursor: pointer;">
+                <%= t('newsletter.subscribe') %>
+              </button>
+            </form>
+            <p class="js-newsletter-msg" style="display: none; margin-top: 12px; font-weight: 700; font-size: 0.9rem;"></p>
+          </section>
         <% } %>
+      <% }) %>
+    <% } else { %>
+      <!-- Fallback: plain grid + pagination + tag cloud -->
+      <% if (articles && articles.length > 0) { %>
+        <div class="grid grid-cols-3 gap-6" data-articles-grid>
+          <% articles.forEach(function(a) { %>
+            <article class="card-template-standard category-card">
+              <a href="/article/<%= a.slug %>">
+                <img src="<%= a.image_url %>" alt="<%= a[`title_${lang}`] %>" class="article-card-img">
+              </a>
+              <div class="article-card-body">
+                <div class="article-card-meta">
+                  <span class="article-card-category badge-cat-<%= a.category_slug || category.slug %>">
+                    <%= a[`category_name_${lang}`] || category[`name_${lang}`] %>
+                  </span>
+                </div>
+                <h3 class="article-card-title">
+                  <a href="/article/<%= a.slug %>">
+                    <%= a[`title_${lang}`] %>
+                  </a>
+                </h3>
+                <p class="article-card-excerpt">
+                  <%= a[`content_${lang}`].replace(/<[^>]*>/g, '').substring(0, 160) %>...
+                </p>
+                <div class="article-card-footer">
+                  <span class="article-card-date">
+                    <%= new Date(a.created_at).toLocaleDateString(lang==='km' ? 'km-KH' : 'en-US' , { year: 'numeric' , month: 'short' , day: 'numeric' }) %>
+                  </span>
+                  <a href="/article/<%= a.slug %>" class="read-more">
+                    <%= t('common.read_more') %> &rarr;
+                  </a>
+                </div>
+              </div>
+            </article>
+          <% }) %>
+        </div>
+        <% if (pagination && pagination.totalPages > 1) { %>
+          <nav class="pagination" style="display: flex; justify-content: center; align-items: center; gap: 8px; margin: 36px 0 12px; flex-wrap: wrap;">
+            <% var basePath = (typeof isTagPage !== 'undefined' && isTagPage) ? '/tag/' + category.slug : '/category/' + category.slug; %>
+            <% if (pagination.current > 1) { %>
+              <a href="<%= basePath %>?page=<%= pagination.current - 1 %>" class="page-link"><%= t('common.prev') %></a>
+            <% } %>
+            <% pagination.pages.forEach(function(p) { %>
+              <a href="<%= basePath %>?page=<%= p %>" class="page-link <%= p === pagination.current ? 'active' : '' %>"><%= p %></a>
+            <% }) %>
+            <% if (pagination.current < pagination.totalPages) { %>
+              <a href="<%= basePath %>?page=<%= pagination.current + 1 %>" class="page-link"><%= t('common.next') %></a>
+            <% } %>
+          </nav>
+        <% } %>
+      <% } else { %>
+        <div style="text-align: center; padding: 60px 0; color: #64748b;">
+          <p style="font-size: 1.1rem; font-weight: 600;"><i class="fas fa-inbox"></i> <%= t('common.no_articles') %></p>
+        </div>
+      <% } %>
+      <% if (typeof tags !== 'undefined' && tags && tags.length > 0) { %>
+        <div style="margin-top: 32px; padding-top: 24px; border-top: 1px solid #e2e8f0;">
+          <div class="tag-cloud" style="display: flex; flex-wrap: wrap; gap: 8px; justify-content: center;">
+            <% tags.slice(0, 20).forEach(function(tag) { %>
+              <a href="/tag/<%= tag.slug %>" class="tag-chip"><%= tag[`name_${lang}`] %></a>
+            <% }) %>
+          </div>
+        </div>
+      <% } %>
+    <% } %>
   </div>
 </section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    var toggle = document.querySelector('[data-view-toggle]');
+    var grid = document.querySelector('[data-articles-grid]');
+    if (!toggle || !grid) return;
+    toggle.querySelectorAll('.view-toggle-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        toggle.querySelectorAll('.view-toggle-btn').forEach(function (b) { b.classList.remove('active'); });
+        btn.classList.add('active');
+        if (btn.getAttribute('data-view') === 'list') {
+          grid.classList.add('view-list');
+        } else {
+          grid.classList.remove('view-list');
+        }
+      });
+    });
+  });
+</script>

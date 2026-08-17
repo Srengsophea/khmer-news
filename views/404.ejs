@@ -6,6 +6,18 @@
   <title><%= title %></title>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Khmer:wght@300;400;500;600;700;800;900&family=Noto+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/style.css">
+  <script>
+    (function () {
+      try {
+        var stored = localStorage.getItem('khmer-news-dark-mode');
+        var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        var dark = stored === null ? prefersDark : (stored === '1');
+        if (dark) {
+          document.documentElement.classList.add('dark-mode');
+        }
+      } catch (e) {}
+    })();
+  </script>
 </head>
 <body>
   <div class="error-page">

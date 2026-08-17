@@ -1,0 +1,31 @@
+<section class="section" style="padding: 40px 0;">
+  <div class="container">
+    <nav class="breadcrumb" style="display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: #64748b; margin-bottom: 24px; background: #ffffff; padding: 10px 16px; border-radius: 30px; border: 1px solid #e2e8f0; width: fit-content;">
+      <a href="/" style="color: var(--primary-color, #1e3a8a); font-weight: 600;"><%= t('nav.home') %></a>
+      <span>&rsaquo;</span>
+      <span style="color: #94a3b8;"><%= t('nav.terms') %></span>
+    </nav>
+
+    <div style="max-width: 860px; margin: 0 auto;">
+      <div style="background: #ffffff; border-radius: 16px; padding: 40px; border: 1px solid #e2e8f0; box-shadow: 0 4px 20px -4px rgba(15,23,42,0.04);">
+        <h1 style="font-size: 2rem; font-weight: 900; color: #0f172a; margin-bottom: 8px;"><i class="fas fa-scroll"></i> <%= t('terms.title') %></h1>
+        <p style="color: #94a3b8; font-size: 0.88rem; margin-bottom: 24px;"><%= t('terms.updated') %> <%= new Date().toLocaleDateString(lang === 'km' ? 'km-KH' : 'en-US', { year: 'numeric', month: 'long', day: 'numeric' }) %></p>
+
+        <p style="color: #334155; font-size: 1.02rem; line-height: 1.85; margin-bottom: 28px;"><%= t('terms.intro') %></p>
+
+        <% var sections = [
+          { h: t('terms.h1'), body: t('terms.h1_body') },
+          { h: t('terms.h2'), body: t('terms.h2_body') },
+          { h: t('terms.h3'), body: t('terms.h3_body') },
+          { h: t('terms.h4'), body: t('terms.h4_body') }
+        ]; %>
+        <% sections.forEach(function(s) { %>
+          <div style="padding: 20px 0; border-top: 1px solid #e2e8f0;">
+            <h2 style="font-size: 1.2rem; font-weight: 800; color: #0f172a; margin-bottom: 10px;"><%= s.h %></h2>
+            <p style="color: #475569; font-size: 0.98rem; line-height: 1.8;"><%= s.body %></p>
+          </div>
+        <% }) %>
+      </div>
+    </div>
+  </div>
+</section>

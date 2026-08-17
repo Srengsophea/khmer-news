@@ -14,6 +14,21 @@
     href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Koh+Santepheap:wght@300;400;700;900&family=Noto+Sans+Khmer:wght@300;400;500;600;700;800;900&family=Outfit:wght@300;400;500;600;700;800;900&display=swap"
     rel="stylesheet">
   <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+  <script>
+    // Apply dark mode before first paint to avoid flash
+    (function () {
+      try {
+        var stored = localStorage.getItem('khmer-news-dark-mode');
+        var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        var dark = stored === null ? prefersDark : (stored === '1');
+        if (dark) {
+          document.documentElement.classList.add('dark-mode');
+        }
+      } catch (e) {}
+    })();
+  </script>
 
   <style>
     :root {
@@ -42,6 +57,7 @@
         </a>
       </div>
       <div class="top-links">
+        <button id="darkModeToggle" class="dark-mode-toggle" aria-label="Toggle dark mode" title="Toggle dark mode"><i class="fas fa-moon"></i></button>
         <span>
           <%= t('common.language') %>:
         </span>
@@ -147,7 +163,7 @@
     <div class="breaking-bar">
       <div class="container">
         <div class="breaking-inner">
-          <span class="breaking-label">BREAKING ⚡</span>
+          <span class="breaking-label">BREAKING <i class="fas fa-bolt"></i></span>
           <div class="breaking-marquee-track-container">
             <div class="breaking-marquee-track">
               <% var newsTxt='' ; %>
@@ -271,13 +287,19 @@
               </ul>
             </div>
             <div class="footer-col newsletter-col">
-              <h4>Newsletter</h4>
-              <p class="newsletter-desc">Subscribe to receive the latest breaking news alerts in your inbox.</p>
-              <form class="footer-newsletter-form"
-                onsubmit="event.preventDefault(); alert('Subscribed successfully!');">
-                <input type="email" placeholder="Your email address" required class="newsletter-input">
-                <button type="submit" class="newsletter-btn">Subscribe</button>
+              <h4>
+                <%= t('newsletter.title') %>
+              </h4>
+              <p class="newsletter-desc">
+                <%= t('newsletter.desc') %>
+              </p>
+              <form class="footer-newsletter-form js-newsletter-form" novalidate>
+                <input type="email" placeholder="<%= t('newsletter.placeholder') %>" required class="newsletter-input js-newsletter-input">
+                <button type="submit" class="newsletter-btn js-newsletter-btn">
+                  <%= t('newsletter.subscribe') %>
+                </button>
               </form>
+              <p class="newsletter-msg js-newsletter-msg" style="display: none; margin-top: 8px; font-size: 0.85rem; font-weight: 600;"></p>
             </div>
           </div>
 
@@ -311,14 +333,22 @@
                   <%= (typeof siteSettings !=='undefined' && siteSettings && siteSettings.site_name_en) || 'Khmer News'
                     %>. All rights reserved.</p>
               <div class="footer-legal-links">
-                <a href="/privacy">Privacy Policy</a>
-                <a href="/terms">Terms of Service</a>
+                <a href="/privacy">
+                  <%= t('nav.privacy') %>
+                </a>
+                <a href="/terms">
+                  <%= t('nav.terms') %>
+                </a>
+                <a href="/feed.xml" title="RSS Feed"><i class="fas fa-rss"></i> RSS</a>
               </div>
             </div>
           </div>
         </div>
       </footer>
 
+      <button id="backToTop" class="back-to-top" aria-label="<%= t('common.back_to_top') %>" title="<%= t('common.back_to_top') %>">↑</button>
+
+      <script src="/js/main.js"></script>
       <script>
         document.addEventListener('DOMContentLoaded', function () {
           var switcher = document.getElementById('langSwitcher');
@@ -383,6 +413,80 @@
           var dateEl = document.getElementById('currentDate');
           if (dateEl) {
             dateEl.textContent = now.toLocaleDateString('<%= lang %>', options);
+          }
+
+          // Newsletter form (AJAX)
+          var newsletterForms = document.querySelectorAll('.js-newsletter-form');
+          newsletterForms.forEach(function (form) {
+            form.addEventListener('submit', function (e) {
+              e.preventDefault();
+              var input = form.querySelector('.js-newsletter-input');
+              var msg = form.querySelector('.js-newsletter-msg');
+              var btn = form.querySelector('.js-newsletter-btn');
+              var email = input ? input.value.trim() : '';
+              if (!email) { return; }
+              if (btn) { btn.disabled = true; btn.textContent = '...'; }
+              fetch('/api/newsletter/subscribe', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: email })
+              })
+              .then(function (r) { return r.json(); })
+              .then(function (data) {
+                if (msg) {
+                  msg.style.display = 'block';
+                  if (data.success) {
+                    msg.style.color = '#4ade80';
+                    msg.textContent = '<%= t('newsletter.success') %>';
+                    if (input) input.value = '';
+                  } else {
+                    msg.style.color = '#f87171';
+                    msg.textContent = '<%= t('newsletter.error') %>';
+                  }
+                }
+                if (btn) { btn.disabled = false; btn.textContent = '<%= t('newsletter.subscribe') %>'; }
+              })
+              .catch(function () {
+                if (msg) {
+                  msg.style.display = 'block';
+                  msg.style.color = '#f87171';
+                  msg.textContent = '<%= t('newsletter.error') %>';
+                }
+                if (btn) { btn.disabled = false; btn.textContent = '<%= t('newsletter.subscribe') %>'; }
+              });
+            });
+          });
+
+          // Dark mode toggle
+          var darkToggle = document.getElementById('darkModeToggle');
+          if (darkToggle) {
+            function syncDarkIcon() {
+              var isDark = document.documentElement.classList.contains('dark-mode');
+              darkToggle.innerHTML = isDark ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+            }
+            darkToggle.addEventListener('click', function () {
+              var isDark = document.documentElement.classList.toggle('dark-mode');
+              try {
+                localStorage.setItem('khmer-news-dark-mode', isDark ? '1' : '0');
+              } catch (e) {}
+              syncDarkIcon();
+            });
+            syncDarkIcon();
+          }
+
+          // Back to top button
+          var backToTop = document.getElementById('backToTop');
+          if (backToTop) {
+            window.addEventListener('scroll', function () {
+              if (window.scrollY > 400) {
+                backToTop.classList.add('show');
+              } else {
+                backToTop.classList.remove('show');
+              }
+            });
+            backToTop.addEventListener('click', function () {
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
           }
         });
       </script>

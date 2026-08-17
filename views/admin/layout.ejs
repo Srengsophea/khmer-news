@@ -8,26 +8,44 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Koh+Santepheap:wght@300;400;700;900&family=Noto+Sans+Khmer:wght@300;400;500;600;700;800;900&family=Noto+Serif+Khmer:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <script>
+    (function () {
+      try {
+        var stored = localStorage.getItem('khmer-news-dark-mode');
+        var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        var dark = stored === null ? prefersDark : (stored === '1');
+        if (dark) {
+          document.documentElement.classList.add('dark-mode');
+        }
+      } catch (e) {}
+    })();
+  </script>
 </head>
 <body>
   <div class="admin-layout">
     <aside class="admin-sidebar">
       <div class="admin-brand">Khmer<span style="color:#b91c1c">News</span> Admin</div>
       <nav class="admin-nav">
-        <a href="/admin/dashboard" class="admin-nav-item <%= typeof title !== 'undefined' && title === 'Dashboard' ? 'active' : '' %>">📊 <%= t('admin.dashboard') %></a>
-        <a href="/admin/layout" class="admin-nav-item <%= typeof title !== 'undefined' && title === 'Layout & Theme Studio' ? 'active' : '' %>">🎨 Layout Studio</a>
-        <a href="/admin/articles" class="admin-nav-item <%= typeof title !== 'undefined' && (title === 'Articles' || title === 'Add Article' || title === 'Edit Article') ? 'active' : '' %>">📰 <%= t('admin.articles') %></a>
-        <a href="/admin/categories" class="admin-nav-item <%= typeof title !== 'undefined' && (title === 'Categories' || title === 'Add Category' || title === 'Edit Category') ? 'active' : '' %>">📂 <%= t('admin.categories') %></a>
-        <a href="/admin/ads" class="admin-nav-item <%= typeof title !== 'undefined' && (title === 'Ads Management' || title === 'Edit Ad' || title === 'Add Ad') ? 'active' : '' %>">📣 Ads Management</a>
-        <a href="/admin/settings" class="admin-nav-item <%= typeof title !== 'undefined' && title === 'Settings' ? 'active' : '' %>">🔧 Settings</a>
-        <a href="/" target="_blank" class="admin-nav-item">🌐 View Live Site ↗</a>
-        <a href="/admin/logout" class="admin-nav-item" style="margin-top: auto; border-top: 1px solid #1e293b; padding-top: 16px; color: #f87171;">🚪 <%= t('admin.logout') %></a>
+        <a href="/admin/dashboard" class="admin-nav-item <%= typeof title !== 'undefined' && title === 'Dashboard' ? 'active' : '' %>"><i class="fas fa-chart-simple"></i> <%= t('admin.dashboard') %></a>
+        <a href="/admin/layout" class="admin-nav-item <%= typeof title !== 'undefined' && title === 'Layout & Theme Studio' ? 'active' : '' %>"><i class="fas fa-palette"></i> Layout Studio</a>
+        <a href="/admin/articles" class="admin-nav-item <%= typeof title !== 'undefined' && (title === 'Articles' || title === 'Add Article' || title === 'Edit Article') ? 'active' : '' %>"><i class="fas fa-newspaper"></i> <%= t('admin.articles') %></a>
+        <a href="/admin/categories" class="admin-nav-item <%= typeof title !== 'undefined' && (title === 'Categories' || title === 'Add Category' || title === 'Edit Category') ? 'active' : '' %>"><i class="fas fa-folder"></i> <%= t('admin.categories') %></a>
+        <a href="/admin/tags" class="admin-nav-item <%= typeof title !== 'undefined' && (title === 'Tags' || title === 'Add Tag' || title === 'Edit Tag') ? 'active' : '' %>"><i class="fas fa-tags"></i> Tags</a>
+        <a href="/admin/ads" class="admin-nav-item <%= typeof title !== 'undefined' && (title === 'Ads Management' || title === 'Edit Ad' || title === 'Add Ad') ? 'active' : '' %>"><i class="fas fa-bullhorn"></i> Ads Management</a>
+        <a href="/admin/subscribers" class="admin-nav-item <%= typeof title !== 'undefined' && title === 'Subscribers' ? 'active' : '' %>"><i class="fas fa-envelope-open-text"></i> Subscribers</a>
+        <a href="/admin/messages" class="admin-nav-item <%= typeof title !== 'undefined' && title === 'Messages' ? 'active' : '' %>"><i class="fas fa-envelope"></i> Messages</a>
+        <a href="/admin/comments" class="admin-nav-item <%= typeof title !== 'undefined' && title === 'Comments' ? 'active' : '' %>"><i class="fas fa-comments"></i> Comments<% if (typeof pendingComments !== 'undefined' && pendingComments > 0) { %><span style="background: #f59e0b; color: #0f172a; font-size: 0.7rem; font-weight: 800; padding: 1px 8px; border-radius: 10px; margin-left: 6px;"><%= pendingComments %></span><% } %></a>
+        <a href="/admin/settings" class="admin-nav-item <%= typeof title !== 'undefined' && title === 'Settings' ? 'active' : '' %>"><i class="fas fa-gear"></i> Settings</a>
+        <a href="/" target="_blank" class="admin-nav-item"><i class="fas fa-globe"></i> View Live Site ↗</a>
+        <a href="/admin/logout" class="admin-nav-item" style="margin-top: auto; border-top: 1px solid #1e293b; padding-top: 16px; color: #f87171;"><i class="fas fa-right-from-bracket"></i> <%= t('admin.logout') %></a>
       </nav>
     </aside>
     <main class="admin-main">
       <div class="admin-topbar">
         <div class="admin-user-greeting">Welcome, <strong><%= adminUser %></strong></div>
         <div style="display: flex; align-items: center; gap: 16px;">
+          <button id="darkModeToggle" class="dark-mode-toggle" aria-label="Toggle dark mode" title="Toggle dark mode"><i class="fas fa-moon"></i></button>
           <select id="langSwitcher" class="lang-select">
             <option value="km" <%= lang === 'km' ? 'selected' : '' %>>ខ្មែរ</option>
             <option value="en" <%= lang === 'en' ? 'selected' : '' %>>English</option>
@@ -49,6 +67,22 @@
           var lang = this.value;
           window.location.href = '/change-lang/' + lang;
         });
+      }
+
+      var darkToggle = document.getElementById('darkModeToggle');
+      if (darkToggle) {
+        function syncDarkIcon() {
+          var isDark = document.documentElement.classList.contains('dark-mode');
+          darkToggle.innerHTML = isDark ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+        }
+        darkToggle.addEventListener('click', function() {
+          var isDark = document.documentElement.classList.toggle('dark-mode');
+          try {
+            localStorage.setItem('khmer-news-dark-mode', isDark ? '1' : '0');
+          } catch (e) {}
+          syncDarkIcon();
+        });
+        syncDarkIcon();
       }
     });
   </script>

@@ -80,6 +80,43 @@ function initDatabase(callback) {
         click_count INTEGER DEFAULT 0,
         views_count INTEGER DEFAULT 0
       );
+      CREATE TABLE IF NOT EXISTS subscribers (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        email TEXT UNIQUE NOT NULL,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+      );
+      CREATE TABLE IF NOT EXISTS messages (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL,
+        email TEXT NOT NULL,
+        subject TEXT DEFAULT '',
+        message TEXT NOT NULL,
+        is_read INTEGER DEFAULT 0,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+      );
+      CREATE TABLE IF NOT EXISTS tags (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name_km TEXT NOT NULL,
+        name_en TEXT NOT NULL,
+        slug TEXT UNIQUE NOT NULL
+      );
+      CREATE TABLE IF NOT EXISTS article_tags (
+        article_id INTEGER NOT NULL,
+        tag_id INTEGER NOT NULL,
+        PRIMARY KEY (article_id, tag_id),
+        FOREIGN KEY (article_id) REFERENCES articles(id) ON DELETE CASCADE,
+        FOREIGN KEY (tag_id) REFERENCES tags(id) ON DELETE CASCADE
+      );
+      CREATE TABLE IF NOT EXISTS comments (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        article_id INTEGER NOT NULL,
+        name TEXT NOT NULL,
+        email TEXT NOT NULL,
+        content TEXT NOT NULL,
+        is_approved INTEGER DEFAULT 1,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (article_id) REFERENCES articles(id) ON DELETE CASCADE
+      );
     `;
     db.exec(schema, (err) => {
       if (err) return callback(err);
@@ -102,13 +139,19 @@ function runMigrations(callback) {
     "ALTER TABLE settings ADD COLUMN sidebar_position TEXT DEFAULT 'right'",
     "ALTER TABLE settings ADD COLUMN custom_css TEXT DEFAULT ''",
     "ALTER TABLE settings ADD COLUMN homepage_blocks TEXT DEFAULT ''",
+    "ALTER TABLE settings ADD COLUMN ticker_style TEXT DEFAULT 'marquee'",
+    "ALTER TABLE settings ADD COLUMN custom_templates TEXT DEFAULT ''",
+    "ALTER TABLE settings ADD COLUMN category_blocks TEXT DEFAULT ''",
+    "ALTER TABLE settings ADD COLUMN article_blocks TEXT DEFAULT ''",
     "ALTER TABLE ads ADD COLUMN ad_type TEXT DEFAULT 'image'",
     "ALTER TABLE ads ADD COLUMN html_code TEXT DEFAULT ''",
     "ALTER TABLE ads ADD COLUMN click_count INTEGER DEFAULT 0",
     "ALTER TABLE ads ADD COLUMN views_count INTEGER DEFAULT 0",
     "ALTER TABLE articles ADD COLUMN views_count INTEGER DEFAULT 0",
     "ALTER TABLE articles ADD COLUMN read_time_minutes INTEGER DEFAULT 3",
-    "ALTER TABLE articles ADD COLUMN author_name TEXT DEFAULT 'Khmer News Desk'"
+    "ALTER TABLE articles ADD COLUMN author_name TEXT DEFAULT 'Khmer News Desk'",
+    "ALTER TABLE articles ADD COLUMN summary_km TEXT DEFAULT ''",
+    "ALTER TABLE articles ADD COLUMN summary_en TEXT DEFAULT ''"
   ];
 
   let completed = 0;
@@ -124,14 +167,41 @@ function runMigrations(callback) {
   });
 }
 
+function seedTags(callback) {
+  db.get("SELECT COUNT(*) as c FROM tags", (err, row) => {
+    if (err || (row && row.c > 0)) return callback();
+    const tags = [
+      { name_km: 'រដ្ឋាភិបាល', name_en: 'Government', slug: 'government' },
+      { name_km: 'សេដ្ឋកិច្ច', name_en: 'Economy', slug: 'economy' },
+      { name_km: 'បច្ចេកវិទ្យា', name_en: 'Technology', slug: 'technology' },
+      { name_km: 'កីឡា', name_en: 'Sports', slug: 'sports' },
+      { name_km: 'អប់រំ', name_en: 'Education', slug: 'education' },
+      { name_km: 'សុខាភិបាល', name_en: 'Health', slug: 'health' },
+      { name_km: 'បរិស្ថាន', name_en: 'Environment', slug: 'environment' },
+      { name_km: 'វប្បធម៌', name_en: 'Culture', slug: 'culture' },
+      { name_km: 'អាកាសធាតុ', name_en: 'Climate', slug: 'climate' },
+      { name_km: 'អាស៊ាន', name_en: 'ASEAN', slug: 'asean' }
+    ];
+    db.serialize(() => {
+      tags.forEach((t) => {
+        db.run("INSERT INTO tags (name_km, name_en, slug) VALUES (?,?,?)", [t.name_km, t.name_en, t.slug]);
+      });
+      callback();
+    });
+  });
+}
+
 function ensureDefaultSettings(callback) {
   const defaultBlocks = JSON.stringify([
     { id: "b-hero", type: "hero", title_km: "ព័ត៌មានលេចធ្លោ", title_en: "Featured Showcase", style: "grid_3", enabled: true, limit: 3 },
+    { id: "b-ticker", type: "ticker", title_km: "ព័ត៌មានចុងក្រោយ", title_en: "Latest Headlines", enabled: true, limit: 10 },
     { id: "b-spotlight", type: "spotlight", title_km: "ព័ត៌មានសំខាន់ប្រចាំថ្ងៃ", title_en: "Top Spotlight", style: "wide_card", enabled: true, limit: 1 },
     { id: "b-ad-mid", type: "ad_slot", title_km: "ផ្ទាំងពាណិជ្ជកម្មកណ្តាល", title_en: "Mid Content Banner", position_slot: "homepage_mid_banner", enabled: true },
     { id: "b-cat-national", type: "category", category_id: 1, title_km: "ព័ត៌មានជាតិ", title_en: "National News", style: "grid_3_col", enabled: true, limit: 6 },
     { id: "b-cat-tech", type: "category", category_id: 4, title_km: "បច្ចេកវិទ្យា", title_en: "Technology", style: "grid_2_col", enabled: true, limit: 4 },
     { id: "b-cat-sports", type: "category", category_id: 3, title_km: "កីឡា", title_en: "Sports", style: "list_view", enabled: true, limit: 4 },
+    { id: "b-headlines", type: "headlines", title_km: "កំពូលព័ត៌មាន", title_en: "Top Headlines", enabled: true, limit: 10 },
+    { id: "b-tags", type: "tags", title_km: "ស្លាកព័ត៌មានពេញនិយម", title_en: "Popular Tags", enabled: true, limit: 20 },
     { id: "b-ad-bottom", type: "ad_slot", title_km: "ផ្ទាំងពាណិជ្ជកម្មខាងក្រោម", title_en: "Bottom Banner", position_slot: "homepage_bottom_banner", enabled: true },
     { id: "b-newsletter", type: "newsletter", title_km: "ជាវព័ត៌មានប្រចាំថ្ងៃ", title_en: "Subscribe Newsletter", enabled: true }
   ]);
@@ -142,10 +212,10 @@ function ensureDefaultSettings(callback) {
       db.get("SELECT homepage_blocks FROM settings WHERE id = 1", [], (e, sRow) => {
         if (sRow && (!sRow.homepage_blocks || sRow.homepage_blocks.trim() === '')) {
           db.run("UPDATE settings SET homepage_blocks = ? WHERE id = 1", [defaultBlocks], () => {
-            if (callback) callback();
+            seedTags(() => { if (callback) callback(); });
           });
         } else {
-          if (callback) callback();
+          seedTags(() => { if (callback) callback(); });
         }
       });
       return;
@@ -170,7 +240,7 @@ function ensureDefaultSettings(callback) {
         1, 'right', ?
       )
     `, [defaultBlocks], () => {
-      if (callback) callback();
+      seedTags(() => { if (callback) callback(); });
     });
   });
 }

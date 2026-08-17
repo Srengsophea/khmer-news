@@ -1,73 +1,179 @@
 <div class="admin-page-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
   <div>
-    <h1 style="font-size: 1.75rem; font-weight: 800; color: #0f172a; margin: 0;">🖱️ Visual Drag & Drop Layout Studio</h1>
+    <h1 style="font-size: 1.75rem; font-weight: 800; color: #0f172a; margin: 0;"><i class="fas fa-mouse-pointer"></i> Visual Drag & Drop Layout Studio</h1>
     <p style="color: #64748b; margin-top: 4px; font-size: 0.95rem;">Drag and drop section blocks to reorder, customize visual wireframes, or apply pre-designed templates with one click.</p>
   </div>
   <div style="display: flex; gap: 12px;">
     <a href="/" target="_blank" class="btn btn-outline" style="display: flex; align-items: center; gap: 8px;">
-      🌐 View Live Website ↗
+      <i class="fas fa-globe"></i> View Live Website ↗
     </a>
     <button type="button" onclick="saveAllBlocks()" class="btn btn-primary" style="padding: 10px 24px; font-weight: 700; display: flex; align-items: center; gap: 8px;">
-      💾 Save Layout Changes
+      <i class="fas fa-floppy-disk"></i> Save Layout Changes
     </button>
   </div>
 </div>
 
 <% if (typeof success !== 'undefined' && success) { %>
   <div style="background-color: #dcfce7; border: 1px solid #86efac; color: #166534; padding: 14px 18px; border-radius: 8px; margin-bottom: 24px; display: flex; align-items: center; gap: 10px; font-weight: 500;">
-    <span>✅</span> <%= success %>
+    <span><i class="fas fa-circle-check"></i></span> <%= success %>
   </div>
 <% } %>
 
 <!-- PRESET LAYOUT TEMPLATES BAR -->
-<div style="background: linear-gradient(135deg, #1e3a8a, #0f172a); color: white; border-radius: 12px; padding: 20px; margin-bottom: 24px; box-shadow: 0 4px 12px rgba(15,23,42,0.15);">
+<div id="presetTemplatesBar" style="background: linear-gradient(135deg, #1e3a8a, #0f172a); color: white; border-radius: 12px; padding: 20px; margin-bottom: 24px; box-shadow: 0 4px 12px rgba(15,23,42,0.15);">
   <h3 style="font-size: 1.1rem; font-weight: 700; color: #ffffff; margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">
-    <span>⚡</span> Apply Pre-designed Homepage Templates
+    <span><i class="fas fa-bolt"></i></span> Apply Pre-designed Homepage Templates
   </h3>
   <p style="font-size: 0.88rem; color: rgba(255,255,255,0.8); margin-bottom: 16px;">Select a layout template to automatically configure your homepage sections with professional design patterns.</p>
 
-  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px;">
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(235px, 1fr)); gap: 16px;">
     <button type="button" onclick="applyTemplate('classic')" class="template-card-btn">
-      <strong style="display: block; font-size: 1rem; margin-bottom: 4px;">🏛️ Classic News Portal</strong>
-      <span style="font-size: 0.8rem; color: rgba(255,255,255,0.75);">3-Card Hero + Spotlight + National 3-Col + Mid Ad + Tech 2-Col</span>
+      <span class="tpl-preview">
+        <span class="tpl-row"><span class="tpl-bar" style="flex:2; background:#1e3a8a;"></span><span class="tpl-bar" style="flex:1; background:#60a5fa;"></span></span>
+        <span class="tpl-row"><span class="tpl-bar" style="background:#334155;"></span></span>
+        <span class="tpl-row"><span class="tpl-bar" style="flex:0 0 60px; background:#f59e0b;"></span></span>
+        <span class="tpl-row"><span class="tpl-bar" style="background:#64748b;"></span><span class="tpl-bar" style="background:#64748b;"></span><span class="tpl-bar" style="background:#64748b;"></span></span>
+        <span class="tpl-row"><span class="tpl-bar" style="background:#94a3b8;"></span><span class="tpl-bar" style="background:#94a3b8;"></span></span>
+      </span>
+      <strong style="display: block; font-size: 0.95rem; margin: 8px 0 3px;"><i class="fas fa-landmark"></i> Classic News Portal</strong>
+      <span style="font-size: 0.75rem; color: rgba(255,255,255,0.7);">3-Card Hero + Spotlight + Mid Ad + 3-Col + 2-Col</span>
     </button>
 
     <button type="button" onclick="applyTemplate('breaking')" class="template-card-btn">
-      <strong style="display: block; font-size: 1rem; margin-bottom: 4px;">⚡ Breaking Headlines</strong>
-      <span style="font-size: 0.8rem; color: rgba(255,255,255,0.75);">Wide Banner Hero + Sports Grid + Mid Ad + National List</span>
+      <span class="tpl-preview">
+        <span class="tpl-row"><span class="tpl-bar" style="background:#1e3a8a;"></span></span>
+        <span class="tpl-row"><span class="tpl-bar" style="background:#64748b;"></span><span class="tpl-bar" style="background:#64748b;"></span><span class="tpl-bar" style="background:#64748b;"></span></span>
+        <span class="tpl-row"><span class="tpl-bar" style="flex:0 0 60px; background:#f59e0b;"></span></span>
+        <span class="tpl-row" style="flex-direction:column;"><span class="tpl-bar" style="height:5px; background:#94a3b8;"></span><span class="tpl-bar" style="height:5px; background:#94a3b8;"></span></span>
+      </span>
+      <strong style="display: block; font-size: 0.95rem; margin: 8px 0 3px;"><i class="fas fa-bolt"></i> Breaking Headlines</strong>
+      <span style="font-size: 0.75rem; color: rgba(255,255,255,0.7);">Wide Hero + Sports Grid + Ad + National List</span>
     </button>
 
     <button type="button" onclick="applyTemplate('magazine')" class="template-card-btn">
-      <strong style="display: block; font-size: 1rem; margin-bottom: 4px;">📰 Magazine & Editorial</strong>
-      <span style="font-size: 0.8rem; color: rgba(255,255,255,0.75);">Split Dual Hero + Tech Grid + Newsletter + Bottom Ad</span>
+      <span class="tpl-preview">
+        <span class="tpl-row"><span class="tpl-bar" style="background:#1e3a8a;"></span><span class="tpl-bar" style="background:#dc2626;"></span></span>
+        <span class="tpl-row"><span class="tpl-bar" style="background:#64748b;"></span><span class="tpl-bar" style="background:#64748b;"></span></span>
+        <span class="tpl-row"><span class="tpl-bar" style="background:#7e22ce;"></span></span>
+        <span class="tpl-row"><span class="tpl-bar" style="flex:0 0 60px; background:#f59e0b;"></span></span>
+      </span>
+      <strong style="display: block; font-size: 0.95rem; margin: 8px 0 3px;"><i class="fas fa-newspaper"></i> Magazine & Editorial</strong>
+      <span style="font-size: 0.75rem; color: rgba(255,255,255,0.7);">Split Hero + Tech Grid + Newsletter + Ad</span>
     </button>
+
+    <button type="button" onclick="applyTemplate('compact')" class="template-card-btn">
+      <span class="tpl-preview">
+        <span class="tpl-row"><span class="tpl-bar" style="background:#dc2626;"></span></span>
+        <span class="tpl-row"><span class="tpl-bar" style="flex:0 0 70px; background:#ef4444;"></span><span class="tpl-bar" style="background:#e2e8f0;"></span></span>
+        <span class="tpl-row"><span class="tpl-bar" style="flex:0 0 20px; background:#fbbf24;"></span><span class="tpl-bar" style="background:#e2e8f0;"></span></span>
+        <span class="tpl-row"><span class="tpl-bar" style="flex:0 0 30px; background:#06b6d4;"></span><span class="tpl-bar" style="flex:0 0 50px; background:#06b6d4;"></span><span class="tpl-bar" style="flex:0 0 24px; background:#06b6d4;"></span></span>
+      </span>
+      <strong style="display: block; font-size: 0.95rem; margin: 8px 0 3px;"><i class="fas fa-newspaper"></i> Compact Headlines</strong>
+      <span style="font-size: 0.75rem; color: rgba(255,255,255,0.7);">Carousel + Ticker + Top 10 + Tags</span>
+    </button>
+
+    <button type="button" onclick="applyTemplate('tech')" class="template-card-btn">
+      <span class="tpl-preview">
+        <span class="tpl-row"><span class="tpl-bar" style="background:#0ea5e9;"></span></span>
+        <span class="tpl-row"><span class="tpl-bar" style="background:#64748b;"></span><span class="tpl-bar" style="background:#64748b;"></span><span class="tpl-bar" style="background:#64748b;"></span></span>
+        <span class="tpl-row"><span class="tpl-bar" style="flex:0 0 20px; background:#fbbf24;"></span><span class="tpl-bar" style="background:#e2e8f0;"></span></span>
+        <span class="tpl-row"><span class="tpl-bar" style="flex:0 0 30px; background:#06b6d4;"></span><span class="tpl-bar" style="flex:0 0 50px; background:#06b6d4;"></span></span>
+      </span>
+      <strong style="display: block; font-size: 0.95rem; margin: 8px 0 3px;"><i class="fas fa-robot"></i> Tech & Digital</strong>
+      <span style="font-size: 0.75rem; color: rgba(255,255,255,0.7);">Carousel + Tech 3-Col + Top 10 + Tags</span>
+    </button>
+
+    <button type="button" onclick="applyTemplate('economy')" class="template-card-btn">
+      <span class="tpl-preview">
+        <span class="tpl-row"><span class="tpl-bar" style="background:#1e3a8a;"></span><span class="tpl-bar" style="background:#15803d;"></span></span>
+        <span class="tpl-row"><span class="tpl-bar" style="background:#a21caf;"></span><span class="tpl-bar" style="background:#a21caf;"></span><span class="tpl-bar" style="background:#a21caf;"></span><span class="tpl-bar" style="background:#a21caf;"></span></span>
+        <span class="tpl-row" style="flex-direction:column;"><span class="tpl-bar" style="height:6px; background:#15803d;"></span><span class="tpl-row-inner"><span class="tpl-bar"></span><span class="tpl-bar"></span></span></span>
+        <span class="tpl-row"><span class="tpl-bar" style="flex:0 0 20px; background:#fbbf24;"></span><span class="tpl-bar" style="background:#e2e8f0;"></span></span>
+      </span>
+      <strong style="display: block; font-size: 0.95rem; margin: 8px 0 3px;"><i class="fas fa-building-columns"></i> Economy & Business</strong>
+      <span style="font-size: 0.75rem; color: rgba(255,255,255,0.7);">Split Hero + Stats + Featured Top + Top 10</span>
+    </button>
+
+    <button type="button" onclick="applyTemplate('minimal')" class="template-card-btn">
+      <span class="tpl-preview">
+        <span class="tpl-row"><span class="tpl-bar" style="background:#1e3a8a;"></span></span>
+        <span class="tpl-row" style="flex-direction:column;"><span class="tpl-bar" style="height:5px; background:#94a3b8;"></span><span class="tpl-bar" style="height:5px; background:#94a3b8;"></span><span class="tpl-bar" style="height:5px; background:#94a3b8;"></span></span>
+        <span class="tpl-row"><span class="tpl-bar" style="flex:0 0 20px; background:#fbbf24;"></span><span class="tpl-bar" style="background:#e2e8f0;"></span></span>
+        <span class="tpl-row"><span class="tpl-bar" style="flex:0 0 30px; background:#06b6d4;"></span><span class="tpl-bar" style="flex:0 0 50px; background:#06b6d4;"></span></span>
+      </span>
+      <strong style="display: block; font-size: 0.95rem; margin: 8px 0 3px;"><i class="fas fa-wand-magic-sparkles"></i> Minimal News</strong>
+      <span style="font-size: 0.75rem; color: rgba(255,255,255,0.7);">Banner + List View + Top 10 + Tags</span>
+    </button>
+
+    <div id="customTemplatesSection" style="grid-column: 1 / -1; border-top: 1px dashed rgba(255,255,255,0.25); padding-top: 16px; margin-top: 8px;">
+      <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px; flex-wrap: wrap;">
+        <h4 style="font-size: 0.95rem; font-weight: 700; color: #ffffff; margin: 0;"><i class="fas fa-folder-open"></i> My Custom Layouts</h4>
+        <button type="button" onclick="saveCurrentAsTemplate()" class="template-card-btn" style="background: #16a34a; border: 1px solid #86efac; color: #ffffff; padding: 7px 16px; border-radius: 8px; font-size: 0.82rem; font-weight: 700; cursor: pointer; box-shadow: none;"><i class="fas fa-floppy-disk"></i> Save Current Layout as Template</button>
+        <span style="font-size: 0.78rem; color: rgba(255,255,255,0.65);">Snapshot your current block arrangement and reuse it anytime.</span>
+      </div>
+      <div id="customTemplatesList" style="display: flex; gap: 12px; flex-wrap: wrap;">
+        <% if (typeof customTemplates !== 'undefined' && customTemplates.length > 0) { %>
+          <% customTemplates.forEach(function(t) { %>
+            <div class="custom-tpl-card" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); border-radius: 10px; padding: 12px 14px; display: flex; align-items: center; gap: 10px;">
+              <span style="font-size: 1rem;"><i class="fas fa-folder-tree"></i></span>
+              <span style="font-size: 0.88rem; font-weight: 700; color: #ffffff;"><%= t.name %></span>
+              <span style="font-size: 0.72rem; color: rgba(255,255,255,0.6);"><%= (t.blocks || []).length %> blocks</span>
+              <button type="button" onclick="applyCustomTemplate('<%= t.name.replace(/'/g, "\\'") %>')" style="background: #2563eb; border: none; color: #fff; padding: 5px 12px; border-radius: 6px; font-size: 0.78rem; font-weight: 700; cursor: pointer;">Apply</button>
+              <button type="button" onclick="deleteCustomTemplate('<%= t.name.replace(/'/g, "\\'") %>')" style="background: transparent; border: 1px solid rgba(248,113,113,0.6); color: #fca5a5; padding: 5px 10px; border-radius: 6px; font-size: 0.78rem; cursor: pointer;"><i class="fas fa-xmark"></i></button>
+            </div>
+          <% }); %>
+        <% } else { %>
+          <span style="font-size: 0.82rem; color: rgba(255,255,255,0.55);">No custom layouts saved yet — click "Save Current Layout as Template" to create your first one.</span>
+        <% } %>
+      </div>
+    </div>
   </div>
 </div>
 
 <!-- TAB NAVIGATION -->
 <div style="display: flex; border-bottom: 2px solid #e2e8f0; margin-bottom: 24px;">
-  <button type="button" id="tabBlocksBtn" class="studio-tab active" onclick="switchTab('blocks')">🧩 Section Blocks Canvas (Drag & Drop)</button>
-  <button type="button" id="tabThemeBtn" class="studio-tab" onclick="switchTab('theme')">🎨 Brand Colors & Header Settings</button>
+  <button type="button" id="tabBlocksBtn" class="studio-tab active" onclick="switchTab('blocks')"><i class="fas fa-puzzle-piece"></i> Section Blocks Canvas (Drag & Drop)</button>
+  <button type="button" id="tabThemeBtn" class="studio-tab" onclick="switchTab('theme')"><i class="fas fa-palette"></i> Brand Colors & Header Settings</button>
 </div>
 
 <!-- SECTION 1: DRAG AND DROP BUILDER STUDIO -->
 <div id="blocksStudioSection" class="studio-section">
-  
+
+  <!-- PAGE TYPE SELECTOR: which page this layout controls -->
+  <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 18px;">
+    <span style="font-size: 0.9rem; font-weight: 700; color: #334155;">Customize layout for:</span>
+    <button type="button" id="pageHomeBtn" class="studio-tab active" onclick="switchPage('home')"><i class="fas fa-house"></i> Homepage</button>
+    <button type="button" id="pageCatBtn" class="studio-tab" onclick="switchPage('category')"><i class="fas fa-folder"></i> Category Page</button>
+    <button type="button" id="pageArtBtn" class="studio-tab" onclick="switchPage('article')"><i class="fas fa-file-lines"></i> Article Page</button>
+  </div>
+
   <!-- ADD BLOCK ACTION BAR -->
   <div style="background: #ffffff; border-radius: 12px; padding: 20px; border: 1px solid #e2e8f0; margin-bottom: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.03);">
-    <h3 style="font-size: 1rem; font-weight: 700; color: #1e293b; margin-bottom: 12px;">➕ Add Section Block to Canvas</h3>
+    <h3 style="font-size: 1rem; font-weight: 700; color: #1e293b; margin-bottom: 12px;"><i class="fas fa-plus"></i> Add Section Block to Canvas</h3>
     <div style="display: flex; gap: 12px; flex-wrap: wrap;">
       <button type="button" onclick="addNewBlock('category')" class="add-block-btn" style="background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe;">
-        📰 Add Category News Grid
+        <i class="fas fa-newspaper"></i> Add Category News Grid
       </button>
       <button type="button" onclick="addNewBlock('ad_slot')" class="add-block-btn" style="background: #fefce8; color: #a16207; border: 1px solid #fef08a;">
-        📣 Add Ad Banner Slot
+        <i class="fas fa-bullhorn"></i> Add Ad Banner Slot
       </button>
       <button type="button" onclick="addNewBlock('spotlight')" class="add-block-btn" style="background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0;">
-        ⭐ Add Spotlight Feature Block
+        <i class="fas fa-star"></i> Add Spotlight Feature Block
       </button>
       <button type="button" onclick="addNewBlock('newsletter')" class="add-block-btn" style="background: #faf5ff; color: #7e22ce; border: 1px solid #e9d5ff;">
-        📬 Add Newsletter CTA Widget
+        <i class="fas fa-envelope-open-text"></i> Add Newsletter CTA Widget
+      </button>
+      <button type="button" onclick="addNewBlock('ticker')" class="add-block-btn" style="background: #fef2f2; color: #b91c1c; border: 1px solid #fecaca;">
+        <i class="fas fa-newspaper"></i> Add Headlines Ticker Marquee
+      </button>
+      <button type="button" onclick="addNewBlock('headlines')" class="add-block-btn" style="background: #fffbeb; color: #b45309; border: 1px solid #fde68a;">
+        <i class="fas fa-list-ol"></i> Add Top-10 Numbered Headlines
+      </button>
+      <button type="button" onclick="addNewBlock('tags')" class="add-block-btn" style="background: #ecfeff; color: #0e7490; border: 1px solid #a5f3fc;">
+        <i class="fas fa-tags"></i> Add Tag Cloud Widget
+      </button>
+      <button type="button" onclick="addNewBlock('stats')" class="add-block-btn" style="background: #fdf4ff; color: #a21caf; border: 1px solid #f5d0fe;">
+        <i class="fas fa-chart-simple"></i> Add Stats Counter Strip
       </button>
     </div>
   </div>
@@ -82,11 +188,13 @@
 <!-- SECTION 2: THEME & BRAND COLOR SETTINGS -->
 <div id="themeStudioSection" class="studio-section" style="display: none;">
   <form action="/admin/layout/save" method="POST">
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 32px;">
+    <div style="display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 24px; align-items: start;">
+      <div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 32px;">
       
       <!-- Primary Colors -->
       <div style="background: #ffffff; border-radius: 12px; padding: 24px; border: 1px solid #e2e8f0;">
-        <h3 style="font-size: 1.15rem; font-weight: 700; color: #1e293b; margin-bottom: 16px;">🎯 Brand Palette</h3>
+        <h3 style="font-size: 1.15rem; font-weight: 700; color: #1e293b; margin-bottom: 16px;"><i class="fas fa-bullseye"></i> Brand Palette</h3>
         
         <div class="form-group" style="margin-bottom: 20px;">
           <label style="display: block; font-weight: 600; margin-bottom: 8px;">Primary Brand Color</label>
@@ -109,38 +217,52 @@
             <input type="text" id="accentColorText" value="<%= settings.accent_color || '#dc2626' %>" style="flex: 1; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 6px; font-family: monospace;" readonly>
           </div>
         </div>
+
+        <div class="form-group">
+          <label style="display: block; font-weight: 600; margin-bottom: 8px;"><i class="fas fa-palette"></i> One-Click Brand Themes</label>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <button type="button" onclick="setTheme('#1e3a8a','#dc2626')" title="Royal News"><span style="display:inline-block;width:26px;height:26px;border-radius:6px;background:linear-gradient(135deg,#1e3a8a 50%,#dc2626 50%);border:2px solid #e2e8f0;cursor:pointer;"></span></button>
+            <button type="button" onclick="setTheme('#b91c1c','#f59e0b')" title="Crimson Alert"><span style="display:inline-block;width:26px;height:26px;border-radius:6px;background:linear-gradient(135deg,#b91c1c 50%,#f59e0b 50%);border:2px solid #e2e8f0;cursor:pointer;"></span></button>
+            <button type="button" onclick="setTheme('#047857','#f43f5e')" title="Emerald Tech"><span style="display:inline-block;width:26px;height:26px;border-radius:6px;background:linear-gradient(135deg,#047857 50%,#f43f5e 50%);border:2px solid #e2e8f0;cursor:pointer;"></span></button>
+            <button type="button" onclick="setTheme('#5b21b6','#22d3ee')" title="Deep Purple"><span style="display:inline-block;width:26px;height:26px;border-radius:6px;background:linear-gradient(135deg,#5b21b6 50%,#22d3ee 50%);border:2px solid #e2e8f0;cursor:pointer;"></span></button>
+            <button type="button" onclick="setTheme('#0f766e','#fb923c')" title="Ocean Teal"><span style="display:inline-block;width:26px;height:26px;border-radius:6px;background:linear-gradient(135deg,#0f766e 50%,#fb923c 50%);border:2px solid #e2e8f0;cursor:pointer;"></span></button>
+            <button type="button" onclick="setTheme('#1d4ed8','#16a34a')" title="Digital Blue"><span style="display:inline-block;width:26px;height:26px;border-radius:6px;background:linear-gradient(135deg,#1d4ed8 50%,#16a34a 50%);border:2px solid #e2e8f0;cursor:pointer;"></span></button>
+            <button type="button" onclick="setTheme('#7c2d12','#eab308')" title="Golden Press"><span style="display:inline-block;width:26px;height:26px;border-radius:6px;background:linear-gradient(135deg,#7c2d12 50%,#eab308 50%);border:2px solid #e2e8f0;cursor:pointer;"></span></button>
+            <button type="button" onclick="setTheme('#0f172a','#06b6d4')" title="Midnight Cyber"><span style="display:inline-block;width:26px;height:26px;border-radius:6px;background:linear-gradient(135deg,#0f172a 50%,#06b6d4 50%);border:2px solid #e2e8f0;cursor:pointer;"></span></button>
+          </div>
+          <p style="font-size: 0.78rem; color: #94a3b8; margin-top: 8px;">Pick a palette — primary & accent colors are applied instantly to the preview. Click <strong>Save Theme & Brand Settings</strong> to publish.</p>
+        </div>
       </div>
 
       <!-- Hero Style Defaults -->
       <div style="background: #ffffff; border-radius: 12px; padding: 24px; border: 1px solid #e2e8f0;">
-        <h3 style="font-size: 1.15rem; font-weight: 700; color: #1e293b; margin-bottom: 16px;">🖼️ Default Hero Mode</h3>
-        
-        <div style="display: flex; flex-direction: column; gap: 12px;">
-          <label style="display: flex; align-items: center; gap: 12px; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; cursor: pointer;">
-            <input type="radio" name="hero_layout_style" value="grid_3" <%= (settings.hero_layout_style === 'grid_3' || !settings.hero_layout_style) ? 'checked' : '' %>>
-            <div>
-              <strong style="display: block; color: #0f172a;">Standard 3-Card Grid (1 Main + 2 Side)</strong>
-            </div>
-          </label>
-          <label style="display: flex; align-items: center; gap: 12px; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; cursor: pointer;">
-            <input type="radio" name="hero_layout_style" value="split_2" <%= settings.hero_layout_style === 'split_2' ? 'checked' : '' %>>
-            <div>
-              <strong style="display: block; color: #0f172a;">Split Dual Featured (2 Equal Columns)</strong>
-            </div>
-          </label>
-          <label style="display: flex; align-items: center; gap: 12px; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; cursor: pointer;">
-            <input type="radio" name="hero_layout_style" value="single_hero_banner" <%= settings.hero_layout_style === 'single_hero_banner' ? 'checked' : '' %>>
-            <div>
-              <strong style="display: block; color: #0f172a;">Single Ultra-Wide Hero Banner</strong>
-            </div>
-          </label>
+        <h3 style="font-size: 1.15rem; font-weight: 700; color: #1e293b; margin-bottom: 6px;"><i class="fas fa-image"></i> Default Hero Style</h3>
+        <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 14px;">Used by the homepage hero when the hero block doesn't specify its own style.</p>
+        <select name="hero_layout_style" id="heroStyleSelect"
+          style="width: 100%; padding: 11px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.95rem; font-weight: 600; background: #ffffff;">
+          <option value="grid_3" <%= (settings.hero_layout_style === 'grid_3' || !settings.hero_layout_style) ? 'selected' : '' %>>Standard 3-Card Grid (1 Main + 2 Side)</option>
+          <option value="split_2" <%= settings.hero_layout_style === 'split_2' ? 'selected' : '' %>>Split Dual Featured (2 Equal Columns)</option>
+          <option value="single_hero_banner" <%= settings.hero_layout_style === 'single_hero_banner' ? 'selected' : '' %>>Single Ultra-Wide Hero Banner</option>
+          <option value="mosaic" <%= settings.hero_layout_style === 'mosaic' ? 'selected' : '' %>>Asymmetric Mosaic (Tall + Wide + 2 Minis)</option>
+          <option value="hero_2x2" <%= settings.hero_layout_style === 'hero_2x2' ? 'selected' : '' %>>2×2 Feature Grid (4 Equal Cards)</option>
+          <option value="carousel" <%= settings.hero_layout_style === 'carousel' ? 'selected' : '' %>>Auto-Rotating Carousel Slider</option>
+        </select>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px;">
+          <button type="button" onclick="setHeroStyle('grid_3')" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 6px 12px; border-radius: 6px; font-size: 0.8rem; font-weight: 600; cursor: pointer;">▦ 3-Card</button>
+          <button type="button" onclick="setHeroStyle('split_2')" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 6px 12px; border-radius: 6px; font-size: 0.8rem; font-weight: 600; cursor: pointer;">▥ Split</button>
+          <button type="button" onclick="setHeroStyle('single_hero_banner')" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 6px 12px; border-radius: 6px; font-size: 0.8rem; font-weight: 600; cursor: pointer;">▬ Banner</button>
+          <button type="button" onclick="setHeroStyle('mosaic')" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 6px 12px; border-radius: 6px; font-size: 0.8rem; font-weight: 600; cursor: pointer;">▦ Mosaic</button>
+          <button type="button" onclick="setHeroStyle('hero_2x2')" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 6px 12px; border-radius: 6px; font-size: 0.8rem; font-weight: 600; cursor: pointer;">▤ 2×2</button>
+          <button type="button" onclick="setHeroStyle('carousel')" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 6px 12px; border-radius: 6px; font-size: 0.8rem; font-weight: 600; cursor: pointer;"><i class="fas fa-images"></i> Carousel</button>
         </div>
+        <div id="themeOverrideNotice" style="display: none; margin-top: 14px; background: #fffbeb; border: 1px solid #fde68a; color: #92400e; border-radius: 8px; padding: 10px 12px; font-size: 0.82rem; line-height: 1.5;"></div>
+        <button type="button" onclick="applyThemeDefaultsToBlocks()" style="margin-top: 10px; width: 100%; background: #eff6ff; border: 1px solid #bfdbfe; color: #1d4ed8; padding: 9px 12px; border-radius: 8px; font-size: 0.85rem; font-weight: 700; cursor: pointer;"><i class="fas fa-bolt"></i> Apply This Theme Style to ALL Hero & Ticker Blocks</button>
       </div>
     </div>
 
     <!-- Ticker and Custom CSS -->
     <div style="background: #ffffff; border-radius: 12px; padding: 24px; border: 1px solid #e2e8f0; margin-bottom: 32px;">
-      <h3 style="font-size: 1.15rem; font-weight: 700; color: #1e293b; margin-bottom: 16px;">⚡ Live Breaking News Ticker</h3>
+      <h3 style="font-size: 1.15rem; font-weight: 700; color: #1e293b; margin-bottom: 16px;"><i class="fas fa-bolt"></i> Live Breaking News Ticker</h3>
       <div style="margin-bottom: 16px;">
         <label style="display: flex; align-items: center; gap: 10px; font-weight: 600; cursor: pointer;">
           <input type="checkbox" name="breaking_news_enabled" value="1" <%= (settings.breaking_news_enabled == 1 || settings.breaking_news_enabled === undefined) ? 'checked' : '' %> style="width: 18px; height: 18px;">
@@ -158,13 +280,140 @@
         </div>
       </div>
 
-      <h3 style="font-size: 1.15rem; font-weight: 700; color: #1e293b; margin-bottom: 16px;">💻 Custom CSS Code</h3>
+      <div style="margin-bottom: 24px;">
+        <label style="display: block; font-weight: 600; margin-bottom: 6px;"><i class="fas fa-newspaper"></i> Headlines Ticker Style</label>
+        <select name="ticker_style" id="tickerStyleSelect"
+          style="width: 100%; padding: 11px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.95rem; font-weight: 600; background: #ffffff;">
+          <option value="marquee" <%= (settings.ticker_style === 'marquee' || !settings.ticker_style) ? 'selected' : '' %>>Marquee (continuous scrolling)</option>
+          <option value="static" <%= settings.ticker_style === 'static' ? 'selected' : '' %>>Static List (no animation)</option>
+          <option value="slide" <%= settings.ticker_style === 'slide' ? 'selected' : '' %>>Slide (auto-rotating headline)</option>
+        </select>
+        <p style="font-size: 0.8rem; color: #94a3b8; margin-top: 6px;">Applies to all "Latest Headlines" ticker blocks on the homepage.</p>
+        <% if (!blocks.some(function(b) { return b && b.type === 'ticker'; })) { %>
+          <p style="font-size: 0.8rem; color: #b45309; background: #fffbeb; border: 1px solid #fde68a; border-radius: 6px; padding: 8px 10px; margin-top: 8px;"><i class="fas fa-triangle-exclamation"></i> Your homepage has <strong>no ticker block</strong> yet — click <strong>Blocks</strong> tab and add a "Headlines Ticker Marquee" block for this style to appear on the site.</p>
+        <% } %>
+      </div>
+
+      <h3 style="font-size: 1.15rem; font-weight: 700; color: #1e293b; margin-bottom: 16px;"><i class="fas fa-code"></i> Custom CSS Code</h3>
       <textarea name="custom_css" rows="4" style="width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-family: monospace;" placeholder="/* Custom CSS */"><%= settings.custom_css || '' %></textarea>
     </div>
 
-    <button type="submit" class="btn btn-primary" style="padding: 12px 32px; font-weight: 700; border-radius: 8px;">
-      💾 Save Theme & Brand Settings
-    </button>
+        <button type="submit" class="btn btn-primary" style="padding: 12px 32px; font-weight: 700; border-radius: 8px;">
+          <i class="fas fa-floppy-disk"></i> Save Theme & Brand Settings
+        </button>
+        </div>
+
+        <!-- LIVE THEME PREVIEW -->
+        <div class="theme-preview-scope" style="min-width: 0;">
+          <div style="position: sticky; top: 16px; background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(15,23,42,0.15);">
+            <div style="display: flex; align-items: center; justify-content: space-between; padding: 8px 12px; background: #0f172a;">
+              <span style="display: flex; gap: 5px;">
+                <span style="width: 9px; height: 9px; border-radius: 50%; background: #f87171; display: inline-block;"></span>
+                <span style="width: 9px; height: 9px; border-radius: 50%; background: #fbbf24; display: inline-block;"></span>
+                <span style="width: 9px; height: 9px; border-radius: 50%; background: #34d399; display: inline-block;"></span>
+              </span>
+              <span style="font-size: 0.68rem; color: #94a3b8; background: #1e293b; padding: 2px 12px; border-radius: 10px;"><i class="fas fa-lock"></i> khmer-news.local</span>
+              <span style="font-size: 0.6rem; font-weight: 800; color: #fbbf24; background: rgba(251,191,36,0.15); padding: 2px 10px; border-radius: 10px; letter-spacing: 0.06em;">● LIVE PREVIEW</span>
+            </div>
+
+            <div class="pv-stage" id="pvStage" style="--pv-primary: <%= settings.primary_color || '#1e3a8a' %>; --pv-accent: <%= settings.accent_color || '#dc2626' %>; background: #f8fafc; padding: 14px;">
+              <!-- Site header -->
+              <div style="background: var(--pv-primary); border-radius: 8px 8px 0 0; padding: 10px 16px; display: flex; align-items: center; justify-content: space-between;">
+                <span style="color: #fff; font-weight: 800; font-size: 0.8rem; letter-spacing: 0.06em;">KH NEWS</span>
+                <span style="display: flex; gap: 12px;">
+                  <span style="color: rgba(255,255,255,0.85); font-size: 0.6rem;">National</span>
+                  <span style="color: rgba(255,255,255,0.85); font-size: 0.6rem;">Tech</span>
+                  <span style="color: rgba(255,255,255,0.85); font-size: 0.6rem;">Sports</span>
+                  <span style="color: rgba(255,255,255,0.85); font-size: 0.6rem;">Culture</span>
+                </span>
+              </div>
+
+              <!-- Breaking news bar -->
+              <div id="pvBreaking" style="background: var(--pv-accent); color: #fff; padding: 5px 16px; font-size: 0.6rem; font-weight: 700; display: flex; gap: 8px; align-items: center;">
+                <span><i class="fas fa-bolt"></i> BREAKING</span>
+                <span id="pvBreakingText" style="font-weight: 500; opacity: 0.95; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Live breaking news updates</span>
+              </div>
+
+              <!-- Hero area (swaps by style) -->
+              <div style="background: #ffffff; padding: 12px; border-radius: 0 0 8px 8px;">
+                <div id="pvHero" style="height: 110px; border-radius: 6px; overflow: hidden; position: relative;">
+                  <div class="pv-hero-v" data-v="grid_3" style="display: flex; gap: 6px; height: 100%;">
+                    <div style="flex: 2; background: linear-gradient(135deg, var(--pv-primary), #0f172a); border-radius: 6px; position: relative;">
+                      <span style="position: absolute; left: 8px; bottom: 8px; color: #fff; font-size: 0.55rem; font-weight: 700; background: var(--pv-accent); padding: 2px 6px; border-radius: 4px;">NATIONAL</span>
+                    </div>
+                    <div style="flex: 1; display: flex; flex-direction: column; gap: 6px;">
+                      <div style="flex: 1; background: #e2e8f0; border-radius: 6px;"></div>
+                      <div style="flex: 1; background: #e2e8f0; border-radius: 6px;"></div>
+                    </div>
+                  </div>
+                  <div class="pv-hero-v" data-v="split_2" style="display: none; gap: 6px; height: 100%;">
+                    <div style="flex: 1; background: linear-gradient(135deg, var(--pv-primary), #0f172a); border-radius: 6px;"></div>
+                    <div style="flex: 1; background: linear-gradient(135deg, var(--pv-accent), #7f1d1d); border-radius: 6px;"></div>
+                  </div>
+                  <div class="pv-hero-v" data-v="single_hero_banner" style="display: none; height: 100%; background: linear-gradient(135deg, var(--pv-primary), #0f172a); border-radius: 6px; position: relative;">
+                    <span style="position: absolute; left: 8px; bottom: 8px; color: #fff; font-size: 0.55rem; font-weight: 700; background: var(--pv-accent); padding: 2px 6px; border-radius: 4px;">BREAKING</span>
+                  </div>
+                  <div class="pv-hero-v" data-v="carousel" style="display: none; height: 100%; background: linear-gradient(135deg, var(--pv-accent), #0f172a); border-radius: 6px; position: relative;">
+                    <span style="position: absolute; left: 50%; transform: translateX(-50%); bottom: 6px; display: flex; gap: 4px;">
+                      <span style="width: 12px; height: 4px; border-radius: 2px; background: #fff;"></span>
+                      <span style="width: 4px; height: 4px; border-radius: 2px; background: rgba(255,255,255,0.5);"></span>
+                      <span style="width: 4px; height: 4px; border-radius: 2px; background: rgba(255,255,255,0.5);"></span>
+                    </span>
+                  </div>
+                  <div class="pv-hero-v" data-v="mosaic" style="display: none; height: 100%; gap: 6px;">
+                    <div style="flex: 1.4; background: linear-gradient(135deg, var(--pv-primary), #0f172a); border-radius: 6px; position: relative;">
+                      <span style="position: absolute; left: 6px; bottom: 6px; color: #fff; font-size: 0.5rem; font-weight: 700; background: var(--pv-accent); padding: 1px 5px; border-radius: 3px;">TOP</span>
+                    </div>
+                    <div style="flex: 1; display: flex; flex-direction: column; gap: 6px;">
+                      <div style="flex: 1.3; background: linear-gradient(135deg, var(--pv-primary), #334155); border-radius: 6px;"></div>
+                      <div style="flex: 1; display: flex; gap: 6px;">
+                        <div style="flex: 1; background: #cbd5e1; border-radius: 6px;"></div>
+                        <div style="flex: 1; background: #cbd5e1; border-radius: 6px;"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="pv-hero-v" data-v="hero_2x2" style="display: none; height: 100%; flex-wrap: wrap; gap: 6px;">
+                    <div style="width: calc(50% - 3px); height: calc(50% - 3px); background: linear-gradient(135deg, var(--pv-primary), #0f172a); border-radius: 6px;"></div>
+                    <div style="width: calc(50% - 3px); height: calc(50% - 3px); background: linear-gradient(135deg, var(--pv-accent), #7f1d1d); border-radius: 6px;"></div>
+                    <div style="width: calc(50% - 3px); height: calc(50% - 3px); background: linear-gradient(135deg, var(--pv-accent), #7f1d1d); border-radius: 6px;"></div>
+                    <div style="width: calc(50% - 3px); height: calc(50% - 3px); background: linear-gradient(135deg, var(--pv-primary), #334155); border-radius: 6px;"></div>
+                  </div>
+                </div>
+
+                <!-- Headlines ticker (swaps by style) -->
+                <div style="margin-top: 10px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 6px; display: flex; align-items: center; overflow: hidden;">
+                  <span style="background: var(--pv-accent); color: #fff; font-size: 0.55rem; font-weight: 800; padding: 6px 10px; white-space: nowrap; text-transform: uppercase;">Latest</span>
+                  <div id="pvTickerBody" style="flex: 1; padding: 0 10px; overflow: hidden;">
+                    <div class="pv-ticker-v pv-ticker-marquee" data-v="marquee" style="font-size: 0.6rem; color: #334155; font-weight: 600;">
+                      <span class="pv-marquee-track">Headline one about the expressway • Headline two on health • Headline three tech news • </span>
+                      <span class="pv-marquee-track" aria-hidden="true">Headline one about the expressway • Headline two on health • Headline three tech news • </span>
+                    </div>
+                    <div class="pv-ticker-v" data-v="static" style="display: none; font-size: 0.6rem; color: #334155; padding: 6px 0; font-weight: 600; white-space: nowrap; overflow: hidden;">Headline one • Headline two • Headline three</div>
+                    <div class="pv-ticker-v" data-v="slide" style="display: none; font-size: 0.6rem; color: #334155; padding: 6px 0; font-weight: 600; white-space: nowrap; overflow: hidden;">
+                      Headline one auto-rotating…
+                      <span style="display: inline-block; width: 5px; height: 5px; border-radius: 50%; background: var(--pv-accent); margin-left: 5px;"></span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Content + sidebar -->
+                <div id="pvLayout" style="display: flex; gap: 10px; margin-top: 10px;">
+                  <div id="pvMain" style="flex: 2; display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                    <div style="height: 40px; background: #e2e8f0; border-radius: 5px;"></div>
+                    <div style="height: 40px; background: #e2e8f0; border-radius: 5px;"></div>
+                    <div style="height: 40px; background: #e2e8f0; border-radius: 5px;"></div>
+                    <div style="height: 40px; background: #e2e8f0; border-radius: 5px;"></div>
+                  </div>
+                  <div id="pvSidebar" style="flex: 1; background: #e2e8f0; border-radius: 5px; min-height: 90px;"></div>
+                </div>
+
+                <!-- Footer -->
+                <div style="margin-top: 10px; background: #0f172a; color: rgba(255,255,255,0.55); padding: 8px 16px; border-radius: 5px; font-size: 0.55rem;">© 2026 KH News — footer</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        </div>
   </form>
 </div>
 
@@ -256,12 +505,271 @@
     height: 100%;
     flex: 1;
   }
+
+  /* ---- Live theme preview mockup ---- */
+  .theme-preview-scope .pv-ticker-marquee {
+    display: flex;
+    overflow: hidden;
+  }
+  .theme-preview-scope .pv-marquee-track {
+    display: inline-block;
+    white-space: nowrap;
+    animation: pv-ticker-scroll 12s linear infinite;
+  }
+  @keyframes pv-ticker-scroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-100%); }
+  }
+
+  /* Keep the mockup light-themed even when the admin panel is in dark mode */
+  .theme-preview-scope { background: #f1f5f9 !important; }
+  .theme-preview-scope [style*="background: #ffffff"],
+  .theme-preview-scope [style*="background: #fff"] { background-color: #ffffff !important; }
+  .theme-preview-scope [style*="background: #f8fafc"] { background-color: #f8fafc !important; }
+  .theme-preview-scope [style*="background: #f1f5f9"] { background-color: #f1f5f9 !important; }
+  .theme-preview-scope [style*="background: #e2e8f0"] { background-color: #e2e8f0 !important; }
+  .theme-preview-scope [style*="border: 1px solid #e2e8f0"] { border-color: #e2e8f0 !important; }
+
+  /* ---- Template preview thumbnails ---- */
+  .tpl-preview {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 6px;
+    padding: 7px;
+    height: 78px;
+    overflow: hidden;
+  }
+  .tpl-row {
+    display: flex;
+    gap: 3px;
+    flex: 1;
+  }
+  .tpl-row-inner {
+    display: flex;
+    gap: 3px;
+    flex: 1;
+  }
+  .tpl-bar {
+    flex: 1;
+    border-radius: 2.5px;
+    background: #e2e8f0;
+    min-height: 6px;
+  }
+
+  /* ---- Insert-between zones ---- */
+  .insert-zone {
+    position: relative;
+    min-height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .insert-zone-btn {
+    background: #f1f5f9;
+    border: 1.5px dashed #cbd5e1;
+    color: #64748b;
+    border-radius: 20px;
+    padding: 5px 18px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .insert-zone-btn:hover {
+    background: #eff6ff;
+    border-color: #3b82f6;
+    color: #1d4ed8;
+  }
+  .insert-menu {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 50;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.18);
+    padding: 8px;
+    display: none;
+    flex-wrap: wrap;
+    gap: 6px;
+    width: 220px;
+    justify-content: center;
+  }
+  .insert-menu-item {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #334155;
+    padding: 7px 10px;
+    cursor: pointer;
+    transition: all 0.12s;
+  }
+  .insert-menu-item:hover {
+    background: #eff6ff;
+    border-color: #93c5fd;
+    color: #1d4ed8;
+  }
+
+  /* ---- Drag & drop indicators ---- */
+  .block-card.drop-before {
+    border-top: 3px solid #3b82f6;
+  }
+  .block-card.drop-after {
+    border-bottom: 3px solid #3b82f6;
+  }
+
+  /* ---- Auto-save toast ---- */
+  #builderToast {
+    position: fixed;
+    bottom: 26px;
+    right: 26px;
+    background: #166534;
+    color: #ffffff;
+    padding: 12px 22px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    z-index: 99999;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+    opacity: 0;
+    transition: opacity 0.25s;
+    pointer-events: none;
+  }
+
+  /* Dark-mode adjustments for the builder chrome */
+  .dark-mode .insert-zone-btn {
+    background: var(--dm-surface);
+    border-color: var(--dm-border-2);
+    color: var(--dm-muted);
+  }
+  .dark-mode .insert-zone-btn:hover {
+    background: var(--dm-surface-2);
+    border-color: var(--dm-link);
+    color: var(--dm-link);
+  }
+  .dark-mode .insert-menu {
+    background: var(--dm-surface);
+    border-color: var(--dm-border);
+  }
+  .dark-mode .insert-menu-item {
+    background: var(--dm-surface-2);
+    border-color: var(--dm-border);
+    color: var(--dm-text-2);
+  }
+  .dark-mode .insert-menu-item:hover {
+    background: var(--primary-color, #1e3a8a);
+    color: #ffffff;
+  }
 </style>
+
+<style id="pvCustomCss"></style>
 
 <script>
   var availableCategories = <%- JSON.stringify(categories) %>;
-  var blocks = <%- JSON.stringify(blocks) %>;
+  var blocksByPage = {
+    home: <%- JSON.stringify(blocks) %>,
+    category: <%- JSON.stringify(categoryBlocks || []) %>,
+    article: <%- JSON.stringify(articleBlocks || []) %>
+  };
+  var currentPage = 'home';
+  var blocks = blocksByPage.home;
+  var customTemplates = <%- JSON.stringify(customTemplates || []) %>;
+  var activeTab = '<%= tab || "blocks" %>';
   var dragSrcIndex = null;
+
+  var BLOCK_TYPES_BY_PAGE = {
+    home: [
+      { type: 'category', icon: 'fa-newspaper', label: 'Category Grid' },
+      { type: 'ad_slot', icon: 'fa-bullhorn', label: 'Ad Banner' },
+      { type: 'spotlight', icon: 'fa-star', label: 'Spotlight' },
+      { type: 'newsletter', icon: 'fa-envelope-open-text', label: 'Newsletter' },
+      { type: 'ticker', icon: 'fa-newspaper', label: 'Ticker' },
+      { type: 'headlines', icon: 'fa-list-ol', label: 'Top 10' },
+      { type: 'tags', icon: 'fa-tags', label: 'Tags' },
+      { type: 'stats', icon: 'fa-chart-simple', label: 'Stats' }
+    ],
+    category: [
+      { type: 'category', icon: 'fa-newspaper', label: 'Category Grid' },
+      { type: 'headlines', icon: 'fa-list-ol', label: 'Top Headlines' },
+      { type: 'ad_slot', icon: 'fa-bullhorn', label: 'Ad Banner' },
+      { type: 'newsletter', icon: 'fa-envelope-open-text', label: 'Newsletter' },
+      { type: 'tags', icon: 'fa-tags', label: 'Tag Cloud' },
+      { type: 'stats', icon: 'fa-chart-simple', label: 'Stats' }
+    ],
+    article: [
+      { type: 'article_comments', icon: 'fa-comments', label: 'Comments Section' },
+      { type: 'article_related', icon: 'fa-thumbs-up', label: 'Related Articles' },
+      { type: 'ad_slot', icon: 'fa-bullhorn', label: 'Ad Banner' }
+    ]
+  };
+  var BLOCK_TYPES = BLOCK_TYPES_BY_PAGE.home;
+
+  function setPageButton(page) {
+    var map = { home: 'pageHomeBtn', category: 'pageCatBtn', article: 'pageArtBtn' };
+    Object.keys(map).forEach(function (p) {
+      var el = document.getElementById(map[p]);
+      if (el) el.className = 'studio-tab' + (p === currentPage ? ' active' : '');
+    });
+  }
+
+  function switchPage(page) {
+    if (!blocksByPage[page]) return;
+    currentPage = page;
+    blocks = blocksByPage[page];
+    BLOCK_TYPES = BLOCK_TYPES_BY_PAGE[page] || BLOCK_TYPES_BY_PAGE.home;
+    setPageButton(page);
+    var presets = document.getElementById('presetTemplatesBar');
+    if (presets) presets.style.display = page === 'home' ? '' : 'none';
+    renderBlocks();
+    renderCustomTemplates();
+    refreshThemeOverrideNotice();
+  }
+
+  function insertZoneEl(idx) {
+    var zone = document.createElement('div');
+    zone.className = 'insert-zone';
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'insert-zone-btn';
+    btn.textContent = '＋ Insert block here';
+    btn.onclick = function () { toggleInsertMenu(idx); };
+    var menu = document.createElement('div');
+    menu.className = 'insert-menu';
+    menu.id = 'insertMenu' + idx;
+    menu.style.display = 'none';
+    BLOCK_TYPES.forEach(function (bt) {
+      var item = document.createElement('button');
+      item.type = 'button';
+      item.className = 'insert-menu-item';
+      item.title = 'Add ' + bt.label;
+      item.innerHTML = '<i class="fas ' + bt.icon + '"></i> ' + bt.label;
+      item.onclick = function () { insertBlock(idx, bt.type); };
+      menu.appendChild(item);
+    });
+    zone.appendChild(btn);
+    zone.appendChild(menu);
+    return zone;
+  }
+
+  function toggleInsertMenu(idx) {
+    var menu = document.getElementById('insertMenu' + idx);
+    if (!menu) return;
+    var isOpen = menu.style.display !== 'none';
+    document.querySelectorAll('.insert-menu').forEach(function (m) { m.style.display = 'none'; });
+    menu.style.display = isOpen ? 'none' : 'flex';
+  }
+
+  function insertBlock(idx, type) {
+    addNewBlockAt(type, idx);
+    document.querySelectorAll('.insert-menu').forEach(function (m) { m.style.display = 'none'; });
+  }
 
   function renderBlocks() {
     var container = document.getElementById('blocksListContainer');
@@ -274,6 +782,7 @@
     }
 
     blocks.forEach(function(block, idx) {
+      container.appendChild(insertZoneEl(idx));
       var card = document.createElement('div');
       card.className = 'block-card';
       card.draggable = true;
@@ -282,8 +791,6 @@
       // Drag and drop event handlers
       card.addEventListener('dragstart', handleDragStart);
       card.addEventListener('dragover', handleDragOver);
-      card.addEventListener('dragenter', handleDragEnter);
-      card.addEventListener('dragleave', handleDragLeave);
       card.addEventListener('drop', handleDrop);
       card.addEventListener('dragend', handleDragEnd);
 
@@ -297,6 +804,12 @@
       else if (block.type === 'category') { badgeBg = '#fce7f3'; badgeColor = '#9d174d'; badgeText = 'CATEGORY NEWS BLOCK'; }
       else if (block.type === 'ad_slot') { badgeBg = '#fef3c7'; badgeColor = '#92400e'; badgeText = 'AD BANNER SLOT'; }
       else if (block.type === 'newsletter') { badgeBg = '#f3e8ff'; badgeColor = '#6b21a8'; badgeText = 'NEWSLETTER CTA'; }
+      else if (block.type === 'ticker') { badgeBg = '#fee2e2'; badgeColor = '#b91c1c'; badgeText = 'HEADLINES TICKER'; }
+      else if (block.type === 'headlines') { badgeBg = '#fffbeb'; badgeColor = '#b45309'; badgeText = 'TOP HEADLINES LIST'; }
+      else if (block.type === 'tags') { badgeBg = '#cffafe'; badgeColor = '#0e7490'; badgeText = 'TAG CLOUD'; }
+      else if (block.type === 'stats') { badgeBg = '#fdf4ff'; badgeColor = '#a21caf'; badgeText = 'STATS COUNTER STRIP'; }
+      else if (block.type === 'article_comments') { badgeBg = '#e0f2fe'; badgeColor = '#0369a1'; badgeText = 'COMMENTS SECTION'; }
+      else if (block.type === 'article_related') { badgeBg = '#dcfce7'; badgeColor = '#166534'; badgeText = 'RELATED ARTICLES'; }
 
       // Wireframe mini diagram
       var wireframeHtml = '';
@@ -305,6 +818,10 @@
           wireframeHtml = '<div class="wireframe-preview"><div class="wf-box" style="background: #1e3a8a;"></div></div>';
         } else if (block.style === 'split_2') {
           wireframeHtml = '<div class="wireframe-preview"><div class="wf-box" style="background: #3b82f6;"></div><div class="wf-box" style="background: #3b82f6;"></div></div>';
+        } else if (block.style === 'mosaic') {
+          wireframeHtml = '<div class="wireframe-preview"><div class="wf-box" style="flex:1; background:#1e3a8a;"></div><div style="display:flex; flex-direction:column; gap:2px; flex:1; height:100%;"><div class="wf-box" style="flex:1.3; background:#3b82f6;"></div><div style="display:flex; gap:2px; flex:1;"><div class="wf-box"></div><div class="wf-box"></div></div></div></div>';
+        } else if (block.style === 'hero_2x2') {
+          wireframeHtml = '<div class="wireframe-preview" style="display:grid; grid-template-columns:1fr 1fr; grid-template-rows:1fr 1fr; gap:3px; height:64px;"><div class="wf-box" style="background:#1e3a8a;"></div><div class="wf-box" style="background:#3b82f6;"></div><div class="wf-box" style="background:#60a5fa;"></div><div class="wf-box" style="background:#93c5fd;"></div></div>';
         } else {
           wireframeHtml = '<div class="wireframe-preview"><div class="wf-box" style="flex:2; background: #1e3a8a;"></div><div style="display:flex; flex-direction:column; gap:2px; flex:1; height:100%;"><div class="wf-box"></div><div class="wf-box"></div></div></div>';
         }
@@ -313,11 +830,31 @@
           wireframeHtml = '<div class="wireframe-preview"><div class="wf-box"></div><div class="wf-box"></div><div class="wf-box"></div></div>';
         } else if (block.style === 'list_view') {
           wireframeHtml = '<div class="wireframe-preview" style="flex-direction:column; gap:2px;"><div class="wf-box" style="height:12px;"></div><div class="wf-box" style="height:12px;"></div></div>';
+        } else if (block.style === 'featured_top') {
+          wireframeHtml = '<div class="wireframe-preview" style="flex-direction:column; height:56px;"><div class="wf-box" style="background:#1e3a8a; height:24px;"></div><div style="display:flex; gap:2px; flex:1;"><div class="wf-box"></div><div class="wf-box"></div></div></div>';
+        } else if (block.style === 'big_first') {
+          wireframeHtml = '<div class="wireframe-preview" style="flex-direction:column; height:64px;"><div class="wf-box" style="flex:1.4; background:#1e3a8a;"></div><div style="display:flex; flex-direction:column; gap:2px; flex:1;"><div style="display:flex; gap:3px; align-items:center; flex:1;"><div class="wf-box" style="flex:0 0 26px;"></div><div class="wf-box" style="flex:1; height:8px;"></div></div><div style="display:flex; gap:3px; align-items:center; flex:1;"><div class="wf-box" style="flex:0 0 26px;"></div><div class="wf-box" style="flex:1; height:8px;"></div></div></div></div>';
+        } else if (block.style === 'horizontal_scroll') {
+          wireframeHtml = '<div class="wireframe-preview"><div class="wf-box" style="flex:0 0 42px;"></div><div class="wf-box" style="flex:0 0 42px;"></div><div class="wf-box" style="flex:0 0 42px;"></div><div class="wf-box" style="flex:0 0 42px;"></div><div class="wf-box" style="flex:0 0 42px;"></div></div>';
+        } else if (block.style === 'masonry') {
+          wireframeHtml = '<div class="wireframe-preview" style="align-items:flex-start; height:64px;"><div class="wf-box" style="flex:1; height:100%; background:#3b82f6;"></div><div class="wf-box" style="flex:1; height:44px;"></div><div class="wf-box" style="flex:1; height:56px; background:#93c5fd;"></div></div>';
         } else {
           wireframeHtml = '<div class="wireframe-preview"><div class="wf-box"></div><div class="wf-box"></div></div>';
         }
       } else if (block.type === 'ad_slot') {
         wireframeHtml = '<div class="wireframe-preview"><div class="wf-box" style="background: #f59e0b; color: white; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 700;">AD BANNER SLOT</div></div>';
+      } else if (block.type === 'ticker') {
+        wireframeHtml = '<div class="wireframe-preview"><div class="wf-box" style="background: #ef4444; height: 16px;"></div></div>';
+      } else if (block.type === 'headlines') {
+        wireframeHtml = '<div class="wireframe-preview" style="flex-direction: column; gap: 3px; height: 60px;"><div class="wf-box" style="height: 10px; background: #fbbf24;"></div><div class="wf-box" style="height: 10px; background: #fbbf24;"></div><div class="wf-box" style="height: 10px; background: #fbbf24;"></div></div>';
+      } else if (block.type === 'tags') {
+        wireframeHtml = '<div class="wireframe-preview" style="flex-wrap: wrap; height: 40px;"><div class="wf-box" style="flex: 0 0 40px; border-radius: 10px; background: #06b6d4;"></div><div class="wf-box" style="flex: 0 0 60px; border-radius: 10px; background: #06b6d4;"></div><div class="wf-box" style="flex: 0 0 30px; border-radius: 10px; background: #06b6d4;"></div></div>';
+      } else if (block.type === 'stats') {
+        wireframeHtml = '<div class="wireframe-preview" style="height: 34px;"><div style="flex:1; text-align:center; background:#f5d0fe; border-radius:4px; font-size:0.6rem; font-weight:700; color:#a21caf; display:flex; align-items:center; justify-content:center;">1234</div><div style="flex:1; text-align:center; background:#f5d0fe; border-radius:4px; font-size:0.6rem; font-weight:700; color:#a21caf; display:flex; align-items:center; justify-content:center;">5</div><div style="flex:1; text-align:center; background:#f5d0fe; border-radius:4px; font-size:0.6rem; font-weight:700; color:#a21caf; display:flex; align-items:center; justify-content:center;">20</div><div style="flex:1; text-align:center; background:#f5d0fe; border-radius:4px; font-size:0.6rem; font-weight:700; color:#a21caf; display:flex; align-items:center; justify-content:center;">99K</div></div>';
+      } else if (block.type === 'article_comments') {
+        wireframeHtml = '<div class="wireframe-preview" style="flex-direction: column; gap: 3px; height: 56px;"><div class="wf-box" style="background: #3b82f6; height: 14px;"></div><div style="display: flex; gap: 3px; flex: 1;"><div style="flex: 1; background: #e2e8f0; border-radius: 4px;"></div><div style="flex: 2; background: #e2e8f0; border-radius: 4px;"></div></div></div>';
+      } else if (block.type === 'article_related') {
+        wireframeHtml = '<div class="wireframe-preview"><div class="wf-box"></div><div class="wf-box"></div><div class="wf-box"></div></div>';
       }
 
       var html = `
@@ -328,12 +865,12 @@
             <strong style="font-size: 1.1rem; color: #0f172a;">${block.title_km || block.title_en || 'Section Block'}</strong>
           </div>
           <div style="display: flex; align-items: center; gap: 8px;">
-            <button type="button" onclick="moveBlock(${idx}, -1)" ${idx === 0 ? 'disabled' : ''} style="padding: 4px 10px; border-radius: 6px; border: 1px solid #cbd5e1; background: white; cursor: pointer;">⬆️</button>
-            <button type="button" onclick="moveBlock(${idx}, 1)" ${idx === blocks.length - 1 ? 'disabled' : ''} style="padding: 4px 10px; border-radius: 6px; border: 1px solid #cbd5e1; background: white; cursor: pointer;">⬇️</button>
+            <button type="button" onclick="moveBlock(${idx}, -1)" ${idx === 0 ? 'disabled' : ''} style="padding: 4px 10px; border-radius: 6px; border: 1px solid #cbd5e1; background: white; cursor: pointer;"><i class="fas fa-arrow-up"></i></button>
+            <button type="button" onclick="moveBlock(${idx}, 1)" ${idx === blocks.length - 1 ? 'disabled' : ''} style="padding: 4px 10px; border-radius: 6px; border: 1px solid #cbd5e1; background: white; cursor: pointer;"><i class="fas fa-arrow-down"></i></button>
             <button type="button" onclick="toggleBlock(${idx})" style="padding: 4px 12px; border-radius: 6px; border: 1px solid #cbd5e1; background: ${block.enabled ? '#dcfce7' : '#fee2e2'}; color: ${block.enabled ? '#166534' : '#991b1b'}; font-weight: 700; cursor: pointer;">
-              ${block.enabled ? '🟢 Visible' : '🔴 Hidden'}
+              ${block.enabled ? '<span style="color: #16a34a;"><i class="fas fa-circle"></i> Visible</span>' : '<span style="color: #dc2626;"><i class="fas fa-circle"></i> Hidden</span>'}
             </button>
-            <button type="button" onclick="deleteBlock(${idx})" style="padding: 4px 10px; border-radius: 6px; border: 1px solid #fca5a5; background: #fff5f5; color: #dc2626; cursor: pointer;">🗑️</button>
+            <button type="button" onclick="deleteBlock(${idx})" style="padding: 4px 10px; border-radius: 6px; border: 1px solid #fca5a5; background: #fff5f5; color: #dc2626; cursor: pointer;"><i class="fas fa-trash"></i></button>
           </div>
         </div>
 
@@ -365,6 +902,10 @@
             <select onchange="updateBlock(${idx}, 'style', this.value); renderBlocks();" style="width: 100%; padding: 6px 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.9rem;">
               <option value="grid_3_col" ${block.style === 'grid_3_col' ? 'selected' : ''}>3-Column Grid</option>
               <option value="grid_2_col" ${block.style === 'grid_2_col' ? 'selected' : ''}>2-Column Grid</option>
+              <option value="featured_top" ${block.style === 'featured_top' ? 'selected' : ''}>Featured Top (1 Wide Story + Grid)</option>
+              <option value="big_first" ${block.style === 'big_first' ? 'selected' : ''}>Big First Story (Wide Feature + Compact Rows)</option>
+              <option value="horizontal_scroll" ${block.style === 'horizontal_scroll' ? 'selected' : ''}>Horizontal Scroll Strip (Swipeable Cards)</option>
+              <option value="masonry" ${block.style === 'masonry' ? 'selected' : ''}>Magazine Masonry (Mixed Card Heights)</option>
               <option value="list_view" ${block.style === 'list_view' ? 'selected' : ''}>Minimal List View</option>
             </select>
           </div>
@@ -378,9 +919,25 @@
           <div>
             <label style="font-size: 0.8rem; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Hero Style Mode</label>
             <select onchange="updateBlock(${idx}, 'style', this.value); renderBlocks();" style="width: 100%; padding: 6px 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.9rem;">
+              <option value="" ${!block.style ? 'selected' : ''}><i class="fas fa-palette"></i> Follow Theme Setting (default)</option>
               <option value="grid_3" ${block.style === 'grid_3' ? 'selected' : ''}>Standard 3-Card Grid</option>
+              <option value="mosaic" ${block.style === 'mosaic' ? 'selected' : ''}>Asymmetric Mosaic (Tall + Wide + Minis)</option>
+              <option value="hero_2x2" ${block.style === 'hero_2x2' ? 'selected' : ''}>2×2 Feature Grid (4 Equal Cards)</option>
               <option value="split_2" ${block.style === 'split_2' ? 'selected' : ''}>Split Dual Featured</option>
               <option value="single_hero_banner" ${block.style === 'single_hero_banner' ? 'selected' : ''}>Single Ultra-Wide Banner</option>
+              <option value="carousel" ${block.style === 'carousel' ? 'selected' : ''}>Auto-Rotating Carousel Slider</option>
+            </select>
+          </div>
+        `;
+      } else if (block.type === 'ticker') {
+        html += `
+          <div>
+            <label style="font-size: 0.8rem; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Ticker Style Mode</label>
+            <select onchange="updateBlock(${idx}, 'style', this.value); renderBlocks();" style="width: 100%; padding: 6px 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.9rem;">
+              <option value="" ${!block.style ? 'selected' : ''}><i class="fas fa-palette"></i> Follow Theme Setting (default)</option>
+              <option value="marquee" ${block.style === 'marquee' ? 'selected' : ''}>Marquee (continuous scrolling)</option>
+              <option value="static" ${block.style === 'static' ? 'selected' : ''}>Static List (no animation)</option>
+              <option value="slide" ${block.style === 'slide' ? 'selected' : ''}>Slide (auto-rotating headline)</option>
             </select>
           </div>
         `;
@@ -395,6 +952,13 @@
             </select>
           </div>
         `;
+      } else if (block.type === 'article_related') {
+        html += `
+          <div>
+            <label style="font-size: 0.8rem; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Articles Count</label>
+            <input type="number" value="${block.limit || 4}" onchange="updateBlock(${idx}, 'limit', parseInt(this.value))" style="width: 100%; padding: 6px 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.9rem;">
+          </div>
+        `;
       }
 
       html += `</div>`;
@@ -405,33 +969,50 @@
     });
   }
 
-  // HTML5 Drag and Drop handlers
+  // HTML5 Drag and Drop handlers with visual top/bottom drop indicators
+  var dropBeforeIndex = null;
+
   function handleDragStart(e) {
     dragSrcIndex = parseInt(this.getAttribute('data-index'));
     this.classList.add('dragging');
     e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/plain', String(dragSrcIndex));
+  }
+  function clearDropMarks() {
+    document.querySelectorAll('.block-card').forEach(function (c) {
+      c.classList.remove('drop-before', 'drop-after', 'drag-over', 'dragging');
+    });
+    dropBeforeIndex = null;
   }
   function handleDragOver(e) {
     if (e.preventDefault) e.preventDefault();
     e.dataTransfer.dropEffect = 'move';
+    var card = e.target.closest ? e.target.closest('.block-card') : null;
+    if (!card || dragSrcIndex === null) return false;
+    var idx = parseInt(card.getAttribute('data-index'));
+    var rect = card.getBoundingClientRect();
+    var before = e.clientY < rect.top + rect.height / 2;
+    clearDropMarks();
+    card.classList.add(before ? 'drop-before' : 'drop-after');
+    dropBeforeIndex = before ? idx : idx + 1;
     return false;
   }
-  function handleDragEnter() { this.classList.add('drag-over'); }
-  function handleDragLeave() { this.classList.remove('drag-over'); }
   function handleDrop(e) {
     if (e.stopPropagation) e.stopPropagation();
-    var targetIndex = parseInt(this.getAttribute('data-index'));
-    if (dragSrcIndex !== null && dragSrcIndex !== targetIndex) {
+    var target = dropBeforeIndex;
+    if (dragSrcIndex !== null && target !== null && dragSrcIndex !== target) {
       var item = blocks.splice(dragSrcIndex, 1)[0];
-      blocks.splice(targetIndex, 0, item);
+      if (dragSrcIndex < target) target--;
+      blocks.splice(target, 0, item);
       renderBlocks();
+      scheduleSave();
+      showToast('⇅ Block reordered — saved automatically');
     }
+    clearDropMarks();
     return false;
   }
   function handleDragEnd() {
-    this.classList.remove('dragging');
-    var cards = document.querySelectorAll('.block-card');
-    cards.forEach(c => c.classList.remove('drag-over'));
+    clearDropMarks();
   }
 
   function moveBlock(idx, dir) {
@@ -441,42 +1022,77 @@
     blocks[idx] = blocks[newIdx];
     blocks[newIdx] = temp;
     renderBlocks();
+    scheduleSave();
   }
 
   function toggleBlock(idx) {
     blocks[idx].enabled = !blocks[idx].enabled;
     renderBlocks();
+    scheduleSave();
+    showToast(blocks[idx].enabled ? '<i class="fas fa-eye"></i> Block shown — saved automatically' : '<i class="fas fa-eye-slash"></i> Block hidden — saved automatically');
   }
 
   function deleteBlock(idx) {
     if (confirm('Remove this section block from homepage?')) {
       blocks.splice(idx, 1);
       renderBlocks();
+      scheduleSave();
+      showToast('<i class="fas fa-trash"></i> Block removed — saved automatically');
     }
   }
 
   function updateBlock(idx, key, val) {
     blocks[idx][key] = val;
+    scheduleSave();
   }
 
-  function addNewBlock(type) {
+  function buildNewBlock(type) {
+    var defaultTitles = {
+      ticker: { km: 'ព័ត៌មានចុងក្រោយ', en: 'Latest Headlines' },
+      headlines: { km: 'កំពូលព័ត៌មាន', en: 'Top Headlines' },
+      tags: { km: 'ស្លាកព័ត៌មានពេញនិយម', en: 'Popular Tags' },
+      hero: { km: 'ព័ត៌មានលេចធ្លោ', en: 'Featured Showcase' },
+      spotlight: { km: 'ព័ត៌មានសំខាន់', en: 'Spotlight' },
+      category: { km: 'ព័ត៌មានថ្មីៗ', en: 'Latest Category Stories' },
+      newsletter: { km: 'ព្រឹត្តិបត្រព័ត៌មាន', en: 'Newsletter' },
+      ad_slot: { km: 'ផ្ទាំងពាណិជ្ជកម្ម', en: 'Ad Banner' },
+      stats: { km: 'ស្ថិតិព័ត៌មាន', en: 'Site Stats' },
+      article_comments: { km: 'មតិយោបល់', en: 'Comments' },
+      article_related: { km: 'អត្ថបទពាក់ព័ន្ធ', en: 'Related Articles' }
+    };
     var newBlock = {
       id: 'block-' + Date.now(),
       type: type,
-      title_km: type === 'category' ? 'ព័ត៌មានថ្មីៗ' : 'ផ្នែកថ្មី',
-      title_en: type === 'category' ? 'Latest Category Stories' : 'New Section',
+      title_km: (defaultTitles[type] && defaultTitles[type].km) || 'ផ្នែកថ្មី',
+      title_en: (defaultTitles[type] && defaultTitles[type].en) || 'New Section',
       enabled: true,
-      limit: 6,
-      style: type === 'category' ? 'grid_3_col' : 'standard'
+      limit: type === 'ticker' ? 10 : (type === 'tags' ? 20 : 6),
+      style: type === 'category' ? 'grid_3_col' : ''
     };
     if (type === 'category' && availableCategories.length > 0) {
       newBlock.category_id = availableCategories[0].id;
     }
     if (type === 'ad_slot') {
-      newBlock.position_slot = 'homepage_mid_banner';
+      newBlock.position_slot = currentPage === 'article' ? 'article_bottom' : 'homepage_mid_banner';
     }
-    blocks.push(newBlock);
+    if (type === 'article_related') {
+      newBlock.limit = 4;
+    }
+    return newBlock;
+  }
+
+  function addNewBlock(type) {
+    blocks.push(buildNewBlock(type));
     renderBlocks();
+    scheduleSave();
+    showToast('<i class="fas fa-plus"></i> Block added — saved automatically');
+  }
+
+  function addNewBlockAt(type, idx) {
+    blocks.splice(idx, 0, buildNewBlock(type));
+    renderBlocks();
+    scheduleSave();
+    showToast('<i class="fas fa-plus"></i> Block inserted — saved automatically');
   }
 
   function applyTemplate(tpl) {
@@ -484,7 +1100,7 @@
     
     if (tpl === 'classic') {
       blocks = [
-        { id: "b-hero", type: "hero", title_km: "ព័ត៌មានលេចធ្លោ", title_en: "Featured Showcase", style: "grid_3", enabled: true, limit: 3 },
+        { id: "b-hero", type: "hero", title_km: "ព័ត៌មានលេចធ្លោ", title_en: "Featured Showcase", style: "", enabled: true, limit: 3 },
         { id: "b-spotlight", type: "spotlight", title_km: "ព័ត៌មានសំខាន់ប្រចាំថ្ងៃ", title_en: "Top Daily Spotlight", style: "wide_card", enabled: true, limit: 1 },
         { id: "b-ad-mid", type: "ad_slot", title_km: "ផ្ទាំងពាណិជ្ជកម្មកណ្តាល", title_en: "Mid Banner", position_slot: "homepage_mid_banner", enabled: true },
         { id: "b-cat-national", type: "category", category_id: 1, title_km: "ព័ត៌មានជាតិ", title_en: "National News", style: "grid_3_col", enabled: true, limit: 6 },
@@ -493,37 +1109,119 @@
       ];
     } else if (tpl === 'breaking') {
       blocks = [
-        { id: "b-hero", type: "hero", title_km: "ព័ត៌មានទាន់ហេតុការណ៍", title_en: "Breaking Headlines", style: "single_hero_banner", enabled: true, limit: 1 },
+        { id: "b-hero", type: "hero", title_km: "ព័ត៌មានទាន់ហេតុការណ៍", title_en: "Breaking Headlines", style: "", enabled: true, limit: 1 },
         { id: "b-cat-sports", type: "category", category_id: 3, title_km: "កីឡា", title_en: "Sports", style: "grid_3_col", enabled: true, limit: 6 },
         { id: "b-ad-mid", type: "ad_slot", title_km: "ផ្ទាំងពាណិជ្ជកម្មកណ្តាល", title_en: "Mid Banner", position_slot: "homepage_mid_banner", enabled: true },
         { id: "b-cat-national", type: "category", category_id: 1, title_km: "ព័ត៌មានជាតិ", title_en: "National News", style: "list_view", enabled: true, limit: 4 }
       ];
     } else if (tpl === 'magazine') {
       blocks = [
-        { id: "b-hero", type: "hero", title_km: "ទស្សនាវដ្តីព័ត៌មាន", title_en: "Editorial Magazine", style: "split_2", enabled: true, limit: 2 },
+        { id: "b-hero", type: "hero", title_km: "ទស្សនាវដ្តីព័ត៌មាន", title_en: "Editorial Magazine", style: "", enabled: true, limit: 2 },
         { id: "b-cat-tech", type: "category", category_id: 4, title_km: "បច្ចេកវិទ្យា", title_en: "Technology", style: "grid_2_col", enabled: true, limit: 4 },
         { id: "b-newsletter", type: "newsletter", title_km: "ជាវព័ត៌មានប្រចាំថ្ងៃ", title_en: "Daily Newsletter", enabled: true },
         { id: "b-ad-bottom", type: "ad_slot", title_km: "ផ្ទាំងពាណិជ្ជកម្មខាងក្រោម", title_en: "Bottom Banner", position_slot: "homepage_bottom_banner", enabled: true }
       ];
+    } else if (tpl === 'compact') {
+      blocks = [
+        { id: "b-hero", type: "hero", title_km: "ព័ត៌មានលេចធ្លោ", title_en: "Featured Carousel", style: "", enabled: true, limit: 5 },
+        { id: "b-ticker", type: "ticker", title_km: "ព័ត៌មានចុងក្រោយ", title_en: "Latest Headlines", enabled: true, limit: 10 },
+        { id: "b-headlines", type: "headlines", title_km: "កំពូលព័ត៌មាន", title_en: "Top 10 Headlines", enabled: true, limit: 10 },
+        { id: "b-tags", type: "tags", title_km: "ស្លាកព័ត៌មានពេញនិយម", title_en: "Popular Tags", enabled: true, limit: 20 },
+        { id: "b-newsletter", type: "newsletter", title_km: "ជាវព័ត៌មានប្រចាំថ្ងៃ", title_en: "Daily Newsletter", enabled: true }
+      ];
+    } else if (tpl === 'tech') {
+      blocks = [
+        { id: "b-hero", type: "hero", title_km: "ព័ត៌មានបច្ចេកវិទ្យា", title_en: "Tech Highlights", style: "", enabled: true, limit: 5 },
+        { id: "b-cat-tech", type: "category", category_id: 4, title_km: "បច្ចេកវិទ្យា", title_en: "Technology", style: "grid_3_col", enabled: true, limit: 6 },
+        { id: "b-headlines", type: "headlines", title_km: "កំពូលព័ត៌មាន", title_en: "Top Headlines", enabled: true, limit: 8 },
+        { id: "b-tags", type: "tags", title_km: "ស្លាកព័ត៌មានពេញនិយម", title_en: "Popular Tags", enabled: true, limit: 20 },
+        { id: "b-ad-bottom", type: "ad_slot", title_km: "ផ្ទាំងពាណិជ្ជកម្មខាងក្រោម", title_en: "Bottom Banner", position_slot: "homepage_bottom_banner", enabled: true }
+      ];
+    } else if (tpl === 'economy') {
+      blocks = [
+        { id: "b-hero", type: "hero", title_km: "សេដ្ឋកិច្ចប្រចាំថ្ងៃ", title_en: "Economy Today", style: "", enabled: true, limit: 2 },
+        { id: "b-stats", type: "stats", title_km: "ស្ថិតិព័ត៌មាន", title_en: "Site Stats", enabled: true },
+        { id: "b-cat-economy", type: "category", category_id: 5, title_km: "សេដ្ឋកិច្ច", title_en: "Economy & Business", style: "featured_top", enabled: true, limit: 7 },
+        { id: "b-headlines", type: "headlines", title_km: "កំពូលព័ត៌មាន", title_en: "Top Headlines", enabled: true, limit: 8 },
+        { id: "b-newsletter", type: "newsletter", title_km: "ជាវព័ត៌មានប្រចាំថ្ងៃ", title_en: "Daily Newsletter", enabled: true }
+      ];
+    } else if (tpl === 'minimal') {
+      blocks = [
+        { id: "b-hero", type: "hero", title_km: "ព័ត៌មានលេចធ្លោ", title_en: "Featured Story", style: "", enabled: true, limit: 1 },
+        { id: "b-cat-national", type: "category", category_id: 1, title_km: "ព័ត៌មានជាតិ", title_en: "National News", style: "list_view", enabled: true, limit: 5 },
+        { id: "b-headlines", type: "headlines", title_km: "កំពូលព័ត៌មាន", title_en: "Top Headlines", enabled: true, limit: 10 },
+        { id: "b-tags", type: "tags", title_km: "ស្លាកព័ត៌មានពេញនិយម", title_en: "Popular Tags", enabled: true, limit: 20 }
+      ];
     }
-    renderBlocks();
-    saveAllBlocks();
+    blocksByPage.home = blocks;
+    switchPage('home');
+    scheduleSave();
+    showToast('<i class="fas fa-bolt"></i> Template applied to the homepage — saved automatically');
+  }
+
+  var saveTimer = null;
+
+  function scheduleSave() {
+    if (saveTimer) clearTimeout(saveTimer);
+    saveTimer = setTimeout(saveAllBlocks, 350);
+  }
+
+  function showToast(msg, isError) {
+    var t = document.getElementById('builderToast');
+    if (!t) {
+      t = document.createElement('div');
+      t.id = 'builderToast';
+      document.body.appendChild(t);
+    }
+    t.innerHTML = msg;
+    t.style.background = isError ? '#b91c1c' : '#166534';
+    t.style.opacity = '1';
+    clearTimeout(showToast._timer);
+    showToast._timer = setTimeout(function () { t.style.opacity = '0'; }, 2400);
   }
 
   function saveAllBlocks() {
-    fetch('/admin/layout/blocks/save', {
+    if (saveTimer) { clearTimeout(saveTimer); saveTimer = null; }
+    return fetch('/admin/layout/blocks/save', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ blocks: blocks })
+      body: JSON.stringify({ blocks: blocks, page: currentPage })
     })
-    .then(res => res.json())
-    .then(data => {
-      if (data.success) {
-        alert('Homepage block layout saved successfully! View website to see live changes.');
-      } else {
-        alert('Failed to save layout.');
-      }
-    });
+    .then(function (res) { return res.json(); })
+    .then(function (data) {
+      if (data.success) showToast('<i class="fas fa-check"></i> Layout saved automatically');
+      else showToast('<i class="fas fa-xmark"></i> Failed to save layout', true);
+      return data;
+    })
+    .catch(function () { showToast('<i class="fas fa-xmark"></i> Failed to save layout', true); });
+  }
+
+  // ---- Theme tab auto-save: changes publish to the site immediately ----
+  var themeSaveTimer = null;
+  function scheduleThemeSave() {
+    if (themeSaveTimer) clearTimeout(themeSaveTimer);
+    themeSaveTimer = setTimeout(saveThemeSettings, 600);
+  }
+  function saveThemeSettings() {
+    if (themeSaveTimer) { clearTimeout(themeSaveTimer); themeSaveTimer = null; }
+    var form = document.querySelector('#themeStudioSection form');
+    if (!form) return Promise.resolve();
+    var data = new URLSearchParams(new FormData(form));
+    return fetch('/admin/layout/save', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest' },
+      body: data.toString()
+    })
+    .then(function (res) { return res.json().catch(function () { return { success: false }; }); })
+    .then(function (d) {
+      if (d && d.success) showToast('<i class="fas fa-check"></i> Theme saved — applied to your site');
+      else showToast('<i class="fas fa-xmark"></i> Failed to save theme', true);
+    })
+    .catch(function () { showToast('<i class="fas fa-xmark"></i> Failed to save theme', true); });
+  }
+  function themeChanged() {
+    refreshThemePreview();
+    scheduleThemeSave();
   }
 
   function switchTab(tab) {
@@ -536,9 +1234,185 @@
   function setPrimary(color) {
     document.getElementById('primaryColorPicker').value = color;
     document.getElementById('primaryColorText').value = color;
+    themeChanged();
+  }
+
+  function setHeroStyle(value) {
+    var sel = document.getElementById('heroStyleSelect');
+    if (sel) sel.value = value;
+    themeChanged();
+  }
+
+  // ---- Live theme preview ----
+  function refreshThemePreview() {
+    var stage = document.getElementById('pvStage');
+    if (!stage) return;
+
+    var primary = (document.getElementById('primaryColorPicker') || {}).value || '#1e3a8a';
+    var accent = (document.getElementById('accentColorPicker') || {}).value || '#dc2626';
+    stage.style.setProperty('--pv-primary', primary);
+    stage.style.setProperty('--pv-accent', accent);
+
+    // Hero style swap
+    var heroSel = document.getElementById('heroStyleSelect');
+    var heroStyle = heroSel ? heroSel.value : 'grid_3';
+    document.querySelectorAll('.pv-hero-v').forEach(function (el) {
+      el.style.display = el.getAttribute('data-v') === heroStyle ? 'flex' : 'none';
+    });
+
+    // Ticker style swap
+    var tickerSel = document.getElementById('tickerStyleSelect');
+    var tickerStyle = tickerSel ? tickerSel.value : 'marquee';
+    document.querySelectorAll('.pv-ticker-v').forEach(function (el) {
+      el.style.display = el.getAttribute('data-v') === tickerStyle ? 'flex' : 'none';
+    });
+
+    // Breaking news bar
+    var breakingChk = document.querySelector('input[name="breaking_news_enabled"]');
+    var breakingBar = document.getElementById('pvBreaking');
+    if (breakingBar && breakingChk) {
+      breakingBar.style.display = breakingChk.checked ? 'flex' : 'none';
+    }
+    var txtKm = document.querySelector('input[name="breaking_news_text_km"]');
+    var txtEn = document.querySelector('input[name="breaking_news_text_en"]');
+    var bt = document.getElementById('pvBreakingText');
+    if (bt) {
+      bt.textContent = (txtKm && txtKm.value.trim()) || (txtEn && txtEn.value.trim()) || 'Live breaking news updates';
+    }
+
+    // Custom CSS injection (scoped to the preview so it can be tested live)
+    var css = document.querySelector('textarea[name="custom_css"]');
+    var styleEl = document.getElementById('pvCustomCss');
+    if (css && styleEl) styleEl.textContent = css.value || '';
+  }
+
+  function setTheme(primary, accent) {
+    var p = document.getElementById('primaryColorPicker');
+    var a = document.getElementById('accentColorPicker');
+    if (p) p.value = primary;
+    if (a) a.value = accent;
+    themeChanged();
+    showToast('<i class="fas fa-palette"></i> Theme palette applied — auto-saved to your site');
+  }
+
+  function applyThemeDefaultsToBlocks() {
+    var heroSel = document.getElementById('heroStyleSelect');
+    var tickerSel = document.getElementById('tickerStyleSelect');
+    var changed = 0;
+    blocks.forEach(function (b) {
+      if (b.type === 'hero' || b.type === 'ticker') {
+        if (b.style) { b.style = ''; changed++; }
+      }
+    });
+    renderBlocks();
+    scheduleSave();
+    refreshThemeOverrideNotice();
+    showToast(changed > 0 ? ('<i class="fas fa-bolt"></i> Cleared ' + changed + ' block override(s) — theme style now applies everywhere') : '<i class="fas fa-check"></i> All blocks already follow the theme setting');
+  }
+
+  function refreshThemeOverrideNotice() {
+    var notice = document.getElementById('themeOverrideNotice');
+    if (!notice) return;
+    var overrides = blocks.filter(function (b) { return (b.type === 'hero' || b.type === 'ticker') && b.style; });
+    if (overrides.length > 0) {
+      notice.style.display = 'block';
+      notice.innerHTML = '<i class="fas fa-triangle-exclamation"></i> <strong>' + overrides.length + ' block(s)</strong> on your homepage have their own pinned style and will <strong>ignore this theme default</strong> until set to "Follow Theme Setting". Click the green button below to clear them.';
+    } else {
+      notice.style.display = 'none';
+    }
+  }
+
+  function saveCurrentAsTemplate() {
+    if (!blocks || blocks.length === 0) { showToast('Add some blocks first', true); return; }
+    var name = prompt('Name this custom layout template:');
+    if (!name || !name.trim()) return;
+    var payload = { name: name.trim(), blocks: blocks, page: currentPage };
+    fetch('/admin/layout/templates/save', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    })
+    .then(function (r) { return r.json(); })
+    .then(function (data) {
+      if (data.success) {
+        customTemplates = data.templates || [];
+        renderCustomTemplates();
+        showToast('<i class="fas fa-folder-tree"></i> Template "' + name.trim() + '" saved');
+      } else {
+        showToast(data.error || 'Failed to save template', true);
+      }
+    });
+  }
+
+  function applyCustomTemplate(name) {
+    var t = customTemplates.find(function (x) { return x.name === name && (x.page || 'home') === currentPage; });
+    if (!t) { showToast('Template not found', true); return; }
+    if (!confirm('Apply custom layout "' + name + '"? This replaces your current block arrangement.')) return;
+    var tplPage = t.page || 'home';
+    blocksByPage[tplPage] = JSON.parse(JSON.stringify(t.blocks));
+    switchPage(tplPage);
+    scheduleSave();
+    showToast('<i class="fas fa-folder-tree"></i> Custom layout "' + name + '" applied — saved automatically');
+  }
+
+  function deleteCustomTemplate(name) {
+    if (!confirm('Delete custom layout "' + name + '"?')) return;
+    fetch('/admin/layout/templates/delete', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: name, page: currentPage })
+    })
+    .then(function (r) { return r.json(); })
+    .then(function (data) {
+      if (data.success) {
+        customTemplates = data.templates || [];
+        renderCustomTemplates();
+        showToast('<i class="fas fa-trash"></i> Template "' + name + '" deleted');
+      }
+    });
+  }
+
+  function renderCustomTemplates() {
+    var list = document.getElementById('customTemplatesList');
+    if (!list) return;
+    var pageLabel = currentPage === 'category' ? 'category' : (currentPage === 'article' ? 'article' : 'homepage');
+    var mine = customTemplates.filter(function (t) { return (t.page || 'home') === currentPage; });
+    if (mine.length === 0) {
+      list.innerHTML = '<span style="font-size: 0.82rem; color: rgba(255,255,255,0.55);">No custom ' + pageLabel + ' layouts saved yet — click "Save Current Layout as Template" to create your first one.</span>';
+      return;
+    }
+    list.innerHTML = '';
+    mine.forEach(function (t) {
+      var card = document.createElement('div');
+      card.className = 'custom-tpl-card';
+      card.style.cssText = 'background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); border-radius: 10px; padding: 12px 14px; display: flex; align-items: center; gap: 10px;';
+      var safeName = t.name.replace(/'/g, "\\'");
+      card.innerHTML = '<span style="font-size: 1rem;"><i class="fas fa-folder-tree"></i></span>' +
+        '<span style="font-size: 0.88rem; font-weight: 700; color: #ffffff;">' + t.name + '</span>' +
+        '<span style="font-size: 0.72rem; color: rgba(255,255,255,0.6);">' + (t.blocks || []).length + ' blocks</span>' +
+        '<button type="button" onclick="applyCustomTemplate(\'' + safeName + '\')" style="background: #2563eb; border: none; color: #fff; padding: 5px 12px; border-radius: 6px; font-size: 0.78rem; font-weight: 700; cursor: pointer;">Apply</button>' +
+        '<button type="button" onclick="deleteCustomTemplate(\'' + safeName + '\')" style="background: transparent; border: 1px solid rgba(248,113,113,0.6); color: #fca5a5; padding: 5px 10px; border-radius: 6px; font-size: 0.78rem; cursor: pointer;"><i class="fas fa-xmark"></i></button>';
+      list.appendChild(card);
+    });
   }
 
   document.addEventListener('DOMContentLoaded', function() {
+    if (activeTab === 'theme') switchTab('theme');
+    refreshThemeOverrideNotice();
     renderBlocks();
+
+    // Live preview event wiring — every change also auto-saves
+    ['primaryColorPicker', 'accentColorPicker', 'heroStyleSelect', 'tickerStyleSelect'].forEach(function (id) {
+      var el = document.getElementById(id);
+      if (!el) return;
+      el.addEventListener('change', themeChanged);
+      if (el.type === 'color') el.addEventListener('input', themeChanged);
+    });
+    document.querySelectorAll('input[name="breaking_news_enabled"], input[name="breaking_news_text_km"], input[name="breaking_news_text_en"], textarea[name="custom_css"]').forEach(function (el) {
+      el.addEventListener('input', themeChanged);
+      el.addEventListener('change', themeChanged);
+    });
+
+    refreshThemePreview();
   });
 </script>
