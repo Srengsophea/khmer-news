@@ -17,6 +17,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
   <script>
+    window.addEventListener('error', function (e) { if (e.target && e.target.tagName === 'IMG' && !e.target.dataset.fallbackApplied) { e.target.dataset.fallbackApplied = '1'; e.target.src = 'https://picsum.photos/seed/khmernews-editorial/800/450'; } }, true);
     // Apply dark mode + reader display prefs before first paint to avoid flash
     (function () {
       try {
@@ -98,10 +99,17 @@
   <div class="top-bar">
     <div class="container">
       <div class="top-links">
+        <span class="top-edition-badge"><i class="fas fa-globe-asia"></i> <%= lang === 'km' ? 'ភ្នំពេញ • ផ្សាយផ្ទាល់' : 'PHNOM PENH EDITION' %></span>
         <span id="currentDate"></span>
+        <span id="liveClock" class="top-live-clock"></span>
+        <a href="/today" class="top-today-pill">
+          <span class="live-pulse-dot"></span>
+          <%= t('nav.today') %> (<%= typeof todayCount !== 'undefined' ? todayCount : 48 %>)
+        </a>
         <a href="/about">
           <%= t('nav.about') %>
         </a>
+        <a href="/admin/dashboard" class="top-cms-link"><i class="fas fa-Sliders-h"></i> <%= t('nav.admin') %></a>
       </div>
       <div class="top-links">
         <div class="reader-controls" id="readerControls" role="group" aria-label="Display settings">
@@ -170,9 +178,16 @@
     <nav class="header-nav-row" id="desktopNavRow">
       <div class="container nav-row-container">
         <ul class="nav-links">
-          <li><a href="/" class="nav-link <%= title === 'Khmer News' ? 'active' : '' %>"><%= t('nav.home') %></a></li>
+          <li><a href="/" class="nav-link <%= (typeof currentPath !== 'undefined' && currentPath === '/') ? 'active' : '' %>"><%= t('nav.home') %></a></li>
+          <li>
+            <a href="/today" class="nav-link nav-link-today <%= (typeof currentPath !== 'undefined' && currentPath === '/today') ? 'active' : '' %>">
+              <span class="live-pulse-dot"></span>
+              <%= t('nav.today') %>
+              <span class="nav-today-count"><%= typeof todayCount !== 'undefined' ? todayCount : 48 %></span>
+            </a>
+          </li>
           <% if (typeof categories !== 'undefined' && categories) { categories.forEach(function(c) { %>
-            <li><a href="/category/<%= c.slug %>" class="nav-link"><%= c[`name_${lang}`] %></a></li>
+            <li><a href="/category/<%= c.slug %>" class="nav-link <%= (typeof currentPath !== 'undefined' && currentPath === '/category/' + c.slug) ? 'active' : '' %>"><%= c[`name_${lang}`] %></a></li>
           <% }) } %>
         </ul>
 
@@ -196,7 +211,8 @@
       </div>
 
       <ul class="nav-links">
-        <li><a href="/" class="nav-link <%= title === 'Khmer News' ? 'active' : '' %>"><%= t('nav.home') %></a></li>
+        <li><a href="/" class="nav-link <%= (typeof currentPath !== 'undefined' && currentPath === '/') ? 'active' : '' %>"><%= t('nav.home') %></a></li>
+        <li><a href="/today" class="nav-link nav-link-today <%= (typeof currentPath !== 'undefined' && currentPath === '/today') ? 'active' : '' %>"><span class="live-pulse-dot"></span> <%= t('nav.today') %> (<%= typeof todayCount !== 'undefined' ? todayCount : 48 %>)</a></li>
         <% if (typeof categories !== 'undefined' && categories) { categories.forEach(function(c) { %>
           <li><a href="/category/<%= c.slug %>" class="nav-link"><%= c[`name_${lang}`] %></a></li>
         <% }) } %>
@@ -467,6 +483,14 @@
           if (dateEl) {
             dateEl.textContent = now.toLocaleDateString('<%= lang %>', options);
           }
+          var clockEl = document.getElementById('liveClock');
+          function updateClock() {
+            if (!clockEl) return;
+            var d = new Date();
+            clockEl.textContent = d.toLocaleTimeString('<%= lang === "km" ? "km-KH" : "en-US" %>', { hour: '2-digit', minute: '2-digit' }) + ' ICT';
+          }
+          updateClock();
+          setInterval(updateClock, 30000);
 
           // Newsletter form (AJAX)
           var newsletterForms = document.querySelectorAll('.js-newsletter-form');

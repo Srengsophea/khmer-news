@@ -1,728 +1,1050 @@
-<div class="admin-page-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
-  <div>
-    <h1 style="font-size: 1.75rem; font-weight: 800; color: #0f172a; margin: 0;"><i class="fas fa-mouse-pointer"></i> Visual Drag & Drop Layout Studio</h1>
-    <p style="color: #64748b; margin-top: 4px; font-size: 0.95rem;">Drag and drop section blocks to reorder, customize visual wireframes, or apply pre-designed templates with one click.</p>
-  </div>
-  <div style="display: flex; gap: 12px;">
-    <a href="/" target="_blank" class="btn btn-outline" style="display: flex; align-items: center; gap: 8px;">
-      <i class="fas fa-globe"></i> View Live Website ↗
-    </a>
-    <button type="button" onclick="saveAllBlocks()" class="btn btn-primary" style="padding: 10px 24px; font-weight: 700; display: flex; align-items: center; gap: 8px;">
-      <i class="fas fa-floppy-disk"></i> Save Layout Changes
-    </button>
-  </div>
-</div>
-
-<% if (typeof success !== 'undefined' && success) { %>
-  <div style="background-color: #dcfce7; border: 1px solid #86efac; color: #166534; padding: 14px 18px; border-radius: 8px; margin-bottom: 24px; display: flex; align-items: center; gap: 10px; font-weight: 500;">
-    <span><i class="fas fa-circle-check"></i></span> <%= success %>
-  </div>
-<% } %>
-
-<!-- PRESET LAYOUT TEMPLATES BAR -->
-<div id="presetTemplatesBar" style="background: linear-gradient(135deg, #1e3a8a, #0f172a); color: white; border-radius: 12px; padding: 20px; margin-bottom: 24px; box-shadow: 0 4px 12px rgba(15,23,42,0.15);">
-  <h3 style="font-size: 1.1rem; font-weight: 700; color: #ffffff; margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">
-    <span><i class="fas fa-bolt"></i></span> Apply Pre-designed Homepage Templates
-  </h3>
-  <p style="font-size: 0.88rem; color: rgba(255,255,255,0.8); margin-bottom: 16px;">Select a layout template to automatically configure your homepage sections with professional design patterns.</p>
-
-  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(235px, 1fr)); gap: 16px;">
-    <button type="button" onclick="applyTemplate('classic')" class="template-card-btn">
-      <span class="tpl-preview">
-        <span class="tpl-row"><span class="tpl-bar" style="flex:2; background:#1e3a8a;"></span><span class="tpl-bar" style="flex:1; background:#60a5fa;"></span></span>
-        <span class="tpl-row"><span class="tpl-bar" style="background:#334155;"></span></span>
-        <span class="tpl-row"><span class="tpl-bar" style="flex:0 0 60px; background:#f59e0b;"></span></span>
-        <span class="tpl-row"><span class="tpl-bar" style="background:#64748b;"></span><span class="tpl-bar" style="background:#64748b;"></span><span class="tpl-bar" style="background:#64748b;"></span></span>
-        <span class="tpl-row"><span class="tpl-bar" style="background:#94a3b8;"></span><span class="tpl-bar" style="background:#94a3b8;"></span></span>
-      </span>
-      <strong style="display: block; font-size: 0.95rem; margin: 8px 0 3px;"><i class="fas fa-landmark"></i> Classic News Portal</strong>
-      <span style="font-size: 0.75rem; color: rgba(255,255,255,0.7);">3-Card Hero + Spotlight + Mid Ad + 3-Col + 2-Col</span>
-    </button>
-
-    <button type="button" onclick="applyTemplate('breaking')" class="template-card-btn">
-      <span class="tpl-preview">
-        <span class="tpl-row"><span class="tpl-bar" style="background:#1e3a8a;"></span></span>
-        <span class="tpl-row"><span class="tpl-bar" style="background:#64748b;"></span><span class="tpl-bar" style="background:#64748b;"></span><span class="tpl-bar" style="background:#64748b;"></span></span>
-        <span class="tpl-row"><span class="tpl-bar" style="flex:0 0 60px; background:#f59e0b;"></span></span>
-        <span class="tpl-row" style="flex-direction:column;"><span class="tpl-bar" style="height:5px; background:#94a3b8;"></span><span class="tpl-bar" style="height:5px; background:#94a3b8;"></span></span>
-      </span>
-      <strong style="display: block; font-size: 0.95rem; margin: 8px 0 3px;"><i class="fas fa-bolt"></i> Breaking Headlines</strong>
-      <span style="font-size: 0.75rem; color: rgba(255,255,255,0.7);">Wide Hero + Sports Grid + Ad + National List</span>
-    </button>
-
-    <button type="button" onclick="applyTemplate('magazine')" class="template-card-btn">
-      <span class="tpl-preview">
-        <span class="tpl-row"><span class="tpl-bar" style="background:#1e3a8a;"></span><span class="tpl-bar" style="background:#dc2626;"></span></span>
-        <span class="tpl-row"><span class="tpl-bar" style="background:#64748b;"></span><span class="tpl-bar" style="background:#64748b;"></span></span>
-        <span class="tpl-row"><span class="tpl-bar" style="background:#7e22ce;"></span></span>
-        <span class="tpl-row"><span class="tpl-bar" style="flex:0 0 60px; background:#f59e0b;"></span></span>
-      </span>
-      <strong style="display: block; font-size: 0.95rem; margin: 8px 0 3px;"><i class="fas fa-newspaper"></i> Magazine & Editorial</strong>
-      <span style="font-size: 0.75rem; color: rgba(255,255,255,0.7);">Split Hero + Tech Grid + Newsletter + Ad</span>
-    </button>
-
-    <button type="button" onclick="applyTemplate('compact')" class="template-card-btn">
-      <span class="tpl-preview">
-        <span class="tpl-row"><span class="tpl-bar" style="background:#dc2626;"></span></span>
-        <span class="tpl-row"><span class="tpl-bar" style="flex:0 0 70px; background:#ef4444;"></span><span class="tpl-bar" style="background:#e2e8f0;"></span></span>
-        <span class="tpl-row"><span class="tpl-bar" style="flex:0 0 20px; background:#fbbf24;"></span><span class="tpl-bar" style="background:#e2e8f0;"></span></span>
-        <span class="tpl-row"><span class="tpl-bar" style="flex:0 0 30px; background:#06b6d4;"></span><span class="tpl-bar" style="flex:0 0 50px; background:#06b6d4;"></span><span class="tpl-bar" style="flex:0 0 24px; background:#06b6d4;"></span></span>
-      </span>
-      <strong style="display: block; font-size: 0.95rem; margin: 8px 0 3px;"><i class="fas fa-newspaper"></i> Compact Headlines</strong>
-      <span style="font-size: 0.75rem; color: rgba(255,255,255,0.7);">Carousel + Ticker + Top 10 + Tags</span>
-    </button>
-
-    <button type="button" onclick="applyTemplate('tech')" class="template-card-btn">
-      <span class="tpl-preview">
-        <span class="tpl-row"><span class="tpl-bar" style="background:#0ea5e9;"></span></span>
-        <span class="tpl-row"><span class="tpl-bar" style="background:#64748b;"></span><span class="tpl-bar" style="background:#64748b;"></span><span class="tpl-bar" style="background:#64748b;"></span></span>
-        <span class="tpl-row"><span class="tpl-bar" style="flex:0 0 20px; background:#fbbf24;"></span><span class="tpl-bar" style="background:#e2e8f0;"></span></span>
-        <span class="tpl-row"><span class="tpl-bar" style="flex:0 0 30px; background:#06b6d4;"></span><span class="tpl-bar" style="flex:0 0 50px; background:#06b6d4;"></span></span>
-      </span>
-      <strong style="display: block; font-size: 0.95rem; margin: 8px 0 3px;"><i class="fas fa-robot"></i> Tech & Digital</strong>
-      <span style="font-size: 0.75rem; color: rgba(255,255,255,0.7);">Carousel + Tech 3-Col + Top 10 + Tags</span>
-    </button>
-
-    <button type="button" onclick="applyTemplate('economy')" class="template-card-btn">
-      <span class="tpl-preview">
-        <span class="tpl-row"><span class="tpl-bar" style="background:#1e3a8a;"></span><span class="tpl-bar" style="background:#15803d;"></span></span>
-        <span class="tpl-row"><span class="tpl-bar" style="background:#a21caf;"></span><span class="tpl-bar" style="background:#a21caf;"></span><span class="tpl-bar" style="background:#a21caf;"></span><span class="tpl-bar" style="background:#a21caf;"></span></span>
-        <span class="tpl-row" style="flex-direction:column;"><span class="tpl-bar" style="height:6px; background:#15803d;"></span><span class="tpl-row-inner"><span class="tpl-bar"></span><span class="tpl-bar"></span></span></span>
-        <span class="tpl-row"><span class="tpl-bar" style="flex:0 0 20px; background:#fbbf24;"></span><span class="tpl-bar" style="background:#e2e8f0;"></span></span>
-      </span>
-      <strong style="display: block; font-size: 0.95rem; margin: 8px 0 3px;"><i class="fas fa-building-columns"></i> Economy & Business</strong>
-      <span style="font-size: 0.75rem; color: rgba(255,255,255,0.7);">Split Hero + Stats + Featured Top + Top 10</span>
-    </button>
-
-    <button type="button" onclick="applyTemplate('minimal')" class="template-card-btn">
-      <span class="tpl-preview">
-        <span class="tpl-row"><span class="tpl-bar" style="background:#1e3a8a;"></span></span>
-        <span class="tpl-row" style="flex-direction:column;"><span class="tpl-bar" style="height:5px; background:#94a3b8;"></span><span class="tpl-bar" style="height:5px; background:#94a3b8;"></span><span class="tpl-bar" style="height:5px; background:#94a3b8;"></span></span>
-        <span class="tpl-row"><span class="tpl-bar" style="flex:0 0 20px; background:#fbbf24;"></span><span class="tpl-bar" style="background:#e2e8f0;"></span></span>
-        <span class="tpl-row"><span class="tpl-bar" style="flex:0 0 30px; background:#06b6d4;"></span><span class="tpl-bar" style="flex:0 0 50px; background:#06b6d4;"></span></span>
-      </span>
-      <strong style="display: block; font-size: 0.95rem; margin: 8px 0 3px;"><i class="fas fa-wand-magic-sparkles"></i> Minimal News</strong>
-      <span style="font-size: 0.75rem; color: rgba(255,255,255,0.7);">Banner + List View + Top 10 + Tags</span>
-    </button>
-
-    <div id="customTemplatesSection" style="grid-column: 1 / -1; border-top: 1px dashed rgba(255,255,255,0.25); padding-top: 16px; margin-top: 8px;">
-      <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px; flex-wrap: wrap;">
-        <h4 style="font-size: 0.95rem; font-weight: 700; color: #ffffff; margin: 0;"><i class="fas fa-folder-open"></i> My Custom Layouts</h4>
-        <button type="button" onclick="saveCurrentAsTemplate()" class="template-card-btn" style="background: #16a34a; border: 1px solid #86efac; color: #ffffff; padding: 7px 16px; border-radius: 8px; font-size: 0.82rem; font-weight: 700; cursor: pointer; box-shadow: none;"><i class="fas fa-floppy-disk"></i> Save Current Layout as Template</button>
-        <span style="font-size: 0.78rem; color: rgba(255,255,255,0.65);">Snapshot your current block arrangement and reuse it anytime.</span>
-      </div>
-      <div id="customTemplatesList" style="display: flex; gap: 12px; flex-wrap: wrap;">
-        <% if (typeof customTemplates !== 'undefined' && customTemplates.length > 0) { %>
-          <% customTemplates.forEach(function(t) { %>
-            <div class="custom-tpl-card" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); border-radius: 10px; padding: 12px 14px; display: flex; align-items: center; gap: 10px;">
-              <span style="font-size: 1rem;"><i class="fas fa-folder-tree"></i></span>
-              <span style="font-size: 0.88rem; font-weight: 700; color: #ffffff;"><%= t.name %></span>
-              <span style="font-size: 0.72rem; color: rgba(255,255,255,0.6);"><%= (t.blocks || []).length %> blocks</span>
-              <button type="button" onclick="applyCustomTemplate('<%= t.name.replace(/'/g, "\\'") %>')" style="background: #2563eb; border: none; color: #fff; padding: 5px 12px; border-radius: 6px; font-size: 0.78rem; font-weight: 700; cursor: pointer;">Apply</button>
-              <button type="button" onclick="deleteCustomTemplate('<%= t.name.replace(/'/g, "\\'") %>')" style="background: transparent; border: 1px solid rgba(248,113,113,0.6); color: #fca5a5; padding: 5px 10px; border-radius: 6px; font-size: 0.78rem; cursor: pointer;"><i class="fas fa-xmark"></i></button>
-            </div>
-          <% }); %>
-        <% } else { %>
-          <span style="font-size: 0.82rem; color: rgba(255,255,255,0.55);">No custom layouts saved yet — click "Save Current Layout as Template" to create your first one.</span>
-        <% } %>
-      </div>
+<div class="studio-v2">
+  <!-- ==================== TOP COMMAND HEADER ==================== -->
+  <header class="studio-header">
+    <div>
+      <span class="cms-kicker">KHMER NEWS VISUAL ARCHITECTURE ENGINE</span>
+      <h1 class="studio-title">
+        <i class="fas fa-sliders"></i> Layout &amp; Theme Studio 2.0
+      </h1>
+      <p class="studio-subtitle">
+        Design your newspaper front page, category desks, and article pages visually. Every change auto-saves and updates the live blueprint on the right.
+      </p>
     </div>
-  </div>
-</div>
 
-<!-- TAB NAVIGATION -->
-<div style="display: flex; border-bottom: 2px solid #e2e8f0; margin-bottom: 24px;">
-  <button type="button" id="tabBlocksBtn" class="studio-tab active" onclick="switchTab('blocks')"><i class="fas fa-puzzle-piece"></i> Section Blocks Canvas (Drag & Drop)</button>
-  <button type="button" id="tabThemeBtn" class="studio-tab" onclick="switchTab('theme')"><i class="fas fa-palette"></i> Brand Colors & Header Settings</button>
-</div>
+    <div class="studio-header-actions">
+      <button type="button" id="undoBtn" onclick="undoBlockChange()" class="cms-btn cms-btn-outline" disabled title="Undo last block change">
+        <i class="fas fa-rotate-left"></i> Undo
+      </button>
+      <button type="button" onclick="saveCurrentAsTemplate()" class="cms-btn cms-btn-outline" title="Save current arrangement as a reusable preset">
+        <i class="fas fa-bookmark"></i> Save Preset
+      </button>
+      <a href="/" target="_blank" class="cms-btn cms-btn-outline">
+        <i class="fas fa-arrow-up-right-from-square"></i> Live Site ↗
+      </a>
+      <button type="button" onclick="saveAllBlocks(true)" class="cms-btn cms-btn-primary">
+        <i class="fas fa-floppy-disk"></i> Publish Layout Now
+      </button>
+    </div>
+  </header>
 
-<!-- SECTION 1: DRAG AND DROP BUILDER STUDIO -->
-<div id="blocksStudioSection" class="studio-section">
+  <% if (typeof success !== 'undefined' && success) { %>
+    <div class="cms-alert cms-alert-success">
+      <i class="fas fa-circle-check"></i> <%= success %>
+    </div>
+  <% } %>
 
-  <!-- PAGE TYPE SELECTOR: which page this layout controls -->
-  <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 18px;">
-    <span style="font-size: 0.9rem; font-weight: 700; color: #334155;">Customize layout for:</span>
-    <button type="button" id="pageHomeBtn" class="studio-tab active" onclick="switchPage('home')"><i class="fas fa-house"></i> Homepage</button>
-    <button type="button" id="pageCatBtn" class="studio-tab" onclick="switchPage('category')"><i class="fas fa-folder"></i> Category Page</button>
-    <button type="button" id="pageArtBtn" class="studio-tab" onclick="switchPage('article')"><i class="fas fa-file-lines"></i> Article Page</button>
-  </div>
+  <!-- ==================== MAIN MODE TABS ==================== -->
+  <div class="studio-mode-bar">
+    <div class="studio-mode-tabs">
+      <button type="button" id="tabBlocksBtn" class="studio-mode-tab active" onclick="switchTab('blocks')">
+        <span class="step-num">1</span>
+        <div>
+          <strong>Page Structure &amp; Blocks Builder</strong>
+          <span>Add, reorder, and style newspaper sections</span>
+        </div>
+      </button>
+      <button type="button" id="tabPresetsBtn" class="studio-mode-tab" onclick="switchTab('presets')">
+        <span class="step-num">2</span>
+        <div>
+          <strong>1-Click Newspaper Templates (<span id="presetCountBadge">8</span>)</strong>
+          <span>Instant Reuters, NYT, Live Wire &amp; Custom presets</span>
+        </div>
+      </button>
+      <button type="button" id="tabThemeBtn" class="studio-mode-tab" onclick="switchTab('theme')">
+        <span class="step-num">3</span>
+        <div>
+          <strong>Brand Palette, Typography &amp; Ticker</strong>
+          <span>Colors, width, font scale, breaking wire &amp; CSS</span>
+        </div>
+      </button>
+    </div>
 
-  <!-- ADD BLOCK ACTION BAR -->
-  <div style="background: #ffffff; border-radius: 12px; padding: 20px; border: 1px solid #e2e8f0; margin-bottom: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.03);">
-    <h3 style="font-size: 1rem; font-weight: 700; color: #1e293b; margin-bottom: 12px;"><i class="fas fa-plus"></i> Add Section Block to Canvas</h3>
-    <div style="display: flex; gap: 12px; flex-wrap: wrap;">
-      <button type="button" onclick="addNewBlock('category')" class="add-block-btn" style="background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe;">
-        <i class="fas fa-newspaper"></i> Add Category News Grid
+    <!-- Page Selector Pill Group -->
+    <div class="studio-page-switcher" id="pageSwitcherWrap">
+      <span class="switcher-label">Editing Page:</span>
+      <button type="button" id="pageHomeBtn" class="page-pill active" onclick="switchPage('home')">
+        <i class="fas fa-newspaper"></i> Front Page
       </button>
-      <button type="button" onclick="addNewBlock('ad_slot')" class="add-block-btn" style="background: #fefce8; color: #a16207; border: 1px solid #fef08a;">
-        <i class="fas fa-bullhorn"></i> Add Ad Banner Slot
+      <button type="button" id="pageCatBtn" class="page-pill" onclick="switchPage('category')">
+        <i class="fas fa-layer-group"></i> Category Desk
       </button>
-      <button type="button" onclick="addNewBlock('spotlight')" class="add-block-btn" style="background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0;">
-        <i class="fas fa-star"></i> Add Spotlight Feature Block
-      </button>
-      <button type="button" onclick="addNewBlock('newsletter')" class="add-block-btn" style="background: #faf5ff; color: #7e22ce; border: 1px solid #e9d5ff;">
-        <i class="fas fa-envelope-open-text"></i> Add Newsletter CTA Widget
-      </button>
-      <button type="button" onclick="addNewBlock('ticker')" class="add-block-btn" style="background: #fef2f2; color: #b91c1c; border: 1px solid #fecaca;">
-        <i class="fas fa-newspaper"></i> Add Headlines Ticker Marquee
-      </button>
-      <button type="button" onclick="addNewBlock('headlines')" class="add-block-btn" style="background: #fffbeb; color: #b45309; border: 1px solid #fde68a;">
-        <i class="fas fa-list-ol"></i> Add Top-10 Numbered Headlines
-      </button>
-      <button type="button" onclick="addNewBlock('tags')" class="add-block-btn" style="background: #ecfeff; color: #0e7490; border: 1px solid #a5f3fc;">
-        <i class="fas fa-tags"></i> Add Tag Cloud Widget
-      </button>
-      <button type="button" onclick="addNewBlock('stats')" class="add-block-btn" style="background: #fdf4ff; color: #a21caf; border: 1px solid #f5d0fe;">
-        <i class="fas fa-chart-simple"></i> Add Stats Counter Strip
+      <button type="button" id="pageArtBtn" class="page-pill" onclick="switchPage('article')">
+        <i class="fas fa-file-lines"></i> Article Page
       </button>
     </div>
   </div>
 
-  <!-- VISUAL DRAG & DROP CANVAS LIST -->
-  <div id="blocksListContainer" style="display: flex; flex-direction: column; gap: 16px; margin-bottom: 32px;">
-    <!-- Rendered dynamically by Javascript below -->
-  </div>
-
-</div>
-
-<!-- SECTION 2: THEME & BRAND COLOR SETTINGS -->
-<div id="themeStudioSection" class="studio-section" style="display: none;">
-  <form action="/admin/layout/save" method="POST">
-    <div style="display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 24px; align-items: start;">
-      <div>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 32px;">
-      
-      <!-- Primary Colors -->
-      <div style="background: #ffffff; border-radius: 12px; padding: 24px; border: 1px solid #e2e8f0;">
-        <h3 style="font-size: 1.15rem; font-weight: 700; color: #1e293b; margin-bottom: 16px;"><i class="fas fa-bullseye"></i> Brand Palette</h3>
-        
-        <div class="form-group" style="margin-bottom: 20px;">
-          <label style="display: block; font-weight: 600; margin-bottom: 8px;">Primary Brand Color</label>
-          <div style="display: flex; gap: 12px; align-items: center;">
-            <input type="color" id="primaryColorPicker" name="primary_color" value="<%= settings.primary_color || '#1e3a8a' %>" style="width: 50px; height: 42px; border-radius: 6px; cursor: pointer; padding: 2px;">
-            <input type="text" id="primaryColorText" value="<%= settings.primary_color || '#1e3a8a' %>" style="flex: 1; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 6px; font-family: monospace;" readonly>
-          </div>
-          <div style="display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap;">
-            <button type="button" onclick="setPrimary('#1e3a8a')" style="background: #1e3a8a; color: white; border: none; padding: 6px 12px; border-radius: 6px; font-size: 0.8rem; cursor: pointer;">Royal Blue</button>
-            <button type="button" onclick="setPrimary('#b91c1c')" style="background: #b91c1c; color: white; border: none; padding: 6px 12px; border-radius: 6px; font-size: 0.8rem; cursor: pointer;">Crimson News</button>
-            <button type="button" onclick="setPrimary('#047857')" style="background: #047857; color: white; border: none; padding: 6px 12px; border-radius: 6px; font-size: 0.8rem; cursor: pointer;">Emerald Tech</button>
-            <button type="button" onclick="setPrimary('#5b21b6')" style="background: #5b21b6; color: white; border: none; padding: 6px 12px; border-radius: 6px; font-size: 0.8rem; cursor: pointer;">Deep Purple</button>
-          </div>
-        </div>
-
-        <div class="form-group" style="margin-bottom: 20px;">
-          <label style="display: block; font-weight: 600; margin-bottom: 8px;">Accent Badge Color</label>
-          <div style="display: flex; gap: 12px; align-items: center;">
-            <input type="color" id="accentColorPicker" name="accent_color" value="<%= settings.accent_color || '#dc2626' %>" style="width: 50px; height: 42px; border-radius: 6px; cursor: pointer; padding: 2px;">
-            <input type="text" id="accentColorText" value="<%= settings.accent_color || '#dc2626' %>" style="flex: 1; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 6px; font-family: monospace;" readonly>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label style="display: block; font-weight: 600; margin-bottom: 8px;"><i class="fas fa-palette"></i> One-Click Brand Themes</label>
-          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-            <button type="button" onclick="setTheme('#1e3a8a','#dc2626')" title="Royal News"><span style="display:inline-block;width:26px;height:26px;border-radius:6px;background:linear-gradient(135deg,#1e3a8a 50%,#dc2626 50%);border:2px solid #e2e8f0;cursor:pointer;"></span></button>
-            <button type="button" onclick="setTheme('#b91c1c','#f59e0b')" title="Crimson Alert"><span style="display:inline-block;width:26px;height:26px;border-radius:6px;background:linear-gradient(135deg,#b91c1c 50%,#f59e0b 50%);border:2px solid #e2e8f0;cursor:pointer;"></span></button>
-            <button type="button" onclick="setTheme('#047857','#f43f5e')" title="Emerald Tech"><span style="display:inline-block;width:26px;height:26px;border-radius:6px;background:linear-gradient(135deg,#047857 50%,#f43f5e 50%);border:2px solid #e2e8f0;cursor:pointer;"></span></button>
-            <button type="button" onclick="setTheme('#5b21b6','#22d3ee')" title="Deep Purple"><span style="display:inline-block;width:26px;height:26px;border-radius:6px;background:linear-gradient(135deg,#5b21b6 50%,#22d3ee 50%);border:2px solid #e2e8f0;cursor:pointer;"></span></button>
-            <button type="button" onclick="setTheme('#0f766e','#fb923c')" title="Ocean Teal"><span style="display:inline-block;width:26px;height:26px;border-radius:6px;background:linear-gradient(135deg,#0f766e 50%,#fb923c 50%);border:2px solid #e2e8f0;cursor:pointer;"></span></button>
-            <button type="button" onclick="setTheme('#1d4ed8','#16a34a')" title="Digital Blue"><span style="display:inline-block;width:26px;height:26px;border-radius:6px;background:linear-gradient(135deg,#1d4ed8 50%,#16a34a 50%);border:2px solid #e2e8f0;cursor:pointer;"></span></button>
-            <button type="button" onclick="setTheme('#7c2d12','#eab308')" title="Golden Press"><span style="display:inline-block;width:26px;height:26px;border-radius:6px;background:linear-gradient(135deg,#7c2d12 50%,#eab308 50%);border:2px solid #e2e8f0;cursor:pointer;"></span></button>
-            <button type="button" onclick="setTheme('#0f172a','#06b6d4')" title="Midnight Cyber"><span style="display:inline-block;width:26px;height:26px;border-radius:6px;background:linear-gradient(135deg,#0f172a 50%,#06b6d4 50%);border:2px solid #e2e8f0;cursor:pointer;"></span></button>
-          </div>
-          <p style="font-size: 0.78rem; color: #94a3b8; margin-top: 8px;">Pick a palette — primary & accent colors are applied instantly to the preview. Click <strong>Save Theme & Brand Settings</strong> to publish.</p>
-        </div>
+  <!-- ==================== TAB 1: VISUAL BLOCKS BUILDER + LIVE BLUEPRINT ==================== -->
+  <div id="blocksStudioSection" class="studio-section">
+    <!-- Desk Coverage & Health Bar (Homepage Only) -->
+    <div id="deskCoverageBar" class="studio-coverage-bar">
+      <div class="coverage-left">
+        <span class="coverage-title"><i class="fas fa-check-double"></i> Front Page Desk Coverage:</span>
+        <div id="deskCoveragePills" class="coverage-pills"></div>
       </div>
-
-      <!-- Hero Style Defaults -->
-      <div style="background: #ffffff; border-radius: 12px; padding: 24px; border: 1px solid #e2e8f0;">
-        <h3 style="font-size: 1.15rem; font-weight: 700; color: #1e293b; margin-bottom: 6px;"><i class="fas fa-image"></i> Default Hero Style</h3>
-        <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 14px;">Used by the homepage hero when the hero block doesn't specify its own style.</p>
-        <select name="hero_layout_style" id="heroStyleSelect"
-          style="width: 100%; padding: 11px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.95rem; font-weight: 600; background: #ffffff;">
-          <option value="grid_3" <%= (settings.hero_layout_style === 'grid_3' || !settings.hero_layout_style) ? 'selected' : '' %>>Standard 3-Card Grid (1 Main + 2 Side)</option>
-          <option value="split_2" <%= settings.hero_layout_style === 'split_2' ? 'selected' : '' %>>Split Dual Featured (2 Equal Columns)</option>
-          <option value="single_hero_banner" <%= settings.hero_layout_style === 'single_hero_banner' ? 'selected' : '' %>>Single Ultra-Wide Hero Banner</option>
-          <option value="mosaic" <%= settings.hero_layout_style === 'mosaic' ? 'selected' : '' %>>Asymmetric Mosaic (Tall + Wide + 2 Minis)</option>
-          <option value="hero_2x2" <%= settings.hero_layout_style === 'hero_2x2' ? 'selected' : '' %>>2×2 Feature Grid (4 Equal Cards)</option>
-          <option value="carousel" <%= settings.hero_layout_style === 'carousel' ? 'selected' : '' %>>Auto-Rotating Carousel Slider</option>
-        </select>
-        <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px;">
-          <button type="button" onclick="setHeroStyle('grid_3')" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 6px 12px; border-radius: 6px; font-size: 0.8rem; font-weight: 600; cursor: pointer;">▦ 3-Card</button>
-          <button type="button" onclick="setHeroStyle('split_2')" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 6px 12px; border-radius: 6px; font-size: 0.8rem; font-weight: 600; cursor: pointer;">▥ Split</button>
-          <button type="button" onclick="setHeroStyle('single_hero_banner')" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 6px 12px; border-radius: 6px; font-size: 0.8rem; font-weight: 600; cursor: pointer;">▬ Banner</button>
-          <button type="button" onclick="setHeroStyle('mosaic')" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 6px 12px; border-radius: 6px; font-size: 0.8rem; font-weight: 600; cursor: pointer;">▦ Mosaic</button>
-          <button type="button" onclick="setHeroStyle('hero_2x2')" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 6px 12px; border-radius: 6px; font-size: 0.8rem; font-weight: 600; cursor: pointer;">▤ 2×2</button>
-          <button type="button" onclick="setHeroStyle('carousel')" style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 6px 12px; border-radius: 6px; font-size: 0.8rem; font-weight: 600; cursor: pointer;"><i class="fas fa-images"></i> Carousel</button>
-        </div>
-        <div id="themeOverrideNotice" style="display: none; margin-top: 14px; background: #fffbeb; border: 1px solid #fde68a; color: #92400e; border-radius: 8px; padding: 10px 12px; font-size: 0.82rem; line-height: 1.5;"></div>
-        <button type="button" onclick="applyThemeDefaultsToBlocks()" style="margin-top: 10px; width: 100%; background: #eff6ff; border: 1px solid #bfdbfe; color: #1d4ed8; padding: 9px 12px; border-radius: 8px; font-size: 0.85rem; font-weight: 700; cursor: pointer;"><i class="fas fa-bolt"></i> Apply This Theme Style to ALL Hero & Ticker Blocks</button>
-      </div>
-    </div>
-
-    <!-- LAYOUT FLEXIBILITY -->
-    <div style="background: #ffffff; border-radius: 12px; padding: 24px; border: 1px solid #e2e8f0; margin-bottom: 32px;">
-      <h3 style="font-size: 1.15rem; font-weight: 700; color: #1e293b; margin-bottom: 6px;"><i class="fas fa-sliders"></i> Layout Flexibility</h3>
-      <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 16px;">Control the site width, base text size, card corners, and navigation behavior. Changes apply instantly after saving.</p>
-      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 16px;">
-        <div>
-          <label style="display: block; font-weight: 600; margin-bottom: 6px;">Content Width</label>
-          <select name="content_width" style="width: 100%; padding: 11px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.95rem; font-weight: 600; background: #ffffff;">
-            <option value="normal" <%= (settings.content_width === 'normal' || !settings.content_width) ? 'selected' : '' %>>Normal (1200px)</option>
-            <option value="wide" <%= settings.content_width === 'wide' ? 'selected' : '' %>>Wide (1400px)</option>
-            <option value="full" <%= settings.content_width === 'full' ? 'selected' : '' %>>Extra Wide (1720px)</option>
-          </select>
-        </div>
-        <div>
-          <label style="display: block; font-weight: 600; margin-bottom: 6px;">Base Text Size</label>
-          <select name="font_scale" style="width: 100%; padding: 11px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.95rem; font-weight: 600; background: #ffffff;">
-            <option value="small" <%= settings.font_scale === 'small' ? 'selected' : '' %>>Compact (94%)</option>
-            <option value="normal" <%= (settings.font_scale === 'normal' || !settings.font_scale) ? 'selected' : '' %>>Default (100%)</option>
-            <option value="large" <%= settings.font_scale === 'large' ? 'selected' : '' %>>Large (110%)</option>
-            <option value="xlarge" <%= settings.font_scale === 'xlarge' ? 'selected' : '' %>>Extra Large (120%)</option>
-          </select>
-        </div>
-        <div>
-          <label style="display: block; font-weight: 600; margin-bottom: 6px;">Card Corner Style</label>
-          <select name="corner_style" style="width: 100%; padding: 11px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.95rem; font-weight: 600; background: #ffffff;">
-            <option value="rounded" <%= (settings.corner_style === 'rounded' || !settings.corner_style) ? 'selected' : '' %>>Rounded (soft)</option>
-            <option value="crisp" <%= settings.corner_style === 'crisp' ? 'selected' : '' %>>Crisp (subtle)</option>
-            <option value="sharp" <%= settings.corner_style === 'sharp' ? 'selected' : '' %>>Sharp (editorial square)</option>
-          </select>
-        </div>
-      </div>
-      <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; align-items: end;">
-        <div>
-          <label style="display: block; font-weight: 600; margin-bottom: 6px;">Articles Per Page</label>
-          <input type="number" name="pagination_size" min="3" max="48" value="<%= settings.pagination_size || 9 %>" style="width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.95rem; font-weight: 600;">
-          <p style="font-size: 0.75rem; color: #94a3b8; margin-top: 4px;">Category, tag &amp; search pages.</p>
-        </div>
-        <label style="display: flex; align-items: center; gap: 10px; font-weight: 600; cursor: pointer; padding-bottom: 8px;">
-          <input type="checkbox" name="sticky_nav" value="1" <%= (settings.sticky_nav == 1 || settings.sticky_nav === undefined) ? 'checked' : '' %> style="width: 18px; height: 18px;">
-          Sticky Navigation Bar
-        </label>
-        <label style="display: flex; align-items: center; gap: 10px; font-weight: 600; cursor: pointer; padding-bottom: 8px;">
-          <input type="checkbox" name="show_reading_progress" value="1" <%= (settings.show_reading_progress == 1 || settings.show_reading_progress === undefined) ? 'checked' : '' %> style="width: 18px; height: 18px;">
-          Article Reading Progress Bar
-        </label>
-      </div>
-    </div>
-
-    <!-- Ticker and Custom CSS -->
-    <div style="background: #ffffff; border-radius: 12px; padding: 24px; border: 1px solid #e2e8f0; margin-bottom: 32px;">
-      <h3 style="font-size: 1.15rem; font-weight: 700; color: #1e293b; margin-bottom: 16px;"><i class="fas fa-bolt"></i> Live Breaking News Ticker</h3>
-      <div style="margin-bottom: 16px;">
-        <label style="display: flex; align-items: center; gap: 10px; font-weight: 600; cursor: pointer;">
-          <input type="checkbox" name="breaking_news_enabled" value="1" <%= (settings.breaking_news_enabled == 1 || settings.breaking_news_enabled === undefined) ? 'checked' : '' %> style="width: 18px; height: 18px;">
-          Enable Live Breaking News Ticker Bar
-        </label>
-      </div>
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px;">
-        <div>
-          <label style="display: block; font-weight: 600; margin-bottom: 6px;">Ticker Text (Khmer)</label>
-          <input type="text" name="breaking_news_text_km" value="<%= settings.breaking_news_text_km || '' %>" style="width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 6px;">
-        </div>
-        <div>
-          <label style="display: block; font-weight: 600; margin-bottom: 6px;">Ticker Text (English)</label>
-          <input type="text" name="breaking_news_text_en" value="<%= settings.breaking_news_text_en || '' %>" style="width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 6px;">
-        </div>
-      </div>
-
-      <div style="margin-bottom: 24px;">
-        <label style="display: block; font-weight: 600; margin-bottom: 6px;"><i class="fas fa-newspaper"></i> Headlines Ticker Style</label>
-        <select name="ticker_style" id="tickerStyleSelect"
-          style="width: 100%; padding: 11px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.95rem; font-weight: 600; background: #ffffff;">
-          <option value="marquee" <%= (settings.ticker_style === 'marquee' || !settings.ticker_style) ? 'selected' : '' %>>Marquee (continuous scrolling)</option>
-          <option value="static" <%= settings.ticker_style === 'static' ? 'selected' : '' %>>Static List (no animation)</option>
-          <option value="slide" <%= settings.ticker_style === 'slide' ? 'selected' : '' %>>Slide (auto-rotating headline)</option>
-        </select>
-        <p style="font-size: 0.8rem; color: #94a3b8; margin-top: 6px;">Applies to all "Latest Headlines" ticker blocks on the homepage.</p>
-        <% if (!blocks.some(function(b) { return b && b.type === 'ticker'; })) { %>
-          <p style="font-size: 0.8rem; color: #b45309; background: #fffbeb; border: 1px solid #fde68a; border-radius: 6px; padding: 8px 10px; margin-top: 8px;"><i class="fas fa-triangle-exclamation"></i> Your homepage has <strong>no ticker block</strong> yet — click <strong>Blocks</strong> tab and add a "Headlines Ticker Marquee" block for this style to appear on the site.</p>
-        <% } %>
-      </div>
-
-      <h3 style="font-size: 1.15rem; font-weight: 700; color: #1e293b; margin-bottom: 16px;"><i class="fas fa-code"></i> Custom CSS Code</h3>
-      <textarea name="custom_css" rows="4" style="width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-family: monospace;" placeholder="/* Custom CSS */"><%= settings.custom_css || '' %></textarea>
-    </div>
-
-        <button type="submit" class="btn btn-primary" style="padding: 12px 32px; font-weight: 700; border-radius: 8px;">
-          <i class="fas fa-floppy-disk"></i> Save Theme & Brand Settings
+      <div class="coverage-actions">
+        <button type="button" onclick="toggleCollapseAll()" class="studio-mini-btn" id="collapseAllBtn">
+          <i class="fas fa-compress-alt"></i> Compact View
         </button>
+        <button type="button" onclick="exportLayoutJson()" class="studio-mini-btn" title="Export JSON">
+          <i class="fas fa-download"></i> Export
+        </button>
+        <button type="button" onclick="importLayoutJson()" class="studio-mini-btn" title="Import JSON">
+          <i class="fas fa-upload"></i> Import
+        </button>
+      </div>
+    </div>
+
+    <!-- CATEGORIZED ADD-BLOCK LIBRARY -->
+    <div class="studio-library-panel">
+      <div class="studio-library-head">
+        <div>
+          <h3><i class="fas fa-plus-circle" style="color:#dc2626"></i> Click Any Section Block Below to Add It to Your Page</h3>
+          <p>Each block is 100% card-free and uses crisp newspaper hairline dividers.</p>
+        </div>
+        <span id="activeBlockCounter" class="studio-counter-badge">0 active blocks</span>
+      </div>
+
+      <div id="blockLibraryGrid" class="studio-library-grid">
+        <!-- Populated dynamically by JS based on currentPage -->
+      </div>
+    </div>
+
+    <!-- SPLIT WORKSPACE: LEFT = DRAG & DROP STACK, RIGHT = LIVE INTERACTIVE BLUEPRINT -->
+    <div class="studio-workspace-grid">
+      <!-- LEFT: DRAG & DROP CANVAS -->
+      <div class="studio-canvas-col">
+        <div class="studio-col-Subheader">
+          <span><i class="fas fa-grip-vertical"></i> DRAG BLOCKS TO REORDER • CLICK VISUAL ICONS TO CHANGE LAYOUT</span>
+          <span class="autosave-indicator" id="autosaveStatus"><i class="fas fa-cloud-arrow-up"></i> Auto-save active</span>
         </div>
 
-        <!-- LIVE THEME PREVIEW -->
-        <div class="theme-preview-scope" style="min-width: 0;">
-          <div style="position: sticky; top: 16px; background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(15,23,42,0.15);">
-            <div style="display: flex; align-items: center; justify-content: space-between; padding: 8px 12px; background: #0f172a;">
-              <span style="display: flex; gap: 5px;">
-                <span style="width: 9px; height: 9px; border-radius: 50%; background: #f87171; display: inline-block;"></span>
-                <span style="width: 9px; height: 9px; border-radius: 50%; background: #fbbf24; display: inline-block;"></span>
-                <span style="width: 9px; height: 9px; border-radius: 50%; background: #34d399; display: inline-block;"></span>
-              </span>
-              <span style="font-size: 0.68rem; color: #94a3b8; background: #1e293b; padding: 2px 12px; border-radius: 10px;"><i class="fas fa-lock"></i> khmer-news.local</span>
-              <span style="font-size: 0.6rem; font-weight: 800; color: #fbbf24; background: rgba(251,191,36,0.15); padding: 2px 10px; border-radius: 10px; letter-spacing: 0.06em;">● LIVE PREVIEW</span>
+        <div id="blocksListContainer" class="studio-blocks-stack"></div>
+      </div>
+
+      <!-- RIGHT: STICKY LIVE PAGE BLUEPRINT -->
+      <aside class="studio-blueprint-col">
+        <div class="studio-blueprint-card">
+          <div class="blueprint-top">
+            <div>
+              <span class="blueprint-badge"><span class="live-pulse-dot"></span> LIVE PAGE BLUEPRINT</span>
+              <h4 id="blueprintPageTitle">Front Page Architecture</h4>
+            </div>
+            <a href="/" target="_blank" id="blueprintOpenLink" class="studio-mini-btn">Open Page ↗</a>
+          </div>
+          <p class="blueprint-help">
+            Click any section in this miniature map to jump directly to its settings, or use the eye icon to toggle visibility.
+          </p>
+
+          <!-- Simulated Newspaper Masthead -->
+          <div class="blueprint-paper">
+            <div class="bp-masthead">
+              <span>KHMER NEWS</span>
+              <span class="bp-live-pill">● TODAY LIVE</span>
+            </div>
+            <div id="blueprintStack" class="bp-stack"></div>
+            <div class="bp-footer">© Khmer News Broadsheet Footer</div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <!-- ==================== TAB 2: 1-CLICK NEWSPAPER TEMPLATES ==================== -->
+  <div id="presetsStudioSection" class="studio-section" style="display: none;">
+    <div class="studio-presets-panel">
+      <div class="studio-presets-header">
+        <div>
+          <h2><i class="fas fa-wand-magic-sparkles" style="color:#dc2626"></i> One-Click Editorial Newspaper Presets</h2>
+          <p>Choose a complete front-page architecture designed after world-class newsrooms, or save your own custom snapshot.</p>
+        </div>
+        <button type="button" onclick="saveCurrentAsTemplate()" class="cms-btn cms-btn-primary">
+          <i class="fas fa-plus"></i> Save Current Layout as Custom Preset
+        </button>
+      </div>
+
+      <div class="studio-presets-grid">
+        <!-- Preset 1: Full Broadsheet (Recommended) -->
+        <div class="preset-card is-recommended">
+          <div class="preset-card-top">
+            <span class="preset-badge">★ RECOMMENDED DEFAULT</span>
+            <span class="preset-count">13 Sections • All 5 Desks</span>
+          </div>
+          <h3>Reuters / NYT Full Broadsheet</h3>
+          <p>Complete newspaper edition with 3-Column Front Page Hero + Today's Live Wire, all 5 category desks, 3-Desk Comparison, Spotlight, Photojournalism strip, Top 10 &amp; Briefing.</p>
+          <div class="preset-tags">
+            <span>3-Col Hero + Wire</span><span>All 5 Desks</span><span>Photo Strip</span><span>3-Desk Cols</span><span>Top 10</span>
+          </div>
+          <button type="button" onclick="applyTemplate('broadsheet_full')" class="cms-btn cms-btn-primary" style="width:100%;justify-content:center;margin-top:12px;">
+            Apply Full Broadsheet Layout
+          </button>
+        </div>
+
+        <!-- Preset 2: Today Live Breaking Newsroom -->
+        <div class="preset-card">
+          <div class="preset-card-top">
+            <span class="preset-badge is-red">● LIVE WIRE FOCUS</span>
+            <span class="preset-count">10 Sections</span>
+          </div>
+          <h3>Today Live Breaking Newsroom</h3>
+          <p>Built for high-velocity breaking news days. Places the Today's Live Wire Timeline right below the Front Page Hero, followed by National, International, and Economy desks.</p>
+          <div class="preset-tags">
+            <span>Hero + Wire</span><span>Live Timeline</span><span>Ticker</span><span>National</span><span>International</span>
+          </div>
+          <button type="button" onclick="applyTemplate('today_newsroom')" class="cms-btn cms-btn-outline" style="width:100%;justify-content:center;margin-top:12px;">
+            Apply Live Newsroom Layout
+          </button>
+        </div>
+
+        <!-- Preset 3: Financial Times / Markets & Economy -->
+        <div class="preset-card">
+          <div class="preset-card-top">
+            <span class="preset-badge">BUSINESS &amp; POLICY</span>
+            <span class="preset-count">10 Sections</span>
+          </div>
+          <h3>Markets, Economy &amp; Policy Edition</h3>
+          <p>Prioritizes Economy &amp; Markets, 3-Desk Comparison Columns, Editorial Opinion &amp; Analysis, Live Metrics Strip, and National Policy coverage.</p>
+          <div class="preset-tags">
+            <span>Economy Lead</span><span>3-Desk Cols</span><span>Opinion Desk</span><span>Live Stats</span>
+          </div>
+          <button type="button" onclick="applyTemplate('economy')" class="cms-btn cms-btn-outline" style="width:100%;justify-content:center;margin-top:12px;">
+            Apply Economy &amp; Policy Layout
+          </button>
+        </div>
+
+        <!-- Preset 4: Executive Morning Briefing -->
+        <div class="preset-card">
+          <div class="preset-card-top">
+            <span class="preset-badge">EXECUTIVE DIGEST</span>
+            <span class="preset-count">9 Sections</span>
+          </div>
+          <h3>Executive Morning Briefing</h3>
+          <p>Fast, high-density intelligence layout combining the 3-Column Hero, Today's Live Wire, 3-Desk Comparison, Editorial Analysis, and Top 10 Most Read.</p>
+          <div class="preset-tags">
+            <span>3-Col Hero</span><span>Today's Wire</span><span>Across The Desks</span><span>Opinion</span><span>Top 10</span>
+          </div>
+          <button type="button" onclick="applyTemplate('executive')" class="cms-btn cms-btn-outline" style="width:100%;justify-content:center;margin-top:12px;">
+            Apply Executive Briefing Layout
+          </button>
+        </div>
+
+        <!-- Preset 5: Visual & Photojournalism Edition -->
+        <div class="preset-card">
+          <div class="preset-card-top">
+            <span class="preset-badge">VISUAL JOURNALISM</span>
+            <span class="preset-count">10 Sections</span>
+          </div>
+          <h3>Photojournalism &amp; Feature Edition</h3>
+          <p>Showcases large widescreen photography with the Dark Photojournalism Strip, In-Depth Spotlight, National &amp; International desks, and Sports.</p>
+          <div class="preset-tags">
+            <span>Hero</span><span>Photo Strip</span><span>Spotlight</span><span>National</span><span>Sports</span>
+          </div>
+          <button type="button" onclick="applyTemplate('visual_photo')" class="cms-btn cms-btn-outline" style="width:100%;justify-content:center;margin-top:12px;">
+            Apply Photojournalism Layout
+          </button>
+        </div>
+
+        <!-- Preset 6: Tech & Digital Innovation -->
+        <div class="preset-card">
+          <div class="preset-card-top">
+            <span class="preset-badge">TECH &amp; FUTURE</span>
+            <span class="preset-count">9 Sections</span>
+          </div>
+          <h3>Technology &amp; Innovation Digest</h3>
+          <p>Highlights Technology &amp; Innovation, Economy &amp; Startups, International Tech policy, Trending Topic Hashtags, and Top 10 briefings.</p>
+          <div class="preset-tags">
+            <span>Hero</span><span>Tech 3-Col</span><span>Economy</span><span>Today Wire</span><span>Topics</span>
+          </div>
+          <button type="button" onclick="applyTemplate('tech')" class="cms-btn cms-btn-outline" style="width:100%;justify-content:center;margin-top:12px;">
+            Apply Tech Digest Layout
+          </button>
+        </div>
+
+        <!-- Preset 7: Classic 5-Desk Newspaper -->
+        <div class="preset-card">
+          <div class="preset-card-top">
+            <span class="preset-badge">CLASSIC EDITION</span>
+            <span class="preset-count">11 Sections</span>
+          </div>
+          <h3>Classic 5-Desk Broadsheet</h3>
+          <p>Clean sequential presentation of all 5 editorial desks (National, International, Economy, Technology, Sports) with Top 10 Headlines and Newsletter.</p>
+          <div class="preset-tags">
+            <span>Hero</span><span>Ticker</span><span>All 5 Desks</span><span>Top 10</span><span>Newsletter</span>
+          </div>
+          <button type="button" onclick="applyTemplate('classic')" class="cms-btn cms-btn-outline" style="width:100%;justify-content:center;margin-top:12px;">
+            Apply Classic 5-Desk Layout
+          </button>
+        </div>
+
+        <!-- Preset 8: Compact Wire Reader -->
+        <div class="preset-card">
+          <div class="preset-card-top">
+            <span class="preset-badge">ULTRA FAST</span>
+            <span class="preset-count">6 Sections</span>
+          </div>
+          <h3>Minimalist Fast Wire Edition</h3>
+          <p>Streamlined, ultra-fast reading experience with Front Page Hero, Today's Chronological Wire, 3-Desk Summary, and Top 10 Most Read.</p>
+          <div class="preset-tags">
+            <span>Hero</span><span>Today's Wire</span><span>3-Desk Cols</span><span>Top 10</span>
+          </div>
+          <button type="button" onclick="applyTemplate('minimal')" class="cms-btn cms-btn-outline" style="width:100%;justify-content:center;margin-top:12px;">
+            Apply Fast Wire Layout
+          </button>
+        </div>
+      </div>
+
+      <!-- Saved Custom Presets -->
+      <div class="studio-custom-presets-box">
+        <div class="studio-panel-subhead">
+          <h3><i class="fas fa-bookmark"></i> My Saved Custom Presets</h3>
+          <span>Snapshots saved for your pages</span>
+        </div>
+        <div id="customTemplatesList" class="custom-presets-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== TAB 3: BRAND PALETTE, TYPOGRAPHY & TICKER ==================== -->
+  <div id="themeStudioSection" class="studio-section" style="display: none;">
+    <form action="/admin/layout/save" method="POST" id="themeSettingsForm">
+      <div class="studio-workspace-grid">
+        <div class="studio-theme-controls">
+          <!-- 1. Editorial Color Palettes -->
+          <div class="cms-panel">
+            <div class="cms-panel-head">
+              <h2><i class="fas fa-palette"></i> 1-Click Newspaper Brand Palettes</h2>
+              <span class="cms-badge-live">INSTANT PREVIEW</span>
+            </div>
+            <div class="palette-grid">
+              <button type="button" class="palette-btn" onclick="setTheme('#1e3a8a','#dc2626')">
+                <span class="palette-swatches"><i style="background:#1e3a8a"></i><i style="background:#dc2626"></i></span>
+                <strong>Phnom Penh Post Blue &amp; Crimson</strong>
+              </button>
+              <button type="button" class="palette-btn" onclick="setTheme('#0f172a','#dc2626')">
+                <span class="palette-swatches"><i style="background:#0f172a"></i><i style="background:#dc2626"></i></span>
+                <strong>NYT / Reuters Ink &amp; Wire Red</strong>
+              </button>
+              <button type="button" class="palette-btn" onclick="setTheme('#991b1b','#d97706')">
+                <span class="palette-swatches"><i style="background:#991b1b"></i><i style="background:#d97706"></i></span>
+                <strong>BBC / Economist Sovereign Red</strong>
+              </button>
+              <button type="button" class="palette-btn" onclick="setTheme('#065f46','#dc2626')">
+                <span class="palette-swatches"><i style="background:#065f46"></i><i style="background:#dc2626"></i></span>
+                <strong>Emerald Financial Broadsheet</strong>
+              </button>
+              <button type="button" class="palette-btn" onclick="setTheme('#1e293b','#0284c7')">
+                <span class="palette-swatches"><i style="background:#1e293b"></i><i style="background:#0284c7"></i></span>
+                <strong>Slate &amp; Bloomberg Cyan</strong>
+              </button>
+              <button type="button" class="palette-btn" onclick="setTheme('#312e81','#e11d48')">
+                <span class="palette-swatches"><i style="background:#312e81"></i><i style="background:#e11d48"></i></span>
+                <strong>Indigo &amp; Rose Dispatch</strong>
+              </button>
             </div>
 
-            <div class="pv-stage" id="pvStage" style="--pv-primary: <%= settings.primary_color || '#1e3a8a' %>; --pv-accent: <%= settings.accent_color || '#dc2626' %>; background: #f8fafc; padding: 14px;">
-              <!-- Site header -->
-              <div style="background: var(--pv-primary); border-radius: 8px 8px 0 0; padding: 10px 16px; display: flex; align-items: center; justify-content: space-between;">
-                <span style="color: #fff; font-weight: 800; font-size: 0.8rem; letter-spacing: 0.06em;">KH NEWS</span>
-                <span style="display: flex; gap: 12px;">
-                  <span style="color: rgba(255,255,255,0.85); font-size: 0.6rem;">National</span>
-                  <span style="color: rgba(255,255,255,0.85); font-size: 0.6rem;">Tech</span>
-                  <span style="color: rgba(255,255,255,0.85); font-size: 0.6rem;">Sports</span>
-                  <span style="color: rgba(255,255,255,0.85); font-size: 0.6rem;">Culture</span>
-                </span>
+            <div class="cms-form-row-2" style="margin-top: 18px;">
+              <div class="form-group" style="margin-bottom:0;">
+                <label>Primary Editorial Ink / Masthead Color</label>
+                <div style="display:flex;gap:10px;align-items:center;">
+                  <input type="color" id="primaryColorPicker" name="primary_color" value="<%= settings.primary_color || '#1e3a8a' %>" style="width:48px;height:40px;padding:2px;cursor:pointer;">
+                  <input type="text" id="primaryColorText" value="<%= settings.primary_color || '#1e3a8a' %>" class="form-control" readonly>
+                </div>
               </div>
-
-              <!-- Breaking news bar -->
-              <div id="pvBreaking" style="background: var(--pv-accent); color: #fff; padding: 5px 16px; font-size: 0.6rem; font-weight: 700; display: flex; gap: 8px; align-items: center;">
-                <span><i class="fas fa-bolt"></i> BREAKING</span>
-                <span id="pvBreakingText" style="font-weight: 500; opacity: 0.95; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Live breaking news updates</span>
-              </div>
-
-              <!-- Hero area (swaps by style) -->
-              <div style="background: #ffffff; padding: 12px; border-radius: 0 0 8px 8px;">
-                <div id="pvHero" style="height: 110px; border-radius: 6px; overflow: hidden; position: relative;">
-                  <div class="pv-hero-v" data-v="grid_3" style="display: flex; gap: 6px; height: 100%;">
-                    <div style="flex: 2; background: linear-gradient(135deg, var(--pv-primary), #0f172a); border-radius: 6px; position: relative;">
-                      <span style="position: absolute; left: 8px; bottom: 8px; color: #fff; font-size: 0.55rem; font-weight: 700; background: var(--pv-accent); padding: 2px 6px; border-radius: 4px;">NATIONAL</span>
-                    </div>
-                    <div style="flex: 1; display: flex; flex-direction: column; gap: 6px;">
-                      <div style="flex: 1; background: #e2e8f0; border-radius: 6px;"></div>
-                      <div style="flex: 1; background: #e2e8f0; border-radius: 6px;"></div>
-                    </div>
-                  </div>
-                  <div class="pv-hero-v" data-v="split_2" style="display: none; gap: 6px; height: 100%;">
-                    <div style="flex: 1; background: linear-gradient(135deg, var(--pv-primary), #0f172a); border-radius: 6px;"></div>
-                    <div style="flex: 1; background: linear-gradient(135deg, var(--pv-accent), #7f1d1d); border-radius: 6px;"></div>
-                  </div>
-                  <div class="pv-hero-v" data-v="single_hero_banner" style="display: none; height: 100%; background: linear-gradient(135deg, var(--pv-primary), #0f172a); border-radius: 6px; position: relative;">
-                    <span style="position: absolute; left: 8px; bottom: 8px; color: #fff; font-size: 0.55rem; font-weight: 700; background: var(--pv-accent); padding: 2px 6px; border-radius: 4px;">BREAKING</span>
-                  </div>
-                  <div class="pv-hero-v" data-v="carousel" style="display: none; height: 100%; background: linear-gradient(135deg, var(--pv-accent), #0f172a); border-radius: 6px; position: relative;">
-                    <span style="position: absolute; left: 50%; transform: translateX(-50%); bottom: 6px; display: flex; gap: 4px;">
-                      <span style="width: 12px; height: 4px; border-radius: 2px; background: #fff;"></span>
-                      <span style="width: 4px; height: 4px; border-radius: 2px; background: rgba(255,255,255,0.5);"></span>
-                      <span style="width: 4px; height: 4px; border-radius: 2px; background: rgba(255,255,255,0.5);"></span>
-                    </span>
-                  </div>
-                  <div class="pv-hero-v" data-v="mosaic" style="display: none; height: 100%; gap: 6px;">
-                    <div style="flex: 1.4; background: linear-gradient(135deg, var(--pv-primary), #0f172a); border-radius: 6px; position: relative;">
-                      <span style="position: absolute; left: 6px; bottom: 6px; color: #fff; font-size: 0.5rem; font-weight: 700; background: var(--pv-accent); padding: 1px 5px; border-radius: 3px;">TOP</span>
-                    </div>
-                    <div style="flex: 1; display: flex; flex-direction: column; gap: 6px;">
-                      <div style="flex: 1.3; background: linear-gradient(135deg, var(--pv-primary), #334155); border-radius: 6px;"></div>
-                      <div style="flex: 1; display: flex; gap: 6px;">
-                        <div style="flex: 1; background: #cbd5e1; border-radius: 6px;"></div>
-                        <div style="flex: 1; background: #cbd5e1; border-radius: 6px;"></div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="pv-hero-v" data-v="hero_2x2" style="display: none; height: 100%; flex-wrap: wrap; gap: 6px;">
-                    <div style="width: calc(50% - 3px); height: calc(50% - 3px); background: linear-gradient(135deg, var(--pv-primary), #0f172a); border-radius: 6px;"></div>
-                    <div style="width: calc(50% - 3px); height: calc(50% - 3px); background: linear-gradient(135deg, var(--pv-accent), #7f1d1d); border-radius: 6px;"></div>
-                    <div style="width: calc(50% - 3px); height: calc(50% - 3px); background: linear-gradient(135deg, var(--pv-accent), #7f1d1d); border-radius: 6px;"></div>
-                    <div style="width: calc(50% - 3px); height: calc(50% - 3px); background: linear-gradient(135deg, var(--pv-primary), #334155); border-radius: 6px;"></div>
-                  </div>
+              <div class="form-group" style="margin-bottom:0;">
+                <label>Live Wire &amp; Kicker Accent Color</label>
+                <div style="display:flex;gap:10px;align-items:center;">
+                  <input type="color" id="accentColorPicker" name="accent_color" value="<%= settings.accent_color || '#dc2626' %>" style="width:48px;height:40px;padding:2px;cursor:pointer;">
+                  <input type="text" id="accentColorText" value="<%= settings.accent_color || '#dc2626' %>" class="form-control" readonly>
                 </div>
-
-                <!-- Headlines ticker (swaps by style) -->
-                <div style="margin-top: 10px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 6px; display: flex; align-items: center; overflow: hidden;">
-                  <span style="background: var(--pv-accent); color: #fff; font-size: 0.55rem; font-weight: 800; padding: 6px 10px; white-space: nowrap; text-transform: uppercase;">Latest</span>
-                  <div id="pvTickerBody" style="flex: 1; padding: 0 10px; overflow: hidden;">
-                    <div class="pv-ticker-v pv-ticker-marquee" data-v="marquee" style="font-size: 0.6rem; color: #334155; font-weight: 600;">
-                      <span class="pv-marquee-track">Headline one about the expressway • Headline two on health • Headline three tech news • </span>
-                      <span class="pv-marquee-track" aria-hidden="true">Headline one about the expressway • Headline two on health • Headline three tech news • </span>
-                    </div>
-                    <div class="pv-ticker-v" data-v="static" style="display: none; font-size: 0.6rem; color: #334155; padding: 6px 0; font-weight: 600; white-space: nowrap; overflow: hidden;">Headline one • Headline two • Headline three</div>
-                    <div class="pv-ticker-v" data-v="slide" style="display: none; font-size: 0.6rem; color: #334155; padding: 6px 0; font-weight: 600; white-space: nowrap; overflow: hidden;">
-                      Headline one auto-rotating…
-                      <span style="display: inline-block; width: 5px; height: 5px; border-radius: 50%; background: var(--pv-accent); margin-left: 5px;"></span>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Content + sidebar -->
-                <div id="pvLayout" style="display: flex; gap: 10px; margin-top: 10px;">
-                  <div id="pvMain" style="flex: 2; display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-                    <div style="height: 40px; background: #e2e8f0; border-radius: 5px;"></div>
-                    <div style="height: 40px; background: #e2e8f0; border-radius: 5px;"></div>
-                    <div style="height: 40px; background: #e2e8f0; border-radius: 5px;"></div>
-                    <div style="height: 40px; background: #e2e8f0; border-radius: 5px;"></div>
-                  </div>
-                  <div id="pvSidebar" style="flex: 1; background: #e2e8f0; border-radius: 5px; min-height: 90px;"></div>
-                </div>
-
-                <!-- Footer -->
-                <div style="margin-top: 10px; background: #0f172a; color: rgba(255,255,255,0.55); padding: 8px 16px; border-radius: 5px; font-size: 0.55rem;">© 2026 KH News — footer</div>
               </div>
             </div>
           </div>
+
+          <!-- 2. Typography, Proportions & Reading Experience -->
+          <div class="cms-panel" style="margin-top: 20px;">
+            <div class="cms-panel-head">
+              <h2><i class="fas fa-text-height"></i> Broadsheet Width, Typography &amp; Navigation</h2>
+            </div>
+            <div class=" studio-3col-inputs">
+              <div class="form-group">
+                <label>Newspaper Container Width</label>
+                <select name="content_width" class="form-control" onchange="themeChanged()">
+                  <option value="normal" <%= (settings.content_width === 'normal' || !settings.content_width) ? 'selected' : '' %>>Standard Broadsheet (1200px)</option>
+                  <option value="wide" <%= settings.content_width === 'wide' ? 'selected' : '' %>>Wide Newsroom (1400px)</option>
+                  <option value="full" <%= settings.content_width === 'full' ? 'selected' : '' %>>Ultra-Wide Edition (1720px)</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Base Editorial Font Scale</label>
+                <select name="font_scale" class="form-control" onchange="themeChanged()">
+                  <option value="small" <%= settings.font_scale === 'small' ? 'selected' : '' %>>Compact Wire (94%)</option>
+                  <option value="normal" <%= (settings.font_scale === 'normal' || !settings.font_scale) ? 'selected' : '' %>>Standard Newspaper (100%)</option>
+                  <option value="large" <%= settings.font_scale === 'large' ? 'selected' : '' %>>Comfortable Large (110%)</option>
+                  <option value="xlarge" <%= settings.font_scale === 'xlarge' ? 'selected' : '' %>>Executive Extra Large (120%)</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Photo Frame Corner Style</label>
+                <select name="corner_style" class="form-control" onchange="themeChanged()">
+                  <option value="sharp" <%= (settings.corner_style === 'sharp' || !settings.corner_style) ? 'selected' : '' %>>Sharp Editorial Square (2px)</option>
+                  <option value="crisp" <%= settings.corner_style === 'crisp' ? 'selected' : '' %>>Crisp Subtle (6px)</option>
+                  <option value="rounded" <%= settings.corner_style === 'rounded' ? 'selected' : '' %>>Soft Rounded (12px)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="studio-3col-inputs" style="align-items:center;">
+              <div class="form-group" style="margin-bottom:0;">
+                <label>Articles Per Category Page</label>
+                <input type="number" name="pagination_size" min="3" max="48" value="<%= settings.pagination_size || 9 %>" class="form-control" onchange="themeChanged()">
+              </div>
+              <label class="cms-checkbox-label" style="padding-top:18px;">
+                <input type="checkbox" name="sticky_nav" value="1" <%= (settings.sticky_nav == 1 || settings.sticky_nav === undefined) ? 'checked' : '' %> onchange="themeChanged()">
+                <strong>Sticky Top Navigation Bar</strong>
+              </label>
+              <label class="cms-checkbox-label" style="padding-top:18px;">
+                <input type="checkbox" name="show_reading_progress" value="1" <%= (settings.show_reading_progress == 1 || settings.show_reading_progress === undefined) ? 'checked' : '' %> onchange="themeChanged()">
+                <strong>Article Reading Progress Bar</strong>
+              </label>
+            </div>
+          </div>
+
+          <!-- 3. Default Hero & Breaking News Wire -->
+          <div class="cms-panel" style="margin-top: 20px;">
+            <div class="cms-panel-head">
+              <h2><i class="fas fa-bolt" style="color:#dc2626"></i> Global Breaking Wire &amp; Default Hero Mode</h2>
+            </div>
+            <div class="cms-form-row-2">
+              <div class="form-group">
+                <label>Default Front Page Hero Mode</label>
+                <select name="hero_layout_style" id="heroStyleSelect" class="form-control" onchange="themeChanged()">
+                  <option value="grid_3" <%= (settings.hero_layout_style === 'grid_3' || !settings.hero_layout_style) ? 'selected' : '' %>>3-Col Newspaper Front Page (Lead + Picks + Live Wire)</option>
+                  <option value="split_2" <%= settings.hero_layout_style === 'split_2' ? 'selected' : '' %>>Dual Split Lead Stories (2 Equal Columns)</option>
+                  <option value="single_hero_banner" <%= settings.hero_layout_style === 'single_hero_banner' ? 'selected' : '' %>>Single Widescreen Lead Report</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Ticker Animation Mode</label>
+                <select name="ticker_style" id="tickerStyleSelect" class="form-control" onchange="themeChanged()">
+                  <option value="marquee" <%= (settings.ticker_style === 'marquee' || !settings.ticker_style) ? 'selected' : '' %>>Continuous Live Wire Scroll</option>
+                  <option value="static" <%= settings.ticker_style === 'static' ? 'selected' : '' %>>Static Editorial Strip</option>
+                  <option value="slide" <%= settings.ticker_style === 'slide' ? 'selected' : '' %>>Rotating Dispatch Slide</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="cms-checkbox-label">
+                <input type="checkbox" name="breaking_news_enabled" value="1" <%= (settings.breaking_news_enabled == 1 || settings.breaking_news_enabled === undefined) ? 'checked' : '' %> onchange="themeChanged()">
+                <strong>Enable Global Breaking News Bar Under Navigation</strong>
+              </label>
+            </div>
+
+            <div class="cms-form-row-2">
+              <div class="form-group">
+                <label>Breaking News Wire Text (Khmer)</label>
+                <input type="text" name="breaking_news_text_km" value="<%= settings.breaking_news_text_km || '' %>" class="form-control" oninput="themeChanged()">
+              </div>
+              <div class="form-group">
+                <label>Breaking News Wire Text (English)</label>
+                <input type="text" name="breaking_news_text_en" value="<%= settings.breaking_news_text_en || '' %>" class="form-control" oninput="themeChanged()">
+              </div>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 16px;">
+              <label>Custom Editorial CSS Overrides (Optional)</label>
+              <textarea name="custom_css" rows="3" class="form-control" style="font-family:monospace;" placeholder="/* Custom CSS rules */" oninput="themeChanged()"><%= settings.custom_css || '' %></textarea>
+            </div>
+
+            <button type="submit" class="cms-btn cms-btn-primary">
+              <i class="fas fa-floppy-disk"></i> Save Theme &amp; Brand Settings
+            </button>
+          </div>
         </div>
-        </div>
-  </form>
+
+        <!-- Right Column: Live Theme Swatch Preview -->
+        <aside class="studio-blueprint-col">
+          <div class="studio-blueprint-card">
+            <div class="blueprint-top">
+              <div>
+                <span class="blueprint-badge"><span class="live-pulse-dot"></span> LIVE THEME PREVIEW</span>
+                <h4>Masthead &amp; Front Page Colors</h4>
+              </div>
+            </div>
+            <div id="pvStage" style="--pv-primary: <%= settings.primary_color || '#1e3a8a' %>; --pv-accent: <%= settings.accent_color || '#dc2626' %>; background: #ffffff; border: 1px solid #e2e8f0; padding: 14px;">
+              <div style="background: var(--pv-primary); color: #fff; padding: 10px 14px; display: flex; justify-content: space-between; align-items: center;">
+                <strong style="font-size: 0.9rem; letter-spacing: -0.02em;">Khmer<span style="color:#fca5a5">News</span></strong>
+                <span style="font-size: 0.65rem; background: var(--pv-accent); padding: 2px 7px; font-weight: 800;">● TODAY LIVE</span>
+              </div>
+              <div id="pvBreaking" style="background: var(--pv-accent); color: #fff; padding: 5px 12px; font-size: 0.68rem; font-weight: 700; display: flex; gap: 6px; align-items: center;">
+                <span>BREAKING:</span>
+                <span id="pvBreakingText" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Live updates from Phnom Penh</span>
+              </div>
+              <div style="padding: 12px 0; border-bottom: 2px solid #0f172a; display: grid; grid-template-columns: 1.5fr 1fr; gap: 10px;">
+                <div style="border-right: 1px solid #e2e8f0; padding-right: 10px;">
+                  <div style="height: 64px; background: linear-gradient(135deg, var(--pv-primary), #0f172a); margin-bottom: 6px;"></div>
+                  <span style="font-size: 0.6rem; font-weight: 800; color: var(--pv-accent);">NATIONAL DESK • 5M AGO</span>
+                  <div style="font-size: 0.78rem; font-weight: 900; color: #0f172a; line-height: 1.25; margin-top: 2px;">Lead Newspaper Headline Preview</div>
+                </div>
+                <div>
+                  <div style="font-size: 0.62rem; font-weight: 900; border-bottom: 2px solid var(--pv-accent); padding-bottom: 3px; margin-bottom: 6px; color: #0f172a;">● TODAY'S LIVE WIRE</div>
+                  <div style="font-size: 0.65rem; padding: 4px 0; border-bottom: 1px solid #e2e8f0; color: #1e293b;"><strong style="color:var(--pv-accent)">4m</strong> Cambodia Infrastructure Dispatch</div>
+                  <div style="font-size: 0.65rem; padding: 4px 0; border-bottom: 1px solid #e2e8f0; color: #1e293b;"><strong style="color:var(--pv-accent)">16m</strong> ASEAN Digital Trade Accord</div>
+                  <div style="font-size: 0.65rem; padding: 4px 0; color: #1e293b;"><strong style="color:var(--pv-accent)">32m</strong> Kun Khmer Grand Prix Tonight</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </form>
+  </div>
 </div>
 
 <style>
-  .template-card-btn {
-    background: rgba(255,255,255,0.08);
-    border: 1px solid rgba(255,255,255,0.2);
-    border-radius: 8px;
-    padding: 14px;
-    color: white;
+  .studio-v2 { padding-bottom: 48px; }
+  .studio-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding-bottom: 16px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #0f172a;
+  }
+  .studio-title { font-size: 1.75rem; font-weight: 900; color: #0f172a; margin: 0; }
+  .studio-subtitle { color: #64748b; font-size: 0.9rem; margin: 4px 0 0; }
+  .studio-header-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+  /* Mode Bar */
+  .studio-mode-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-bottom: 20px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    padding: 10px 14px;
+  }
+  .studio-mode-tabs { display: flex; gap: 8px; flex-wrap: wrap; }
+  .studio-mode-tab {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 16px;
+    border: 1px solid #e2e8f0;
+    background: #f8fafc;
     text-align: left;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-  .template-card-btn:hover {
-    background: rgba(255,255,255,0.18);
-    border-color: rgba(255,255,255,0.4);
-    transform: translateY(-2px);
-  }
-  .studio-tab {
-    padding: 12px 24px;
-    font-weight: 700;
-    font-size: 1rem;
-    border: none;
-    background: transparent;
-    color: #64748b;
-    cursor: pointer;
-    border-bottom: 3px solid transparent;
-    transition: all 0.2s;
-  }
-  .studio-tab.active {
-    color: #1e3a8a;
-    border-bottom-color: #1e3a8a;
-  }
-  .add-block-btn {
-    padding: 8px 16px;
-    border-radius: 8px;
-    font-weight: 600;
-    font-size: 0.9rem;
-    cursor: pointer;
-    transition: transform 0.15s;
-  }
-  .add-block-btn:hover {
-    transform: translateY(-2px);
-  }
-  .block-card {
-    background: #ffffff;
-    border: 2px solid #e2e8f0;
-    border-radius: 12px;
-    padding: 20px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
-    transition: all 0.2s;
-    cursor: grab;
-  }
-  .block-card:active {
-    cursor: grabbing;
-  }
-  .block-card.dragging {
-    opacity: 0.4;
-    border-style: dashed;
-    border-color: #3b82f6;
-  }
-  .block-card.drag-over {
-    border-color: #2563eb;
-    background: #eff6ff;
-  }
-  .badge-type {
-    display: inline-block;
-    padding: 3px 10px;
-    border-radius: 20px;
-    font-size: 0.75rem;
-    font-weight: 700;
-    text-transform: uppercase;
-  }
-  .wireframe-preview {
-    background: #ffffff;
-    border: 1px solid #cbd5e1;
-    border-radius: 6px;
-    padding: 8px;
-    margin-top: 8px;
-    display: flex;
-    gap: 4px;
-    height: 48px;
-    align-items: center;
-  }
-  .wf-box {
-    background: #e2e8f0;
-    border-radius: 4px;
-    height: 100%;
-    flex: 1;
-  }
-
-  /* ---- Live theme preview mockup ---- */
-  .theme-preview-scope .pv-ticker-marquee {
-    display: flex;
-    overflow: hidden;
-  }
-  .theme-preview-scope .pv-marquee-track {
-    display: inline-block;
-    white-space: nowrap;
-    animation: pv-ticker-scroll 12s linear infinite;
-  }
-  @keyframes pv-ticker-scroll {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-100%); }
-  }
-
-  /* Keep the mockup light-themed even when the admin panel is in dark mode */
-  .theme-preview-scope { background: #f1f5f9 !important; }
-  .theme-preview-scope [style*="background: #ffffff"],
-  .theme-preview-scope [style*="background: #fff"] { background-color: #ffffff !important; }
-  .theme-preview-scope [style*="background: #f8fafc"] { background-color: #f8fafc !important; }
-  .theme-preview-scope [style*="background: #f1f5f9"] { background-color: #f1f5f9 !important; }
-  .theme-preview-scope [style*="background: #e2e8f0"] { background-color: #e2e8f0 !important; }
-  .theme-preview-scope [style*="border: 1px solid #e2e8f0"] { border-color: #e2e8f0 !important; }
-
-  /* ---- Template preview thumbnails ---- */
-  .tpl-preview {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    background: rgba(255,255,255,0.07);
-    border: 1px solid rgba(255,255,255,0.15);
-    border-radius: 6px;
-    padding: 7px;
-    height: 78px;
-    overflow: hidden;
-  }
-  .tpl-row {
-    display: flex;
-    gap: 3px;
-    flex: 1;
-  }
-  .tpl-row-inner {
-    display: flex;
-    gap: 3px;
-    flex: 1;
-  }
-  .tpl-bar {
-    flex: 1;
-    border-radius: 2.5px;
-    background: #e2e8f0;
-    min-height: 6px;
-  }
-
-  /* ---- Insert-between zones ---- */
-  .insert-zone {
-    position: relative;
-    min-height: 30px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .insert-zone-btn {
-    background: #f1f5f9;
-    border: 1.5px dashed #cbd5e1;
-    color: #64748b;
-    border-radius: 20px;
-    padding: 5px 18px;
-    font-size: 0.78rem;
-    font-weight: 700;
     cursor: pointer;
     transition: all 0.15s;
   }
-  .insert-zone-btn:hover {
-    background: #eff6ff;
-    border-color: #3b82f6;
-    color: #1d4ed8;
+  .studio-mode-tab .step-num {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: #cbd5e1;
+    color: #0f172a;
+    font-weight: 900;
+    font-size: 0.8rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
   }
-  .insert-menu {
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 50;
+  .studio-mode-tab strong { display: block; font-size: 0.86rem; color: #0f172a; }
+  .studio-mode-tab span { font-size: 0.72rem; color: #64748b; }
+  .studio-mode-tab.active {
+    background: #0f172a;
+    border-color: #0f172a;
+  }
+  .studio-mode-tab.active strong { color: #ffffff; }
+  .studio-mode-tab.active span { color: #cbd5e1; }
+  .studio-mode-tab.active .step-num { background: #dc2626; color: #ffffff; }
+
+  .studio-page-switcher { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+  .switcher-label { font-size: 0.78rem; font-weight: 800; color: #475569; margin-right: 4px; }
+  .page-pill {
+    padding: 7px 13px;
+    border: 1px solid #cbd5e1;
+    background: #ffffff;
+    font-weight: 700;
+    font-size: 0.8rem;
+    color: #334155;
+    cursor: pointer;
+  }
+  .page-pill.active {
+    background: #dc2626;
+    border-color: #dc2626;
+    color: #ffffff;
+  }
+
+  /* Desk Coverage Bar */
+  .studio-coverage-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
     background: #ffffff;
     border: 1px solid #e2e8f0;
-    border-radius: 10px;
-    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.18);
-    padding: 8px;
-    display: none;
-    flex-wrap: wrap;
-    gap: 6px;
-    width: 220px;
-    justify-content: center;
+    padding: 10px 16px;
+    margin-bottom: 16px;
   }
-  .insert-menu-item {
+  .coverage-left { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .coverage-title { font-size: 0.78rem; font-weight: 800; color: #0f172a; text-transform: uppercase; }
+  .coverage-pills { display: flex; gap: 6px; flex-wrap: wrap; }
+  .cov-pill {
+    font-size: 0.74rem;
+    font-weight: 700;
+    padding: 3px 9px;
+    border-radius: 3px;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .cov-pill.is-covered { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
+  .cov-pill.is-missing { background: #fef2f2; color: #991b1b; border: 1px dashed #fca5a5; cursor: pointer; }
+  .cov-pill.is-missing:hover { background: #dc2626; color: #ffffff; }
+  .coverage-actions { display: flex; gap: 6px; }
+  .studio-mini-btn {
+    background: #f8fafc;
+    border: 1px solid #cbd5e1;
+    color: #334155;
+    padding: 5px 10px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+  }
+  .studio-mini-btn:hover { background: #0f172a; color: #ffffff; border-color: #0f172a; }
+
+  /* Categorized Add-Block Library */
+  .studio-library-panel {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    padding: 16px 18px;
+    margin-bottom: 20px;
+  }
+  .studio-library-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+  .studio-library-head h3 { font-size: 0.95rem; font-weight: 800; margin: 0; color: #0f172a; }
+  .studio-library-head p { font-size: 0.78rem; color: #64748b; margin: 2px 0 0; }
+  .studio-counter-badge {
+    background: #0f172a;
+    color: #ffffff;
+    font-size: 0.75rem;
+    font-weight: 800;
+    padding: 4px 10px;
+  }
+  .studio-library-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(195px, 1fr));
+    gap: 8px;
+  }
+  .lib-block-btn {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 12px;
     background: #f8fafc;
     border: 1px solid #e2e8f0;
-    border-radius: 8px;
-    font-size: 0.78rem;
-    font-weight: 600;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .lib-block-btn:hover {
+    border-color: #0f172a;
+    background: #ffffff;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06);
+  }
+  .lib-block-icon {
+    width: 30px;
+    height: 30px;
+    background: #0f172a;
+    color: #ffffff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.82rem;
+    flex-shrink: 0;
+  }
+  .lib-block-btn strong { display: block; font-size: 0.8rem; color: #0f172a; line-height: 1.25; }
+  .lib-block-btn span { display: block; font-size: 0.7rem; color: #64748b; margin-top: 2px; line-height: 1.3; }
+
+  /* Workspace Split Grid */
+  .studio-workspace-grid {
+    display: grid;
+    grid-template-columns: 1.65fr 1fr;
+    gap: 24px;
+    align-items: start;
+  }
+  .studio-col-Subheader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    color: #475569;
+    margin-bottom: 10px;
+  }
+  .autosave-indicator { color: #16a34a; }
+
+  .studio-blocks-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  /* Upgraded Block Card */
+  .block-card {
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    border-left: 4px solid #0f172a;
+    padding: 16px;
+    transition: all 0.15s;
+  }
+  .block-card.is-hidden-block {
+    opacity: 0.58;
+    background: #f8fafc;
+    border-left-color: #94a3b8 !important;
+  }
+  .block-card.highlight-flash {
+    outline: 3px solid #dc2626;
+  }
+  .block-card-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .block-card-title-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .block-step-num {
+    font-family: monospace;
+    font-weight: 900;
+    font-size: 0.82rem;
+    background: #0f172a;
+    color: #ffffff;
+    padding: 2px 7px;
+  }
+  .block-type-badge {
+    font-size: 0.7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    padding: 2px 8px;
+  }
+  .block-card-controls {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .blk-btn {
+    background: #f8fafc;
+    border: 1px solid #cbd5e1;
     color: #334155;
+    padding: 4px 8px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .blk-btn:hover:not(:disabled) { background: #0f172a; color: #ffffff; border-color: #0f172a; }
+  .blk-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+  .blk-btn.is-vis-on { background: #dcfce7; border-color: #86efac; color: #166534; }
+  .blk-btn.is-vis-off { background: #fee2e2; border-color: #fca5a5; color: #991b1b; }
+  .blk-btn.is-del:hover { background: #dc2626; border-color: #dc2626; color: #ffffff; }
+
+  .block-card-body {
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid #f1f5f9;
+  }
+  .block-card.is-collapsed .block-card-body { display: none; }
+
+  .block-fields-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .block-fields-grid label {
+    display: block;
+    font-size: 0.74rem;
+    font-weight: 700;
+    color: #475569;
+    margin-bottom: 4px;
+  }
+  .block-fields-grid input,
+  .block-fields-grid select {
+    width: 100%;
     padding: 7px 10px;
+    border: 1px solid #cbd5e1;
+    font-size: 0.85rem;
+    background: #ffffff;
+  }
+
+  /* Visual Style Picker Pills inside each Block */
+  .style-picker-row {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-top: 8px;
+  }
+  .style-pill-btn {
+    padding: 6px 10px;
+    font-size: 0.74rem;
+    font-weight: 700;
+    border: 1px solid #cbd5e1;
+    background: #f8fafc;
+    color: #334155;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .style-pill-btn.active {
+    background: #0f172a;
+    border-color: #0f172a;
+    color: #ffffff;
+  }
+
+  /* Right Column: Sticky Live Page Blueprint */
+  .studio-blueprint-col {
+    position: sticky;
+    top: 74px;
+  }
+  .studio-blueprint-card {
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    padding: 16px;
+  }
+  .blueprint-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #0f172a;
+    margin-bottom: 8px;
+  }
+  .blueprint-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.68rem;
+    font-weight: 900;
+    color: #dc2626;
+    letter-spacing: 0.06em;
+  }
+  .blueprint-top h4 { margin: 2px 0 0; font-size: 1rem; font-weight: 900; color: #0f172a; }
+  .blueprint-help { font-size: 0.75rem; color: #64748b; margin: 0 0 12px; }
+
+  .blueprint-paper {
+    background: #f8fafc;
+    border: 1px solid #cbd5e1;
+    padding: 10px;
+  }
+  .bp-masthead {
+    background: #0f172a;
+    color: #ffffff;
+    padding: 6px 10px;
+    font-size: 0.7rem;
+    font-weight: 900;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+  }
+  .bp-live-pill { color: #f87171; }
+  .bp-stack { display: flex; flex-direction: column; gap: 6px; }
+  .bp-item {
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    border-left: 3px solid #0f172a;
+    padding: 7px 9px;
     cursor: pointer;
     transition: all 0.12s;
   }
-  .insert-menu-item:hover {
-    background: #eff6ff;
-    border-color: #93c5fd;
-    color: #1d4ed8;
+  .bp-item:hover { border-color: #dc2626; background: #fef2f2; }
+  .bp-item.is-off { opacity: 0.45; border-style: dashed; }
+  .bp-item-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.72rem;
+    font-weight: 800;
+    color: #0f172a;
+  }
+  .bp-item-sub {
+    font-size: 0.65rem;
+    color: #64748b;
+    margin-top: 2px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .bp-mini-bars {
+    display: flex;
+    gap: 3px;
+    height: 14px;
+    margin-top: 5px;
+  }
+  .bp-mini-bars span {
+    flex: 1;
+    background: #cbd5e1;
+  }
+  .bp-footer {
+    margin-top: 8px;
+    background: #0f172a;
+    color: #94a3b8;
+    font-size: 0.62rem;
+    text-align: center;
+    padding: 5px;
   }
 
-  /* ---- Drag & drop indicators ---- */
-  .block-card.drop-before {
-    border-top: 3px solid #3b82f6;
+  /* Presets Grid */
+  .studio-presets-panel {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    padding: 24px;
   }
-  .block-card.drop-after {
-    border-bottom: 3px solid #3b82f6;
+  .studio-presets-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding-bottom: 16px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #e2e8f0;
+  }
+  .studio-presets-header h2 { margin: 0; font-size: 1.3rem; font-weight: 900; }
+  .studio-presets-header p { margin: 4px 0 0; color: #64748b; font-size: 0.88rem; }
+  .studio-presets-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 18px;
+  }
+  .preset-card {
+    border: 1px solid #cbd5e1;
+    padding: 18px;
+    background: #ffffff;
+    display: flex;
+    flex-direction: column;
+  }
+  .preset-card.is-recommended {
+    border: 2px solid #0f172a;
+    background: #f8fafc;
+  }
+  .preset-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+  .preset-badge {
+    font-size: 0.66rem;
+    font-weight: 900;
+    background: #e2e8f0;
+    color: #0f172a;
+    padding: 2px 7px;
+  }
+  .preset-badge.is-red { background: #fee2e2; color: #dc2626; }
+  .preset-count { font-size: 0.72rem; color: #64748b; font-weight: 700; }
+  .preset-card h3 { font-size: 1.05rem; font-weight: 900; margin: 0 0 6px; color: #0f172a; }
+  .preset-card p { font-size: 0.82rem; color: #475569; line-height: 1.5; margin: 0 0 12px; flex: 1; }
+  .preset-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+  .preset-tags span {
+    font-size: 0.68rem;
+    font-weight: 700;
+    background: #f1f5f9;
+    color: #334155;
+    padding: 2px 6px;
+    border: 1px solid #e2e8f0;
   }
 
-  /* ---- Auto-save toast ---- */
+  .studio-custom-presets-box {
+    margin-top: 28px;
+    padding-top: 20px;
+    border-top: 2px solid #0f172a;
+  }
+  .studio-panel-subhead {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 12px;
+  }
+  .studio-panel-subhead h3 { margin: 0; font-size: 1rem; font-weight: 900; }
+  .studio-panel-subhead span { font-size: 0.78rem; color: #64748b; }
+  .custom-presets-list { display: flex; gap: 10px; flex-wrap: wrap; }
+
+  /* Theme Palette Buttons */
+  .palette-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+    gap: 10px;
+  }
+  .palette-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    background: #f8fafc;
+    border: 1px solid #cbd5e1;
+    cursor: pointer;
+    text-align: left;
+  }
+  .palette-btn:hover { border-color: #0f172a; background: #ffffff; }
+  .palette-swatches { display: inline-flex; border: 1px solid #cbd5e1; }
+  .palette-swatches i { width: 16px; height: 24px; display: inline-block; }
+  .palette-btn strong { font-size: 0.78rem; color: #0f172a; }
+
+  .studio-3col-inputs {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+
   #builderToast {
     position: fixed;
-    bottom: 26px;
-    right: 26px;
-    background: #166534;
+    bottom: 24px;
+    right: 24px;
+    background: #0f172a;
     color: #ffffff;
-    padding: 12px 22px;
-    border-radius: 10px;
-    font-weight: 700;
-    font-size: 0.9rem;
+    padding: 12px 20px;
+    font-weight: 800;
+    font-size: 0.86rem;
     z-index: 99999;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.25);
     opacity: 0;
-    transition: opacity 0.25s;
+    transition: opacity 0.2s;
     pointer-events: none;
   }
 
-  /* Dark-mode adjustments for the builder chrome */
-  .dark-mode .insert-zone-btn {
-    background: var(--dm-surface);
-    border-color: var(--dm-border-2);
-    color: var(--dm-muted);
-  }
-  .dark-mode .insert-zone-btn:hover {
-    background: var(--dm-surface-2);
-    border-color: var(--dm-link);
-    color: var(--dm-link);
-  }
-  .dark-mode .insert-menu {
-    background: var(--dm-surface);
-    border-color: var(--dm-border);
-  }
-  .dark-mode .insert-menu-item {
-    background: var(--dm-surface-2);
-    border-color: var(--dm-border);
-    color: var(--dm-text-2);
-  }
-  .dark-mode .insert-menu-item:hover {
-    background: var(--primary-color, #1e3a8a);
-    color: #ffffff;
+  @media (max-width: 1100px) {
+    .studio-workspace-grid,
+    .studio-3col-inputs {
+      grid-template-columns: 1fr;
+    }
+    .studio-blueprint-col { position: static; }
   }
 </style>
 
-<style id="pvCustomCss"></style>
-
 <script>
-  var availableCategories = <%- JSON.stringify(categories) %>;
+  var availableCategories = <%- JSON.stringify(categories || []) %>;
   var blocksByPage = {
-    home: <%- JSON.stringify(blocks) %>,
+    home: <%- JSON.stringify(blocks || []) %>,
     category: <%- JSON.stringify(categoryBlocks || []) %>,
     article: <%- JSON.stringify(articleBlocks || []) %>
   };
@@ -731,313 +1053,311 @@
   var customTemplates = <%- JSON.stringify(customTemplates || []) %>;
   var activeTab = '<%= tab || "blocks" %>';
   var dragSrcIndex = null;
+  var allCollapsed = false;
+  var historyStack = [];
 
-  var BLOCK_TYPES_BY_PAGE = {
+  // Complete Catalog of Block Types with clear descriptions & colors
+  var BLOCK_CATALOG = {
     home: [
-      { type: 'category', icon: 'fa-newspaper', label: 'Category Grid' },
-      { type: 'ad_slot', icon: 'fa-bullhorn', label: 'Ad Banner' },
-      { type: 'spotlight', icon: 'fa-star', label: 'Spotlight' },
-      { type: 'newsletter', icon: 'fa-envelope-open-text', label: 'Newsletter' },
-      { type: 'ticker', icon: 'fa-newspaper', label: 'Ticker' },
-      { type: 'headlines', icon: 'fa-list-ol', label: 'Top 10' },
-      { type: 'tags', icon: 'fa-tags', label: 'Tags' },
-      { type: 'stats', icon: 'fa-chart-simple', label: 'Stats' }
+      { type: 'hero', icon: 'fa-newspaper', label: 'Front Page Hero & Wire', desc: '3-Col Lead + Picks + Live Wire', color: '#1e3a8a' },
+      { type: 'today_wire', icon: 'fa-bolt', label: "Today's Live Timeline", desc: 'Chronological timestamped wire', color: '#dc2626' },
+      { type: 'category', icon: 'fa-layer-group', label: 'Category Desk Section', desc: 'National, Intl, Economy, Tech, Sports', color: '#0f172a' },
+      { type: 'multi_desk', icon: 'fa-table-columns', label: '3-Desk Comparison', desc: '3 categories side-by-side', color: '#0369a1' },
+      { type: 'spotlight', icon: 'fa-star', label: 'In-Depth Spotlight', desc: 'Widescreen special analysis', color: '#15803d' },
+      { type: 'opinion_desk', icon: 'fa-quote-left', label: 'Opinion & Analysis Desk', desc: '4-col editorial commentary', color: '#7e22ce' },
+      { type: 'photo_journal', icon: 'fa-camera', label: 'Photojournalism Strip', desc: 'Dark 4-photo visual showcase', color: '#334155' },
+      { type: 'headlines', icon: 'fa-list-ol', label: 'Top 10 Most Read', desc: 'Numbered 01–10 rankings', color: '#b45309' },
+      { type: 'ticker', icon: 'fa-tower-broadcast', label: 'Breaking Wire Strip', desc: 'Scrolling live dispatches bar', color: '#b91c1c' },
+      { type: 'tags', icon: 'fa-hashtag', label: 'Trending Topics Bar', desc: 'Topic & desk hashtag links', color: '#0e7490' },
+      { type: 'stats', icon: 'fa-chart-line', label: 'Newsroom Metrics Strip', desc: 'Articles, today wire & reads', color: '#a21caf' },
+      { type: 'newsletter', icon: 'fa-envelope-open-text', label: 'Daily Briefing Signup', desc: 'Reader email subscription band', color: '#4338ca' },
+      { type: 'ad_slot', icon: 'fa-rectangle-ad', label: 'Ad Banner Slot', desc: 'Mid, bottom or top ad placement', color: '#ca8a04' }
     ],
     category: [
-      { type: 'category', icon: 'fa-newspaper', label: 'Category Grid' },
-      { type: 'headlines', icon: 'fa-list-ol', label: 'Top Headlines' },
-      { type: 'ad_slot', icon: 'fa-bullhorn', label: 'Ad Banner' },
-      { type: 'newsletter', icon: 'fa-envelope-open-text', label: 'Newsletter' },
-      { type: 'tags', icon: 'fa-tags', label: 'Tag Cloud' },
-      { type: 'stats', icon: 'fa-chart-simple', label: 'Stats' }
+      { type: 'category', icon: 'fa-layer-group', label: 'Desk Articles Grid', desc: 'Main category articles layout', color: '#0f172a' },
+      { type: 'headlines', icon: 'fa-list-ol', label: 'Top Desk Headlines', desc: 'Numbered ranking list', color: '#b45309' },
+      { type: 'newsletter', icon: 'fa-envelope-open-text', label: 'Daily Briefing Signup', desc: 'Email subscription band', color: '#4338ca' },
+      { type: 'tags', icon: 'fa-hashtag', label: 'Trending Topics Bar', desc: 'Hashtag navigation bar', color: '#0e7490' },
+      { type: 'ad_slot', icon: 'fa-rectangle-ad', label: 'Ad Banner Slot', desc: 'Banner placement', color: '#ca8a04' }
     ],
     article: [
-      { type: 'article_comments', icon: 'fa-comments', label: 'Comments Section' },
-      { type: 'article_related', icon: 'fa-thumbs-up', label: 'Related Articles' },
-      { type: 'ad_slot', icon: 'fa-bullhorn', label: 'Ad Banner' }
+      { type: 'article_comments', icon: 'fa-comments', label: 'Reader Discussion', desc: 'Article comments & form', color: '#0369a1' },
+      { type: 'article_related', icon: 'fa-newspaper', label: 'Related Dispatches', desc: 'More coverage from this desk', color: '#15803d' },
+      { type: 'ad_slot', icon: 'fa-rectangle-ad', label: 'Article Ad Slot', desc: 'Bottom or inline ad banner', color: '#ca8a04' }
     ]
   };
-  var BLOCK_TYPES = BLOCK_TYPES_BY_PAGE.home;
 
-  function setPageButton(page) {
-    var map = { home: 'pageHomeBtn', category: 'pageCatBtn', article: 'pageArtBtn' };
-    Object.keys(map).forEach(function (p) {
-      var el = document.getElementById(map[p]);
-      if (el) el.className = 'studio-tab' + (p === currentPage ? ' active' : '');
+  var CATEGORY_STYLES = [
+    { key: 'featured_top', label: 'Lead + Side + 4 Row', icon: 'fa-table-cells-large' },
+    { key: 'grid_3_col', label: '3-Col Broadsheet', icon: 'fa-table-columns' },
+    { key: 'newspaper_4col', label: '4-Col Broadsheet', icon: 'fa-grip' },
+    { key: 'big_first', label: 'Lead + Right Stack', icon: 'fa-list-check' },
+    { key: 'grid_2_col', label: '2-Col Horizontal', icon: 'fa-pause' },
+    { key: 'list_view', label: 'Chronological Wire', icon: 'fa-bars' }
+  ];
+
+  var HERO_STYLES = [
+    { key: 'grid_3', label: '3-Col Front Page (Lead + Picks + Live Wire)' },
+    { key: 'split_2', label: 'Dual Split Leads (2 Columns)' },
+    { key: 'single_hero_banner', label: 'Single Widescreen Lead' }
+  ];
+
+  function pushHistory() {
+    historyStack.push(JSON.stringify(blocks));
+    if (historyStack.length > 20) historyStack.shift();
+    var uBtn = document.getElementById('undoBtn');
+    if (uBtn) uBtn.disabled = historyStack.length === 0;
+  }
+
+  function undoBlockChange() {
+    if (historyStack.length === 0) return;
+    var prev = JSON.parse(historyStack.pop());
+    blocks = prev;
+    blocksByPage[currentPage] = blocks;
+    var uBtn = document.getElementById('undoBtn');
+    if (uBtn) uBtn.disabled = historyStack.length === 0;
+    renderAll();
+    scheduleSave();
+    showToast('<i class="fas fa-rotate-left"></i> Undid last change');
+  }
+
+  function renderLibrary() {
+    var grid = document.getElementById('blockLibraryGrid');
+    if (!grid) return;
+    var list = BLOCK_CATALOG[currentPage] || BLOCK_CATALOG.home;
+    grid.innerHTML = list.map(function(item) {
+      return '<button type="button" class="lib-block-btn" onclick="addNewBlock(\'' + item.type + '\')">' +
+        '<span class="lib-block-icon" style="background:' + item.color + '"><i class="fas ' + item.icon + '"></i></span>' +
+        '<div><strong>+ ' + item.label + '</strong><span>' + item.desc + '</span></div>' +
+      '</button>';
+    }).join('');
+  }
+
+  function renderDeskCoverage() {
+    var bar = document.getElementById('deskCoverageBar');
+    var pillsEl = document.getElementById('deskCoveragePills');
+    if (!bar || !pillsEl) return;
+    if (currentPage !== 'home') {
+      bar.style.display = 'none';
+      return;
+    }
+    bar.style.display = 'flex';
+    var html = '';
+    var hasLiveWire = blocks.some(function(b) { return b.enabled && (b.type === 'hero' || b.type === 'today_wire'); });
+    html += '<span class="cov-pill ' + (hasLiveWire ? 'is-covered' : 'is-missing') + '" ' +
+      (!hasLiveWire ? 'onclick="addNewBlock(\'today_wire\')" title="Click to add Today Live Wire"' : '') + '>' +
+      '<i class="fas ' + (hasLiveWire ? 'fa-check' : 'fa-plus') + '"></i> Today\'s Live Wire</span>';
+
+    availableCategories.forEach(function(cat) {
+      var covered = blocks.some(function(b) {
+        return b.enabled && ((b.type === 'category' && Number(b.category_id) === Number(cat.id)) || b.type === 'multi_desk');
+      });
+      if (covered) {
+        html += '<span class="cov-pill is-covered"><i class="fas fa-check"></i> ' + cat.name_en + '</span>';
+      } else {
+        html += '<span class="cov-pill is-missing" onclick="addDeskBlock(' + cat.id + ')" title="Click to add ' + cat.name_en + ' desk">' +
+          '<i class="fas fa-plus"></i> Add ' + cat.name_en + '</span>';
+      }
     });
+    pillsEl.innerHTML = html;
   }
 
-  function switchPage(page) {
-    if (!blocksByPage[page]) return;
-    currentPage = page;
-    blocks = blocksByPage[page];
-    BLOCK_TYPES = BLOCK_TYPES_BY_PAGE[page] || BLOCK_TYPES_BY_PAGE.home;
-    setPageButton(page);
-    var presets = document.getElementById('presetTemplatesBar');
-    if (presets) presets.style.display = page === 'home' ? '' : 'none';
-    renderBlocks();
-    renderCustomTemplates();
-    refreshThemeOverrideNotice();
-  }
-
-  function insertZoneEl(idx) {
-    var zone = document.createElement('div');
-    zone.className = 'insert-zone';
-    var btn = document.createElement('button');
-    btn.type = 'button';
-    btn.className = 'insert-zone-btn';
-    btn.textContent = '＋ Insert block here';
-    btn.onclick = function () { toggleInsertMenu(idx); };
-    var menu = document.createElement('div');
-    menu.className = 'insert-menu';
-    menu.id = 'insertMenu' + idx;
-    menu.style.display = 'none';
-    BLOCK_TYPES.forEach(function (bt) {
-      var item = document.createElement('button');
-      item.type = 'button';
-      item.className = 'insert-menu-item';
-      item.title = 'Add ' + bt.label;
-      item.innerHTML = '<i class="fas ' + bt.icon + '"></i> ' + bt.label;
-      item.onclick = function () { insertBlock(idx, bt.type); };
-      menu.appendChild(item);
+  function addDeskBlock(catId) {
+    var cat = availableCategories.find(function(c) { return Number(c.id) === Number(catId); });
+    if (!cat) return;
+    pushHistory();
+    blocks.push({
+      id: 'b-cat-' + cat.slug + '-' + Date.now(),
+      type: 'category',
+      category_id: cat.id,
+      title_km: cat.name_km,
+      title_en: cat.name_en,
+      style: 'grid_3_col',
+      enabled: true,
+      limit: 6
     });
-    zone.appendChild(btn);
-    zone.appendChild(menu);
-    return zone;
+    renderAll();
+    scheduleSave();
+    showToast('<i class="fas fa-plus"></i> Added ' + cat.name_en + ' Desk to Front Page');
   }
 
-  function toggleInsertMenu(idx) {
-    var menu = document.getElementById('insertMenu' + idx);
-    if (!menu) return;
-    var isOpen = menu.style.display !== 'none';
-    document.querySelectorAll('.insert-menu').forEach(function (m) { m.style.display = 'none'; });
-    menu.style.display = isOpen ? 'none' : 'flex';
-  }
-
-  function insertBlock(idx, type) {
-    addNewBlockAt(type, idx);
-    document.querySelectorAll('.insert-menu').forEach(function (m) { m.style.display = 'none'; });
+  function getCatalogMeta(type) {
+    var all = [].concat(BLOCK_CATALOG.home, BLOCK_CATALOG.category, BLOCK_CATALOG.article);
+    return all.find(function(x) { return x.type === type; }) || { label: type.toUpperCase(), desc: '', color: '#0f172a', icon: 'fa-cube' };
   }
 
   function renderBlocks() {
     var container = document.getElementById('blocksListContainer');
+    var counter = document.getElementById('activeBlockCounter');
     if (!container) return;
     container.innerHTML = '';
 
+    var activeCount = (blocks || []).filter(function(b) { return b.enabled; }).length;
+    if (counter) counter.textContent = activeCount + ' of ' + (blocks ? blocks.length : 0) + ' sections visible';
+
     if (!blocks || blocks.length === 0) {
-      container.innerHTML = '<div style="padding: 32px; text-align: center; color: #64748b; background: white; border-radius: 12px; border: 1px solid #e2e8f0;">No section blocks configured. Apply a template above or add a section block!</div>';
+      container.innerHTML = '<div style="padding:32px;text-align:center;background:#fff;border:1px solid #cbd5e1;color:#64748b;">No sections configured yet. Click any block above or apply a 1-Click Preset!</div>';
       return;
     }
 
     blocks.forEach(function(block, idx) {
-      container.appendChild(insertZoneEl(idx));
+      var meta = getCatalogMeta(block.type);
       var card = document.createElement('div');
-      card.className = 'block-card';
+      card.className = 'block-card' + (!block.enabled ? ' is-hidden-block' : '') + (allCollapsed ? ' is-collapsed' : '');
+      card.id = 'studioBlockCard_' + idx;
       card.draggable = true;
       card.setAttribute('data-index', idx);
+      card.style.borderLeftColor = meta.color;
 
-      // Drag and drop event handlers
       card.addEventListener('dragstart', handleDragStart);
       card.addEventListener('dragover', handleDragOver);
       card.addEventListener('drop', handleDrop);
       card.addEventListener('dragend', handleDragEnd);
 
-      if (!block.enabled) {
-        card.style.opacity = '0.55';
-        card.style.background = '#f8fafc';
+      var catName = '';
+      if (block.type === 'category' && block.category_id) {
+        var cObj = availableCategories.find(function(c) { return Number(c.id) === Number(block.category_id); });
+        if (cObj) catName = ' • ' + cObj.name_en;
       }
 
-      var badgeBg = '#e0f2fe', badgeColor = '#0369a1', badgeText = block.type.toUpperCase();
-      if (block.type === 'hero') { badgeBg = '#dbeafe'; badgeColor = '#1e40af'; badgeText = 'HERO SHOWCASE'; }
-      else if (block.type === 'category') { badgeBg = '#fce7f3'; badgeColor = '#9d174d'; badgeText = 'CATEGORY NEWS BLOCK'; }
-      else if (block.type === 'ad_slot') { badgeBg = '#fef3c7'; badgeColor = '#92400e'; badgeText = 'AD BANNER SLOT'; }
-      else if (block.type === 'newsletter') { badgeBg = '#f3e8ff'; badgeColor = '#6b21a8'; badgeText = 'NEWSLETTER CTA'; }
-      else if (block.type === 'ticker') { badgeBg = '#fee2e2'; badgeColor = '#b91c1c'; badgeText = 'HEADLINES TICKER'; }
-      else if (block.type === 'headlines') { badgeBg = '#fffbeb'; badgeColor = '#b45309'; badgeText = 'TOP HEADLINES LIST'; }
-      else if (block.type === 'tags') { badgeBg = '#cffafe'; badgeColor = '#0e7490'; badgeText = 'TAG CLOUD'; }
-      else if (block.type === 'stats') { badgeBg = '#fdf4ff'; badgeColor = '#a21caf'; badgeText = 'STATS COUNTER STRIP'; }
-      else if (block.type === 'article_comments') { badgeBg = '#e0f2fe'; badgeColor = '#0369a1'; badgeText = 'COMMENTS SECTION'; }
-      else if (block.type === 'article_related') { badgeBg = '#dcfce7'; badgeColor = '#166534'; badgeText = 'RELATED ARTICLES'; }
+      var html = '<div class="block-card-head">' +
+        '<div class="block-card-title-group">' +
+          '<span style="cursor:grab;color:#94a3b8;" title="Drag to reorder"><i class="fas fa-grip-vertical"></i></span>' +
+          '<span class="block-step-num">' + String(idx + 1).padStart(2, '0') + '</span>' +
+          '<span class="block-type-badge" style="background:' + meta.color + '18;color:' + meta.color + '"><i class="fas ' + meta.icon + '"></i> ' + meta.label + catName + '</span>' +
+          '<strong style="font-size:0.95rem;color:#0f172a;">' + (block.title_en || block.title_km || meta.label) + '</strong>' +
+          '<span style="font-size:0.78rem;color:#64748b;">(' + (block.title_km || '') + ')</span>' +
+        '</div>' +
+        '<div class="block-card-controls">' +
+          '<button type="button" class="blk-btn" onclick="moveBlock(' + idx + ', -1)" ' + (idx === 0 ? 'disabled' : '') + ' title="Move Up"><i class="fas fa-arrow-up"></i></button>' +
+          '<button type="button" class="blk-btn" onclick="moveBlock(' + idx + ', 1)" ' + (idx === blocks.length - 1 ? 'disabled' : '') + ' title="Move Down"><i class="fas fa-arrow-down"></i></button>' +
+          '<button type="button" class="blk-btn" onclick="duplicateBlock(' + idx + ')" title="Duplicate Block"><i class="fas fa-copy"></i></button>' +
+          '<button type="button" class="blk-btn ' + (block.enabled ? 'is-vis-on' : 'is-vis-off') + '" onclick="toggleBlock(' + idx + ')">' +
+            (block.enabled ? '<i class="fas fa-eye"></i> Live' : '<i class="fas fa-eye-slash"></i> Hidden') +
+          '</button>' +
+          '<button type="button" class="blk-btn is-del" onclick="deleteBlock(' + idx + ')" title="Remove Section"><i class="fas fa-trash"></i></button>' +
+        '</div>' +
+      '</div>';
 
-      // Wireframe mini diagram
-      var wireframeHtml = '';
-      if (block.type === 'hero') {
-        if (block.style === 'single_hero_banner') {
-          wireframeHtml = '<div class="wireframe-preview"><div class="wf-box" style="background: #1e3a8a;"></div></div>';
-        } else if (block.style === 'split_2') {
-          wireframeHtml = '<div class="wireframe-preview"><div class="wf-box" style="background: #3b82f6;"></div><div class="wf-box" style="background: #3b82f6;"></div></div>';
-        } else if (block.style === 'mosaic') {
-          wireframeHtml = '<div class="wireframe-preview"><div class="wf-box" style="flex:1; background:#1e3a8a;"></div><div style="display:flex; flex-direction:column; gap:2px; flex:1; height:100%;"><div class="wf-box" style="flex:1.3; background:#3b82f6;"></div><div style="display:flex; gap:2px; flex:1;"><div class="wf-box"></div><div class="wf-box"></div></div></div></div>';
-        } else if (block.style === 'hero_2x2') {
-          wireframeHtml = '<div class="wireframe-preview" style="display:grid; grid-template-columns:1fr 1fr; grid-template-rows:1fr 1fr; gap:3px; height:64px;"><div class="wf-box" style="background:#1e3a8a;"></div><div class="wf-box" style="background:#3b82f6;"></div><div class="wf-box" style="background:#60a5fa;"></div><div class="wf-box" style="background:#93c5fd;"></div></div>';
-        } else {
-          wireframeHtml = '<div class="wireframe-preview"><div class="wf-box" style="flex:2; background: #1e3a8a;"></div><div style="display:flex; flex-direction:column; gap:2px; flex:1; height:100%;"><div class="wf-box"></div><div class="wf-box"></div></div></div>';
-        }
-      } else if (block.type === 'category') {
-        if (block.style === 'grid_3_col') {
-          wireframeHtml = '<div class="wireframe-preview"><div class="wf-box"></div><div class="wf-box"></div><div class="wf-box"></div></div>';
-        } else if (block.style === 'list_view') {
-          wireframeHtml = '<div class="wireframe-preview" style="flex-direction:column; gap:2px;"><div class="wf-box" style="height:12px;"></div><div class="wf-box" style="height:12px;"></div></div>';
-        } else if (block.style === 'featured_top') {
-          wireframeHtml = '<div class="wireframe-preview" style="flex-direction:column; height:56px;"><div class="wf-box" style="background:#1e3a8a; height:24px;"></div><div style="display:flex; gap:2px; flex:1;"><div class="wf-box"></div><div class="wf-box"></div></div></div>';
-        } else if (block.style === 'big_first') {
-          wireframeHtml = '<div class="wireframe-preview" style="flex-direction:column; height:64px;"><div class="wf-box" style="flex:1.4; background:#1e3a8a;"></div><div style="display:flex; flex-direction:column; gap:2px; flex:1;"><div style="display:flex; gap:3px; align-items:center; flex:1;"><div class="wf-box" style="flex:0 0 26px;"></div><div class="wf-box" style="flex:1; height:8px;"></div></div><div style="display:flex; gap:3px; align-items:center; flex:1;"><div class="wf-box" style="flex:0 0 26px;"></div><div class="wf-box" style="flex:1; height:8px;"></div></div></div></div>';
-        } else if (block.style === 'horizontal_scroll') {
-          wireframeHtml = '<div class="wireframe-preview"><div class="wf-box" style="flex:0 0 42px;"></div><div class="wf-box" style="flex:0 0 42px;"></div><div class="wf-box" style="flex:0 0 42px;"></div><div class="wf-box" style="flex:0 0 42px;"></div><div class="wf-box" style="flex:0 0 42px;"></div></div>';
-        } else if (block.style === 'masonry') {
-          wireframeHtml = '<div class="wireframe-preview" style="align-items:flex-start; height:64px;"><div class="wf-box" style="flex:1; height:100%; background:#3b82f6;"></div><div class="wf-box" style="flex:1; height:44px;"></div><div class="wf-box" style="flex:1; height:56px; background:#93c5fd;"></div></div>';
-        } else {
-          wireframeHtml = '<div class="wireframe-preview"><div class="wf-box"></div><div class="wf-box"></div></div>';
-        }
-      } else if (block.type === 'ad_slot') {
-        wireframeHtml = '<div class="wireframe-preview"><div class="wf-box" style="background: #f59e0b; color: white; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 700;">AD BANNER SLOT</div></div>';
-      } else if (block.type === 'ticker') {
-        wireframeHtml = '<div class="wireframe-preview"><div class="wf-box" style="background: #ef4444; height: 16px;"></div></div>';
-      } else if (block.type === 'headlines') {
-        wireframeHtml = '<div class="wireframe-preview" style="flex-direction: column; gap: 3px; height: 60px;"><div class="wf-box" style="height: 10px; background: #fbbf24;"></div><div class="wf-box" style="height: 10px; background: #fbbf24;"></div><div class="wf-box" style="height: 10px; background: #fbbf24;"></div></div>';
-      } else if (block.type === 'tags') {
-        wireframeHtml = '<div class="wireframe-preview" style="flex-wrap: wrap; height: 40px;"><div class="wf-box" style="flex: 0 0 40px; border-radius: 10px; background: #06b6d4;"></div><div class="wf-box" style="flex: 0 0 60px; border-radius: 10px; background: #06b6d4;"></div><div class="wf-box" style="flex: 0 0 30px; border-radius: 10px; background: #06b6d4;"></div></div>';
-      } else if (block.type === 'stats') {
-        wireframeHtml = '<div class="wireframe-preview" style="height: 34px;"><div style="flex:1; text-align:center; background:#f5d0fe; border-radius:4px; font-size:0.6rem; font-weight:700; color:#a21caf; display:flex; align-items:center; justify-content:center;">1234</div><div style="flex:1; text-align:center; background:#f5d0fe; border-radius:4px; font-size:0.6rem; font-weight:700; color:#a21caf; display:flex; align-items:center; justify-content:center;">5</div><div style="flex:1; text-align:center; background:#f5d0fe; border-radius:4px; font-size:0.6rem; font-weight:700; color:#a21caf; display:flex; align-items:center; justify-content:center;">20</div><div style="flex:1; text-align:center; background:#f5d0fe; border-radius:4px; font-size:0.6rem; font-weight:700; color:#a21caf; display:flex; align-items:center; justify-content:center;">99K</div></div>';
-      } else if (block.type === 'article_comments') {
-        wireframeHtml = '<div class="wireframe-preview" style="flex-direction: column; gap: 3px; height: 56px;"><div class="wf-box" style="background: #3b82f6; height: 14px;"></div><div style="display: flex; gap: 3px; flex: 1;"><div style="flex: 1; background: #e2e8f0; border-radius: 4px;"></div><div style="flex: 2; background: #e2e8f0; border-radius: 4px;"></div></div></div>';
-      } else if (block.type === 'article_related') {
-        wireframeHtml = '<div class="wireframe-preview"><div class="wf-box"></div><div class="wf-box"></div><div class="wf-box"></div></div>';
-      }
-
-      var html = `
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-          <div style="display: flex; align-items: center; gap: 12px;">
-            <span style="cursor: grab; font-size: 1.2rem; color: #94a3b8;" title="Drag to reorder">⣿</span>
-            <span class="badge-type" style="background: ${badgeBg}; color: ${badgeColor};">${badgeText}</span>
-            <strong style="font-size: 1.1rem; color: #0f172a;">${block.title_km || block.title_en || 'Section Block'}</strong>
-          </div>
-          <div style="display: flex; align-items: center; gap: 8px;">
-            <button type="button" onclick="moveBlock(${idx}, -1)" ${idx === 0 ? 'disabled' : ''} style="padding: 4px 10px; border-radius: 6px; border: 1px solid #cbd5e1; background: white; cursor: pointer;"><i class="fas fa-arrow-up"></i></button>
-            <button type="button" onclick="moveBlock(${idx}, 1)" ${idx === blocks.length - 1 ? 'disabled' : ''} style="padding: 4px 10px; border-radius: 6px; border: 1px solid #cbd5e1; background: white; cursor: pointer;"><i class="fas fa-arrow-down"></i></button>
-            <button type="button" onclick="toggleBlock(${idx})" style="padding: 4px 12px; border-radius: 6px; border: 1px solid #cbd5e1; background: ${block.enabled ? '#dcfce7' : '#fee2e2'}; color: ${block.enabled ? '#166534' : '#991b1b'}; font-weight: 700; cursor: pointer;">
-              ${block.enabled ? '<span style="color: #16a34a;"><i class="fas fa-circle"></i> Visible</span>' : '<span style="color: #dc2626;"><i class="fas fa-circle"></i> Hidden</span>'}
-            </button>
-            <button type="button" onclick="deleteBlock(${idx})" style="padding: 4px 10px; border-radius: 6px; border: 1px solid #fca5a5; background: #fff5f5; color: #dc2626; cursor: pointer;"><i class="fas fa-trash"></i></button>
-          </div>
-        </div>
-
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; background: #f8fafc; padding: 14px; border-radius: 8px;">
-          <div>
-            <label style="font-size: 0.8rem; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Title (Khmer)</label>
-            <input type="text" value="${block.title_km || ''}" onchange="updateBlock(${idx}, 'title_km', this.value)" style="width: 100%; padding: 6px 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.9rem;">
-          </div>
-          <div>
-            <label style="font-size: 0.8rem; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Title (English)</label>
-            <input type="text" value="${block.title_en || ''}" onchange="updateBlock(${idx}, 'title_en', this.value)" style="width: 100%; padding: 6px 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.9rem;">
-          </div>
-      `;
+      html += '<div class="block-card-body"><div class="block-fields-grid">' +
+        '<div><label>Section Heading (Khmer)</label><input type="text" value="' + (block.title_km || '').replace(/"/g, '&quot;') + '" oninput="updateBlock(' + idx + ', \'title_km\', this.value)"></div>' +
+        '<div><label>Section Heading (English)</label><input type="text" value="' + (block.title_en || '').replace(/"/g, '&quot;') + '" oninput="updateBlock(' + idx + ', \'title_en\', this.value)"></div>';
 
       if (block.type === 'category') {
-        var catOptions = availableCategories.map(function(c) {
-          return `<option value="${c.id}" ${block.category_id == c.id ? 'selected' : ''}>${c.name_km} (${c.name_en})</option>`;
+        var catOpts = availableCategories.map(function(c) {
+          return '<option value="' + c.id + '" ' + (Number(block.category_id) === Number(c.id) ? 'selected' : '') + '>' + c.name_en + ' / ' + c.name_km + '</option>';
         }).join('');
-        
-        html += `
-          <div>
-            <label style="font-size: 0.8rem; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Select Category</label>
-            <select onchange="updateBlock(${idx}, 'category_id', this.value)" style="width: 100%; padding: 6px 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.9rem;">
-              ${catOptions}
-            </select>
-          </div>
-          <div>
-            <label style="font-size: 0.8rem; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Layout Column Mode</label>
-            <select onchange="updateBlock(${idx}, 'style', this.value); renderBlocks();" style="width: 100%; padding: 6px 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.9rem;">
-              <option value="grid_3_col" ${block.style === 'grid_3_col' ? 'selected' : ''}>3-Column Grid</option>
-              <option value="grid_2_col" ${block.style === 'grid_2_col' ? 'selected' : ''}>2-Column Grid</option>
-              <option value="featured_top" ${block.style === 'featured_top' ? 'selected' : ''}>Featured Top (1 Wide Story + Grid)</option>
-              <option value="big_first" ${block.style === 'big_first' ? 'selected' : ''}>Big First Story (Wide Feature + Compact Rows)</option>
-              <option value="horizontal_scroll" ${block.style === 'horizontal_scroll' ? 'selected' : ''}>Horizontal Scroll Strip (Swipeable Cards)</option>
-              <option value="masonry" ${block.style === 'masonry' ? 'selected' : ''}>Magazine Masonry (Mixed Card Heights)</option>
-              <option value="list_view" ${block.style === 'list_view' ? 'selected' : ''}>Minimal List View</option>
-            </select>
-          </div>
-          <div>
-            <label style="font-size: 0.8rem; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Articles Count</label>
-            <input type="number" value="${block.limit || 6}" onchange="updateBlock(${idx}, 'limit', parseInt(this.value))" style="width: 100%; padding: 6px 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.9rem;">
-          </div>
-        `;
-      } else if (block.type === 'hero') {
-        html += `
-          <div>
-            <label style="font-size: 0.8rem; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Hero Style Mode</label>
-            <select onchange="updateBlock(${idx}, 'style', this.value); renderBlocks();" style="width: 100%; padding: 6px 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.9rem;">
-              <option value="" ${!block.style ? 'selected' : ''}><i class="fas fa-palette"></i> Follow Theme Setting (default)</option>
-              <option value="grid_3" ${block.style === 'grid_3' ? 'selected' : ''}>Standard 3-Card Grid</option>
-              <option value="mosaic" ${block.style === 'mosaic' ? 'selected' : ''}>Asymmetric Mosaic (Tall + Wide + Minis)</option>
-              <option value="hero_2x2" ${block.style === 'hero_2x2' ? 'selected' : ''}>2×2 Feature Grid (4 Equal Cards)</option>
-              <option value="split_2" ${block.style === 'split_2' ? 'selected' : ''}>Split Dual Featured</option>
-              <option value="single_hero_banner" ${block.style === 'single_hero_banner' ? 'selected' : ''}>Single Ultra-Wide Banner</option>
-              <option value="carousel" ${block.style === 'carousel' ? 'selected' : ''}>Auto-Rotating Carousel Slider</option>
-            </select>
-          </div>
-        `;
-      } else if (block.type === 'ticker') {
-        html += `
-          <div>
-            <label style="font-size: 0.8rem; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Ticker Style Mode</label>
-            <select onchange="updateBlock(${idx}, 'style', this.value); renderBlocks();" style="width: 100%; padding: 6px 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.9rem;">
-              <option value="" ${!block.style ? 'selected' : ''}><i class="fas fa-palette"></i> Follow Theme Setting (default)</option>
-              <option value="marquee" ${block.style === 'marquee' ? 'selected' : ''}>Marquee (continuous scrolling)</option>
-              <option value="static" ${block.style === 'static' ? 'selected' : ''}>Static List (no animation)</option>
-              <option value="slide" ${block.style === 'slide' ? 'selected' : ''}>Slide (auto-rotating headline)</option>
-            </select>
-          </div>
-        `;
+        html += '<div><label>Editorial Desk Category</label><select onchange="updateBlock(' + idx + ', \'category_id\', parseInt(this.value,10)); renderAll();">' + catOpts + '</select></div>';
+        html += '<div><label>Number of Dispatches</label><input type="number" min="2" max="18" value="' + (block.limit || 6) + '" onchange="updateBlock(' + idx + ', \'limit\', parseInt(this.value,10))"></div>';
+      } else if (['today_wire', 'headlines', 'ticker', 'tags', 'opinion_desk', 'photo_journal', 'article_related'].indexOf(block.type) !== -1) {
+        html += '<div><label>Items Count</label><input type="number" min="2" max="30" value="' + (block.limit || 6) + '" onchange="updateBlock(' + idx + ', \'limit\', parseInt(this.value,10))"></div>';
       } else if (block.type === 'ad_slot') {
-        html += `
-          <div>
-            <label style="font-size: 0.8rem; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Target Ad Position Slot</label>
-            <select onchange="updateBlock(${idx}, 'position_slot', this.value)" style="width: 100%; padding: 6px 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.9rem;">
-              <option value="homepage_mid_banner" ${block.position_slot === 'homepage_mid_banner' ? 'selected' : ''}>Homepage Mid Content Banner</option>
-              <option value="homepage_bottom_banner" ${block.position_slot === 'homepage_bottom_banner' ? 'selected' : ''}>Homepage Bottom Banner</option>
-              <option value="header_top" ${block.position_slot === 'header_top' ? 'selected' : ''}>Header Top Banner</option>
-            </select>
-          </div>
-        `;
-      } else if (block.type === 'article_related') {
-        html += `
-          <div>
-            <label style="font-size: 0.8rem; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Articles Count</label>
-            <input type="number" value="${block.limit || 4}" onchange="updateBlock(${idx}, 'limit', parseInt(this.value))" style="width: 100%; padding: 6px 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.9rem;">
-          </div>
-        `;
+        html += '<div><label>Ad Position Slot</label><select onchange="updateBlock(' + idx + ', \'position_slot\', this.value)">' +
+          '<option value="homepage_mid_banner" ' + (block.position_slot === 'homepage_mid_banner' ? 'selected' : '') + '>Homepage Mid Banner</option>' +
+          '<option value="homepage_bottom_banner" ' + (block.position_slot === 'homepage_bottom_banner' ? 'selected' : '') + '>Homepage Bottom Banner</option>' +
+          '<option value="header_top" ' + (block.position_slot === 'header_top' ? 'selected' : '') + '>Header Top Banner</option>' +
+        '</select></div>';
+      }
+      html += '</div>';
+
+      // Visual Style Picker Buttons for Category & Hero
+      if (block.type === 'category') {
+        html += '<div style="font-size:0.74rem;font-weight:800;color:#475569;margin-top:4px;">Newspaper Column Arrangement:</div><div class="style-picker-row">';
+        CATEGORY_STYLES.forEach(function(st) {
+          var isAct = (block.style || 'grid_3_col') === st.key;
+          html += '<button type="button" class="style-pill-btn ' + (isAct ? 'active' : '') + '" onclick="updateBlock(' + idx + ', \'style\', \'' + st.key + '\'); renderAll();">' +
+            '<i class="fas ' + st.icon + '"></i> ' + st.label +
+          '</button>';
+        });
+        html += '</div>';
+      } else if (block.type === 'hero') {
+        html += '<div style="font-size:0.74rem;font-weight:800;color:#475569;margin-top:4px;">Front Page Hero Architecture:</div><div class="style-picker-row">';
+        HERO_STYLES.forEach(function(st) {
+          var isAct = (block.style || 'grid_3') === st.key;
+          html += '<button type="button" class="style-pill-btn ' + (isAct ? 'active' : '') + '" onclick="updateBlock(' + idx + ', \'style\', \'' + st.key + '\'); renderAll();">' +
+            st.label +
+          '</button>';
+        });
+        html += '</div>';
       }
 
-      html += `</div>`;
-      if (wireframeHtml) html += wireframeHtml;
-
+      html += '</div>';
       card.innerHTML = html;
       container.appendChild(card);
     });
   }
 
-  // HTML5 Drag and Drop handlers with visual top/bottom drop indicators
-  var dropBeforeIndex = null;
+  function renderBlueprint() {
+    var stack = document.getElementById('blueprintStack');
+    if (!stack) return;
+    if (!blocks || blocks.length === 0) {
+      stack.innerHTML = '<div style="padding:16px;text-align:center;font-size:0.75rem;color:#94a3b8;">Empty page</div>';
+      return;
+    }
+    stack.innerHTML = blocks.map(function(b, idx) {
+      var meta = getCatalogMeta(b.type);
+      var bars = '<span style="background:' + meta.color + '"></span><span></span><span></span>';
+      if (b.type === 'hero') bars = '<span style="flex:2;background:#1e3a8a"></span><span style="flex:1"></span><span style="flex:1;background:#dc2626"></span>';
+      else if (b.type === 'today_wire' || b.type === 'ticker') bars = '<span style="background:#dc2626"></span>';
+      else if (b.type === 'photo_journal') bars = '<span style="background:#0f172a"></span><span style="background:#0f172a"></span><span style="background:#0f172a"></span><span style="background:#0f172a"></span>';
 
+      return '<div class="bp-item ' + (!b.enabled ? 'is-off' : '') + '" onclick="focusBlockCard(' + idx + ')">' +
+        '<div class="bp-item-top">' +
+          '<span>' + String(idx + 1).padStart(2, '0') + '. ' + (b.title_en || b.title_km || meta.label) + '</span>' +
+          '<span style="color:' + (b.enabled ? '#16a34a' : '#94a3b8') + '">' + (b.enabled ? '●' : '○') + '</span>' +
+        '</div>' +
+        '<div class="bp-item-sub">' +
+          '<span>' + meta.label + (b.style ? ' (' + b.style + ')' : '') + '</span>' +
+          '<span>' + (b.limit ? b.limit + ' items' : '') + '</span>' +
+        '</div>' +
+        '<div class="bp-mini-bars">' + bars + '</div>' +
+      '</div>';
+    }).join('');
+  }
+
+  function focusBlockCard(idx) {
+    var el = document.getElementById('studioBlockCard_' + idx);
+    if (!el) return;
+    el.classList.remove('is-collapsed');
+    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    el.classList.add('highlight-flash');
+    setTimeout(function() { el.classList.remove('highlight-flash'); }, 1400);
+  }
+
+  function renderAll() {
+    renderLibrary();
+    renderDeskCoverage();
+    renderBlocks();
+    renderBlueprint();
+    renderCustomTemplates();
+  }
+
+  function toggleCollapseAll() {
+    allCollapsed = !allCollapsed;
+    var btn = document.getElementById('collapseAllBtn');
+    if (btn) btn.innerHTML = allCollapsed ? '<i class="fas fa-expand-alt"></i> Expand All' : '<i class="fas fa-compress-alt"></i> Compact View';
+    renderBlocks();
+  }
+
+  // Drag & Drop
+  var dropBeforeIndex = null;
   function handleDragStart(e) {
-    dragSrcIndex = parseInt(this.getAttribute('data-index'));
+    dragSrcIndex = parseInt(this.getAttribute('data-index'), 10);
     this.classList.add('dragging');
     e.dataTransfer.effectAllowed = 'move';
     e.dataTransfer.setData('text/plain', String(dragSrcIndex));
   }
   function clearDropMarks() {
-    document.querySelectorAll('.block-card').forEach(function (c) {
-      c.classList.remove('drop-before', 'drop-after', 'drag-over', 'dragging');
+    document.querySelectorAll('.block-card').forEach(function(c) {
+      c.classList.remove('drop-before', 'drop-after', 'dragging');
     });
     dropBeforeIndex = null;
   }
   function handleDragOver(e) {
     if (e.preventDefault) e.preventDefault();
-    e.dataTransfer.dropEffect = 'move';
     var card = e.target.closest ? e.target.closest('.block-card') : null;
     if (!card || dragSrcIndex === null) return false;
-    var idx = parseInt(card.getAttribute('data-index'));
+    var idx = parseInt(card.getAttribute('data-index'), 10);
     var rect = card.getBoundingClientRect();
     var before = e.clientY < rect.top + rect.height / 2;
     clearDropMarks();
@@ -1049,169 +1369,266 @@
     if (e.stopPropagation) e.stopPropagation();
     var target = dropBeforeIndex;
     if (dragSrcIndex !== null && target !== null && dragSrcIndex !== target) {
+      pushHistory();
       var item = blocks.splice(dragSrcIndex, 1)[0];
       if (dragSrcIndex < target) target--;
       blocks.splice(target, 0, item);
-      renderBlocks();
+      renderAll();
       scheduleSave();
-      showToast('⇅ Block reordered — saved automatically');
+      showToast('⇅ Section reordered & auto-saved');
     }
     clearDropMarks();
     return false;
   }
-  function handleDragEnd() {
-    clearDropMarks();
-  }
+  function handleDragEnd() { clearDropMarks(); }
 
   function moveBlock(idx, dir) {
     var newIdx = idx + dir;
     if (newIdx < 0 || newIdx >= blocks.length) return;
+    pushHistory();
     var temp = blocks[idx];
     blocks[idx] = blocks[newIdx];
     blocks[newIdx] = temp;
-    renderBlocks();
+    renderAll();
     scheduleSave();
+  }
+
+  function duplicateBlock(idx) {
+    pushHistory();
+    var copy = JSON.parse(JSON.stringify(blocks[idx]));
+    copy.id = 'block-' + Date.now();
+    blocks.splice(idx + 1, 0, copy);
+    renderAll();
+    scheduleSave();
+    showToast('<i class="fas fa-copy"></i> Section duplicated');
   }
 
   function toggleBlock(idx) {
+    pushHistory();
     blocks[idx].enabled = !blocks[idx].enabled;
-    renderBlocks();
+    renderAll();
     scheduleSave();
-    showToast(blocks[idx].enabled ? '<i class="fas fa-eye"></i> Block shown — saved automatically' : '<i class="fas fa-eye-slash"></i> Block hidden — saved automatically');
+    showToast(blocks[idx].enabled ? '<i class="fas fa-eye"></i> Section enabled' : '<i class="fas fa-eye-slash"></i> Section hidden');
   }
 
   function deleteBlock(idx) {
-    if (confirm('Remove this section block from homepage?')) {
-      blocks.splice(idx, 1);
-      renderBlocks();
-      scheduleSave();
-      showToast('<i class="fas fa-trash"></i> Block removed — saved automatically');
-    }
+    pushHistory();
+    blocks.splice(idx, 1);
+    renderAll();
+    scheduleSave();
+    showToast('<i class="fas fa-trash"></i> Section removed (Click Undo to restore)');
   }
 
   function updateBlock(idx, key, val) {
     blocks[idx][key] = val;
+    renderBlueprint();
+    renderDeskCoverage();
     scheduleSave();
   }
 
   function buildNewBlock(type) {
     var defaultTitles = {
-      ticker: { km: 'ព័ត៌មានចុងក្រោយ', en: 'Latest Headlines' },
-      headlines: { km: 'កំពូលព័ត៌មាន', en: 'Top Headlines' },
-      tags: { km: 'ស្លាកព័ត៌មានពេញនិយម', en: 'Popular Tags' },
-      hero: { km: 'ព័ត៌មានលេចធ្លោ', en: 'Featured Showcase' },
-      spotlight: { km: 'ព័ត៌មានសំខាន់', en: 'Spotlight' },
-      category: { km: 'ព័ត៌មានថ្មីៗ', en: 'Latest Category Stories' },
-      newsletter: { km: 'ព្រឹត្តិបត្រព័ត៌មាន', en: 'Newsletter' },
-      ad_slot: { km: 'ផ្ទាំងពាណិជ្ជកម្ម', en: 'Ad Banner' },
-      stats: { km: 'ស្ថិតិព័ត៌មាន', en: 'Site Stats' },
-      article_comments: { km: 'មតិយោបល់', en: 'Comments' },
-      article_related: { km: 'អត្ថបទពាក់ព័ន្ធ', en: 'Related Articles' }
+      hero: { km: 'ព័ត៌មានលេចធ្លោប្រចាំថ្ងៃ', en: 'Front Page Lead & Live Wire' },
+      today_wire: { km: 'ព័ត៌មានថ្មីៗទាន់ហេតុការណ៍ថ្ងៃនេះ', en: "Today's Live News Wire" },
+      ticker: { km: 'ព័ត៌មានទាន់ហេតុការណ៍ថ្ងៃនេះ', en: "Today's Live Wire" },
+      spotlight: { km: 'បទវិភាគស៊ីជម្រៅប្រចាំថ្ងៃ', en: 'In-Depth Editorial Spotlight' },
+      category: { km: 'ព័ត៌មានជាតិ', en: 'National News' },
+      multi_desk: { km: 'ទិដ្ឋភាពរួមតាមផ្នែកព័ត៌មាន', en: 'Across The Editorial Desks' },
+      opinion_desk: { km: 'បទវិភាគ និងទស្សនៈនិពន្ធនាយក', en: 'Editorial Analysis & Perspectives' },
+      photo_journal: { km: 'កម្រងរូបភាពព័ត៌មានប្រចាំថ្ងៃ', en: 'In Pictures: Photojournalism Desk' },
+      headlines: { km: 'កំពូលព័ត៌មានពេញនិយមទាំង ១០', en: 'Top 10 Most Read Briefings' },
+      tags: { km: 'ប្រធានបទកំពុងពេញនិយម', en: 'Trending Topics & Desks' },
+      stats: { km: 'ស្ថិតិបន្ទប់ព័ត៌មាន', en: 'Newsroom Metrics' },
+      newsletter: { km: 'ព្រឹត្តិបត្រព័ត៌មានប្រចាំថ្ងៃ', en: 'Daily Editorial Briefing' },
+      ad_slot: { km: 'ផ្ទាំងពាណិជ្ជកម្ម', en: 'Advertisement' },
+      article_comments: { km: 'មតិយោបល់អ្នកអាន', en: 'Reader Discussion' },
+      article_related: { km: 'អត្ថបទពាក់ព័ន្ធ', en: 'More Coverage From This Desk' }
     };
-    var newBlock = {
+    var nb = {
       id: 'block-' + Date.now(),
       type: type,
       title_km: (defaultTitles[type] && defaultTitles[type].km) || 'ផ្នែកថ្មី',
       title_en: (defaultTitles[type] && defaultTitles[type].en) || 'New Section',
       enabled: true,
-      limit: type === 'ticker' ? 10 : (type === 'tags' ? 20 : 6),
-      style: type === 'category' ? 'grid_3_col' : ''
+      limit: type === 'headlines' ? 10 : (type === 'tags' ? 20 : (type === 'photo_journal' || type === 'opinion_desk' ? 4 : 6)),
+      style: type === 'category' ? 'grid_3_col' : (type === 'hero' ? 'grid_3' : '')
     };
     if (type === 'category' && availableCategories.length > 0) {
-      newBlock.category_id = availableCategories[0].id;
+      nb.category_id = availableCategories[0].id;
     }
     if (type === 'ad_slot') {
-      newBlock.position_slot = currentPage === 'article' ? 'article_bottom' : 'homepage_mid_banner';
+      nb.position_slot = currentPage === 'article' ? 'article_bottom' : 'homepage_mid_banner';
     }
-    if (type === 'article_related') {
-      newBlock.limit = 4;
-    }
-    return newBlock;
+    return nb;
   }
 
   function addNewBlock(type) {
+    pushHistory();
     blocks.push(buildNewBlock(type));
-    renderBlocks();
+    renderAll();
     scheduleSave();
-    showToast('<i class="fas fa-plus"></i> Block added — saved automatically');
-  }
-
-  function addNewBlockAt(type, idx) {
-    blocks.splice(idx, 0, buildNewBlock(type));
-    renderBlocks();
-    scheduleSave();
-    showToast('<i class="fas fa-plus"></i> Block inserted — saved automatically');
+    showToast('<i class="fas fa-plus"></i> Section added to bottom of page');
+    focusBlockCard(blocks.length - 1);
   }
 
   function applyTemplate(tpl) {
-    if (!confirm('Apply this homepage template? This will update your section block arrangement.')) return;
-    
-    if (tpl === 'classic') {
+    pushHistory();
+    if (tpl === 'broadsheet_full') {
       blocks = [
-        { id: "b-hero", type: "hero", title_km: "ព័ត៌មានលេចធ្លោ", title_en: "Featured Showcase", style: "", enabled: true, limit: 3 },
-        { id: "b-spotlight", type: "spotlight", title_km: "ព័ត៌មានសំខាន់ប្រចាំថ្ងៃ", title_en: "Top Daily Spotlight", style: "wide_card", enabled: true, limit: 1 },
-        { id: "b-ad-mid", type: "ad_slot", title_km: "ផ្ទាំងពាណិជ្ជកម្មកណ្តាល", title_en: "Mid Banner", position_slot: "homepage_mid_banner", enabled: true },
+        { id: "b-hero", type: "hero", title_km: "ព័ត៌មានលេចធ្លោប្រចាំថ្ងៃ", title_en: "Front Page Lead & Live Wire", style: "grid_3", enabled: true, limit: 6 },
+        { id: "b-ticker", type: "ticker", title_km: "ព័ត៌មានទាន់ហេតុការណ៍ថ្ងៃនេះ", title_en: "Today's Live Wire", enabled: true, limit: 12 },
+        { id: "b-cat-national", type: "category", category_id: 1, title_km: "ព័ត៌មានជាតិ", title_en: "National News", style: "featured_top", enabled: true, limit: 7 },
+        { id: "b-cat-international", type: "category", category_id: 2, title_km: "ព័ត៌មានអន្តរជាតិ", title_en: "International Desk", style: "grid_3_col", enabled: true, limit: 6 },
+        { id: "b-spotlight", type: "spotlight", title_km: "បទវិភាគស៊ីជម្រៅប្រចាំថ្ងៃ", title_en: "In-Depth Editorial Spotlight", style: "wide_card", enabled: true, limit: 1 },
+        { id: "b-multi-desk", type: "multi_desk", title_km: "ទិដ្ឋភាពរួមតាមផ្នែកព័ត៌មាន", title_en: "Across The Editorial Desks", enabled: true, limit: 4 },
+        { id: "b-cat-economy", type: "category", category_id: 5, title_km: "សេដ្ឋកិច្ច និងធុរកិច្ច", title_en: "Economy & Markets", style: "big_first", enabled: true, limit: 5 },
+        { id: "b-photo", type: "photo_journal", title_km: "កម្រងរូបភាពព័ត៌មានប្រចាំថ្ងៃ", title_en: "In Pictures: Photojournalism Desk", enabled: true, limit: 4 },
+        { id: "b-cat-tech", type: "category", category_id: 4, title_km: "បច្ចេកវិទ្យា និងឌីជីថល", title_en: "Technology & Innovation", style: "grid_2_col", enabled: true, limit: 4 },
+        { id: "b-cat-sports", type: "category", category_id: 3, title_km: "កីឡាជាតិ និងអន្តរជាតិ", title_en: "Sports Desk", style: "list_view", enabled: true, limit: 5 },
+        { id: "b-opinion", type: "opinion_desk", title_km: "បទវិភាគ និងទស្សនៈនិពន្ធនាយក", title_en: "Editorial Analysis & Perspectives", enabled: true, limit: 4 },
+        { id: "b-headlines", type: "headlines", title_km: "កំពូលព័ត៌មានពេញនិយមទាំង ១០", title_en: "Top 10 Most Read Briefings", enabled: true, limit: 10 },
+        { id: "b-newsletter", type: "newsletter", title_km: "ព្រឹត្តិបត្រព័ត៌មានប្រចាំថ្ងៃ", title_en: "Daily Editorial Briefing", enabled: true }
+      ];
+    } else if (tpl === 'today_newsroom') {
+      blocks = [
+        { id: "b-hero", type: "hero", title_km: "ព័ត៌មានលេចធ្លោប្រចាំថ្ងៃ", title_en: "Front Page Lead & Live Wire", style: "grid_3", enabled: true, limit: 6 },
+        { id: "b-today-wire", type: "today_wire", title_km: "ព័ត៌មានថ្មីៗទាន់ហេតុការណ៍ថ្ងៃនេះ", title_en: "Today's Chronological Live Wire", enabled: true, limit: 8 },
         { id: "b-cat-national", type: "category", category_id: 1, title_km: "ព័ត៌មានជាតិ", title_en: "National News", style: "grid_3_col", enabled: true, limit: 6 },
-        { id: "b-cat-tech", type: "category", category_id: 4, title_km: "បច្ចេកវិទ្យា", title_en: "Technology", style: "grid_2_col", enabled: true, limit: 4 },
-        { id: "b-newsletter", type: "newsletter", title_km: "ជាវព័ត៌មានប្រចាំថ្ងៃ", title_en: "Daily Newsletter", enabled: true }
-      ];
-    } else if (tpl === 'breaking') {
-      blocks = [
-        { id: "b-hero", type: "hero", title_km: "ព័ត៌មានទាន់ហេតុការណ៍", title_en: "Breaking Headlines", style: "", enabled: true, limit: 1 },
-        { id: "b-cat-sports", type: "category", category_id: 3, title_km: "កីឡា", title_en: "Sports", style: "grid_3_col", enabled: true, limit: 6 },
-        { id: "b-ad-mid", type: "ad_slot", title_km: "ផ្ទាំងពាណិជ្ជកម្មកណ្តាល", title_en: "Mid Banner", position_slot: "homepage_mid_banner", enabled: true },
-        { id: "b-cat-national", type: "category", category_id: 1, title_km: "ព័ត៌មានជាតិ", title_en: "National News", style: "list_view", enabled: true, limit: 4 }
-      ];
-    } else if (tpl === 'magazine') {
-      blocks = [
-        { id: "b-hero", type: "hero", title_km: "ទស្សនាវដ្តីព័ត៌មាន", title_en: "Editorial Magazine", style: "", enabled: true, limit: 2 },
-        { id: "b-cat-tech", type: "category", category_id: 4, title_km: "បច្ចេកវិទ្យា", title_en: "Technology", style: "grid_2_col", enabled: true, limit: 4 },
-        { id: "b-newsletter", type: "newsletter", title_km: "ជាវព័ត៌មានប្រចាំថ្ងៃ", title_en: "Daily Newsletter", enabled: true },
-        { id: "b-ad-bottom", type: "ad_slot", title_km: "ផ្ទាំងពាណិជ្ជកម្មខាងក្រោម", title_en: "Bottom Banner", position_slot: "homepage_bottom_banner", enabled: true }
-      ];
-    } else if (tpl === 'compact') {
-      blocks = [
-        { id: "b-hero", type: "hero", title_km: "ព័ត៌មានលេចធ្លោ", title_en: "Featured Carousel", style: "", enabled: true, limit: 5 },
-        { id: "b-ticker", type: "ticker", title_km: "ព័ត៌មានចុងក្រោយ", title_en: "Latest Headlines", enabled: true, limit: 10 },
-        { id: "b-headlines", type: "headlines", title_km: "កំពូលព័ត៌មាន", title_en: "Top 10 Headlines", enabled: true, limit: 10 },
-        { id: "b-tags", type: "tags", title_km: "ស្លាកព័ត៌មានពេញនិយម", title_en: "Popular Tags", enabled: true, limit: 20 },
-        { id: "b-newsletter", type: "newsletter", title_km: "ជាវព័ត៌មានប្រចាំថ្ងៃ", title_en: "Daily Newsletter", enabled: true }
-      ];
-    } else if (tpl === 'tech') {
-      blocks = [
-        { id: "b-hero", type: "hero", title_km: "ព័ត៌មានបច្ចេកវិទ្យា", title_en: "Tech Highlights", style: "", enabled: true, limit: 5 },
-        { id: "b-cat-tech", type: "category", category_id: 4, title_km: "បច្ចេកវិទ្យា", title_en: "Technology", style: "grid_3_col", enabled: true, limit: 6 },
-        { id: "b-headlines", type: "headlines", title_km: "កំពូលព័ត៌មាន", title_en: "Top Headlines", enabled: true, limit: 8 },
-        { id: "b-tags", type: "tags", title_km: "ស្លាកព័ត៌មានពេញនិយម", title_en: "Popular Tags", enabled: true, limit: 20 },
-        { id: "b-ad-bottom", type: "ad_slot", title_km: "ផ្ទាំងពាណិជ្ជកម្មខាងក្រោម", title_en: "Bottom Banner", position_slot: "homepage_bottom_banner", enabled: true }
+        { id: "b-cat-international", type: "category", category_id: 2, title_km: "ព័ត៌មានអន្តរជាតិ", title_en: "International Desk", style: "grid_3_col", enabled: true, limit: 6 },
+        { id: "b-cat-economy", type: "category", category_id: 5, title_km: "សេដ្ឋកិច្ច និងធុរកិច្ច", title_en: "Economy & Markets", style: "grid_2_col", enabled: true, limit: 4 },
+        { id: "b-headlines", type: "headlines", title_km: "កំពូលព័ត៌មានពេញនិយមទាំង ១០", title_en: "Top 10 Most Read Briefings", enabled: true, limit: 10 },
+        { id: "b-newsletter", type: "newsletter", title_km: "ព្រឹត្តិបត្រព័ត៌មានប្រចាំថ្ងៃ", title_en: "Daily Editorial Briefing", enabled: true }
       ];
     } else if (tpl === 'economy') {
       blocks = [
-        { id: "b-hero", type: "hero", title_km: "សេដ្ឋកិច្ចប្រចាំថ្ងៃ", title_en: "Economy Today", style: "", enabled: true, limit: 2 },
-        { id: "b-stats", type: "stats", title_km: "ស្ថិតិព័ត៌មាន", title_en: "Site Stats", enabled: true },
-        { id: "b-cat-economy", type: "category", category_id: 5, title_km: "សេដ្ឋកិច្ច", title_en: "Economy & Business", style: "featured_top", enabled: true, limit: 7 },
-        { id: "b-headlines", type: "headlines", title_km: "កំពូលព័ត៌មាន", title_en: "Top Headlines", enabled: true, limit: 8 },
-        { id: "b-newsletter", type: "newsletter", title_km: "ជាវព័ត៌មានប្រចាំថ្ងៃ", title_en: "Daily Newsletter", enabled: true }
+        { id: "b-hero", type: "hero", title_km: "សេដ្ឋកិច្ច និងគោលនយោបាយ", title_en: "Markets & National Policy", style: "grid_3", enabled: true, limit: 6 },
+        { id: "b-stats", type: "stats", title_km: "ស្ថិតិបន្ទប់ព័ត៌មាន", title_en: "Newsroom Live Metrics", enabled: true },
+        { id: "b-cat-economy", type: "category", category_id: 5, title_km: "សេដ្ឋកិច្ច និងទីផ្សារ", title_en: "Economy & Markets", style: "featured_top", enabled: true, limit: 7 },
+        { id: "b-multi-desk", type: "multi_desk", title_km: "ទិដ្ឋភាពរួមតាមផ្នែកព័ត៌មាន", title_en: "Across The Desks", enabled: true, limit: 4 },
+        { id: "b-opinion", type: "opinion_desk", title_km: "បទវិភាគសេដ្ឋកិច្ច", title_en: "Economic Analysis & Opinion", enabled: true, limit: 4 },
+        { id: "b-cat-tech", type: "category", category_id: 4, title_km: "បច្ចេកវិទ្យា និងហិរញ្ញវត្ថុ", title_en: "Fintech & Innovation", style: "grid_3_col", enabled: true, limit: 6 },
+        { id: "b-headlines", type: "headlines", title_km: "កំពូលព័ត៌មានទាំង ១០", title_en: "Top 10 Briefings", enabled: true, limit: 10 },
+        { id: "b-newsletter", type: "newsletter", title_km: "ព្រឹត្តិបត្រព័ត៌មានប្រចាំថ្ងៃ", title_en: "Daily Market Briefing", enabled: true }
+      ];
+    } else if (tpl === 'executive') {
+      blocks = [
+        { id: "b-hero", type: "hero", title_km: "ព័ត៌មានលេចធ្លោប្រចាំថ្ងៃ", title_en: "Morning Executive Lead", style: "grid_3", enabled: true, limit: 6 },
+        { id: "b-multi-desk", type: "multi_desk", title_km: "ទិដ្ឋភាពរួមតាមផ្នែកព័ត៌មាន", title_en: "3-Desk Executive Summary", enabled: true, limit: 4 },
+        { id: "b-today-wire", type: "today_wire", title_km: "ព័ត៌មានថ្មីៗថ្ងៃនេះ", title_en: "Today's Live Dispatches", enabled: true, limit: 6 },
+        { id: "b-opinion", type: "opinion_desk", title_km: "បទវិភាគ និងទស្សនៈ", title_en: "Editorial Perspectives", enabled: true, limit: 4 },
+        { id: "b-headlines", type: "headlines", title_km: "កំពូលព័ត៌មានទាំង ១០", title_en: "Top 10 Most Read", enabled: true, limit: 10 },
+        { id: "b-newsletter", type: "newsletter", title_km: "ព្រឹត្តិបត្រព័ត៌មានប្រចាំថ្ងៃ", title_en: "Daily Executive Briefing", enabled: true }
+      ];
+    } else if (tpl === 'visual_photo') {
+      blocks = [
+        { id: "b-hero", type: "hero", title_km: "ព័ត៌មានលេចធ្លោប្រចាំថ្ងៃ", title_en: "Front Page Lead", style: "grid_3", enabled: true, limit: 6 },
+        { id: "b-photo", type: "photo_journal", title_km: "កម្រងរូបភាពព័ត៌មានប្រចាំថ្ងៃ", title_en: "In Pictures: Photojournalism Desk", enabled: true, limit: 4 },
+        { id: "b-spotlight", type: "spotlight", title_km: "បទវិភាគស៊ីជម្រៅ", title_en: "Special Visual Report", enabled: true, limit: 1 },
+        { id: "b-cat-national", type: "category", category_id: 1, title_km: "ព័ត៌មានជាតិ", title_en: "National News", style: "featured_top", enabled: true, limit: 7 },
+        { id: "b-cat-sports", type: "category", category_id: 3, title_km: "កីឡា", title_en: "Sports Desk", style: "grid_3_col", enabled: true, limit: 6 },
+        { id: "b-newsletter", type: "newsletter", title_km: "ព្រឹត្តិបត្រព័ត៌មានប្រចាំថ្ងៃ", title_en: "Daily Briefing", enabled: true }
+      ];
+    } else if (tpl === 'tech') {
+      blocks = [
+        { id: "b-hero", type: "hero", title_km: "បច្ចេកវិទ្យា និងឌីជីថល", title_en: "Tech & Innovation Front Page", style: "grid_3", enabled: true, limit: 6 },
+        { id: "b-cat-tech", type: "category", category_id: 4, title_km: "បច្ចេកវិទ្យា និងឌីជីថល", title_en: "Technology & AI Desk", style: "featured_top", enabled: true, limit: 7 },
+        { id: "b-cat-economy", type: "category", category_id: 5, title_km: "សេដ្ឋកិច្ចឌីជីថល", title_en: "Digital Economy", style: "grid_3_col", enabled: true, limit: 6 },
+        { id: "b-today-wire", type: "today_wire", title_km: "ព័ត៌មានថ្មីៗថ្ងៃនេះ", title_en: "Today's Live Dispatches", enabled: true, limit: 6 },
+        { id: "b-tags", type: "tags", title_km: "ប្រធានបទបច្ចេកវិទ្យា", title_en: "Trending Tech Topics", enabled: true, limit: 20 }
       ];
     } else if (tpl === 'minimal') {
       blocks = [
-        { id: "b-hero", type: "hero", title_km: "ព័ត៌មានលេចធ្លោ", title_en: "Featured Story", style: "", enabled: true, limit: 1 },
-        { id: "b-cat-national", type: "category", category_id: 1, title_km: "ព័ត៌មានជាតិ", title_en: "National News", style: "list_view", enabled: true, limit: 5 },
-        { id: "b-headlines", type: "headlines", title_km: "កំពូលព័ត៌មាន", title_en: "Top Headlines", enabled: true, limit: 10 },
-        { id: "b-tags", type: "tags", title_km: "ស្លាកព័ត៌មានពេញនិយម", title_en: "Popular Tags", enabled: true, limit: 20 }
+        { id: "b-hero", type: "hero", title_km: "ព័ត៌មានលេចធ្លោ", title_en: "Front Page Lead & Wire", style: "grid_3", enabled: true, limit: 6 },
+        { id: "b-today-wire", type: "today_wire", title_km: "ព័ត៌មានថ្មីៗថ្ងៃនេះ", title_en: "Today's Chronological Wire", enabled: true, limit: 10 },
+        { id: "b-multi-desk", type: "multi_desk", title_km: "ទិដ្ឋភាពរួមតាមផ្នែកព័ត៌មាន", title_en: "Across The Desks", enabled: true, limit: 4 },
+        { id: "b-headlines", type: "headlines", title_km: "កំពូលព័ត៌មានទាំង ១០", title_en: "Top 10 Most Read", enabled: true, limit: 10 }
+      ];
+    } else {
+      blocks = [
+        { id: "b-hero", type: "hero", title_km: "ព័ត៌មានលេចធ្លោប្រចាំថ្ងៃ", title_en: "Front Page Lead & Live Wire", style: "grid_3", enabled: true, limit: 6 },
+        { id: "b-ticker", type: "ticker", title_km: "ព័ត៌មានទាន់ហេតុការណ៍ថ្ងៃនេះ", title_en: "Today's Live Wire", enabled: true, limit: 12 },
+        { id: "b-cat-national", type: "category", category_id: 1, title_km: "ព័ត៌មានជាតិ", title_en: "National News", style: "featured_top", enabled: true, limit: 7 },
+        { id: "b-cat-international", type: "category", category_id: 2, title_km: "ព័ត៌មានអន្តរជាតិ", title_en: "International Desk", style: "grid_3_col", enabled: true, limit: 6 },
+        { id: "b-cat-economy", type: "category", category_id: 5, title_km: "សេដ្ឋកិច្ច និងធុរកិច្ច", title_en: "Economy & Markets", style: "big_first", enabled: true, limit: 5 },
+        { id: "b-cat-tech", type: "category", category_id: 4, title_km: "បច្ចេកវិទ្យា និងឌីជីថល", title_en: "Technology & Innovation", style: "grid_2_col", enabled: true, limit: 4 },
+        { id: "b-cat-sports", type: "category", category_id: 3, title_km: "កីឡាជាតិ និងអន្តរជាតិ", title_en: "Sports Desk", style: "list_view", enabled: true, limit: 5 },
+        { id: "b-headlines", type: "headlines", title_km: "កំពូលព័ត៌មានពេញនិយមទាំង ១០", title_en: "Top 10 Most Read Briefings", enabled: true, limit: 10 },
+        { id: "b-newsletter", type: "newsletter", title_km: "ព្រឹត្តិបត្រព័ត៌មានប្រចាំថ្ងៃ", title_en: "Daily Editorial Briefing", enabled: true }
       ];
     }
     blocksByPage.home = blocks;
     switchPage('home');
+    switchTab('blocks');
     scheduleSave();
-    showToast('<i class="fas fa-bolt"></i> Template applied to the homepage — saved automatically');
+    showToast('<i class="fas fa-wand-magic-sparkles"></i> Editorial Preset applied & published!');
+  }
+
+  function switchTab(tab) {
+    document.getElementById('blocksStudioSection').style.display = tab === 'blocks' ? 'block' : 'none';
+    document.getElementById('presetsStudioSection').style.display = tab === 'presets' ? 'block' : 'none';
+    document.getElementById('themeStudioSection').style.display = tab === 'theme' ? 'block' : 'none';
+    document.getElementById('tabBlocksBtn').className = 'studio-mode-tab ' + (tab === 'blocks' ? 'active' : '');
+    document.getElementById('tabPresetsBtn').className = 'studio-mode-tab ' + (tab === 'presets' ? 'active' : '');
+    document.getElementById('tabThemeBtn').className = 'studio-mode-tab ' + (tab === 'theme' ? 'active' : '');
+    var ps = document.getElementById('pageSwitcherWrap');
+    if (ps) ps.style.display = tab === 'theme' ? 'none' : 'flex';
+  }
+
+  function switchPage(page) {
+    if (!blocksByPage[page]) return;
+    currentPage = page;
+    blocks = blocksByPage[page];
+    historyStack = [];
+    var uBtn = document.getElementById('undoBtn');
+    if (uBtn) uBtn.disabled = true;
+
+    ['home', 'category', 'article'].forEach(function(p) {
+      var id = p === 'home' ? 'pageHomeBtn' : (p === 'category' ? 'pageCatBtn' : 'pageArtBtn');
+      var el = document.getElementById(id);
+      if (el) el.className = 'page-pill' + (p === currentPage ? ' active' : '');
+    });
+
+    var bpTitle = document.getElementById('blueprintPageTitle');
+    var bpLink = document.getElementById('blueprintOpenLink');
+    if (bpTitle) bpTitle.textContent = page === 'home' ? 'Front Page Architecture' : (page === 'category' ? 'Category Desk Architecture' : 'Article Page Architecture');
+    if (bpLink) bpLink.href = page === 'home' ? '/' : (page === 'category' ? '/category/national' : '/today');
+
+    renderAll();
+  }
+
+  function exportLayoutJson() {
+    var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(blocks, null, 2));
+    var a = document.createElement('a');
+    a.setAttribute("href", dataStr);
+    a.setAttribute("download", "khmer-news-layout-" + currentPage + ".json");
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+  }
+
+  function importLayoutJson() {
+    var raw = prompt('Paste exported Layout JSON array here:');
+    if (!raw) return;
+    try {
+      var parsed = JSON.parse(raw);
+      if (!Array.isArray(parsed)) throw new Error('Invalid');
+      pushHistory();
+      blocks = parsed;
+      blocksByPage[currentPage] = blocks;
+      renderAll();
+      scheduleSave();
+      showToast('<i class="fas fa-check"></i> Layout JSON imported & saved');
+    } catch (e) {
+      showToast('Invalid JSON format', true);
+    }
   }
 
   var saveTimer = null;
-
   function scheduleSave() {
+    var st = document.getElementById('autosaveStatus');
+    if (st) st.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
     if (saveTimer) clearTimeout(saveTimer);
-    saveTimer = setTimeout(saveAllBlocks, 350);
+    saveTimer = setTimeout(function() { saveAllBlocks(false); }, 350);
   }
 
   function showToast(msg, isError) {
@@ -1222,116 +1639,60 @@
       document.body.appendChild(t);
     }
     t.innerHTML = msg;
-    t.style.background = isError ? '#b91c1c' : '#166534';
+    t.style.background = isError ? '#b91c1c' : '#0f172a';
     t.style.opacity = '1';
     clearTimeout(showToast._timer);
-    showToast._timer = setTimeout(function () { t.style.opacity = '0'; }, 2400);
+    showToast._timer = setTimeout(function() { t.style.opacity = '0'; }, 2400);
   }
 
-  function saveAllBlocks() {
+  function saveAllBlocks(manual) {
     if (saveTimer) { clearTimeout(saveTimer); saveTimer = null; }
     return fetch('/admin/layout/blocks/save', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ blocks: blocks, page: currentPage })
     })
-    .then(function (res) { return res.json(); })
-    .then(function (data) {
-      if (data.success) showToast('<i class="fas fa-check"></i> Layout saved automatically');
-      else showToast('<i class="fas fa-xmark"></i> Failed to save layout', true);
+    .then(function(res) { return res.json(); })
+    .then(function(data) {
+      var st = document.getElementById('autosaveStatus');
+      if (st) st.innerHTML = '<i class="fas fa-check-circle"></i> All changes saved live';
+      if (data.success && manual) showToast('<i class="fas fa-check"></i> Layout published live to website!');
       return data;
-    })
-    .catch(function () { showToast('<i class="fas fa-xmark"></i> Failed to save layout', true); });
+    });
   }
 
-  // ---- Theme tab auto-save: changes publish to the site immediately ----
+  // Theme Auto-save & Preview
   var themeSaveTimer = null;
-  function scheduleThemeSave() {
-    if (themeSaveTimer) clearTimeout(themeSaveTimer);
-    themeSaveTimer = setTimeout(saveThemeSettings, 600);
-  }
-  function saveThemeSettings() {
-    if (themeSaveTimer) { clearTimeout(themeSaveTimer); themeSaveTimer = null; }
-    var form = document.querySelector('#themeStudioSection form');
-    if (!form) return Promise.resolve();
-    var data = new URLSearchParams(new FormData(form));
-    return fetch('/admin/layout/save', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest' },
-      body: data.toString()
-    })
-    .then(function (res) { return res.json().catch(function () { return { success: false }; }); })
-    .then(function (d) {
-      if (d && d.success) showToast('<i class="fas fa-check"></i> Theme saved — applied to your site');
-      else showToast('<i class="fas fa-xmark"></i> Failed to save theme', true);
-    })
-    .catch(function () { showToast('<i class="fas fa-xmark"></i> Failed to save theme', true); });
-  }
   function themeChanged() {
-    refreshThemePreview();
-    scheduleThemeSave();
-  }
-
-  function switchTab(tab) {
-    document.getElementById('blocksStudioSection').style.display = tab === 'blocks' ? 'block' : 'none';
-    document.getElementById('themeStudioSection').style.display = tab === 'theme' ? 'block' : 'none';
-    document.getElementById('tabBlocksBtn').className = 'studio-tab ' + (tab === 'blocks' ? 'active' : '');
-    document.getElementById('tabThemeBtn').className = 'studio-tab ' + (tab === 'theme' ? 'active' : '');
-  }
-
-  function setPrimary(color) {
-    document.getElementById('primaryColorPicker').value = color;
-    document.getElementById('primaryColorText').value = color;
-    themeChanged();
-  }
-
-  function setHeroStyle(value) {
-    var sel = document.getElementById('heroStyleSelect');
-    if (sel) sel.value = value;
-    themeChanged();
-  }
-
-  // ---- Live theme preview ----
-  function refreshThemePreview() {
     var stage = document.getElementById('pvStage');
-    if (!stage) return;
-
-    var primary = (document.getElementById('primaryColorPicker') || {}).value || '#1e3a8a';
-    var accent = (document.getElementById('accentColorPicker') || {}).value || '#dc2626';
-    stage.style.setProperty('--pv-primary', primary);
-    stage.style.setProperty('--pv-accent', accent);
-
-    // Hero style swap
-    var heroSel = document.getElementById('heroStyleSelect');
-    var heroStyle = heroSel ? heroSel.value : 'grid_3';
-    document.querySelectorAll('.pv-hero-v').forEach(function (el) {
-      el.style.display = el.getAttribute('data-v') === heroStyle ? 'flex' : 'none';
-    });
-
-    // Ticker style swap
-    var tickerSel = document.getElementById('tickerStyleSelect');
-    var tickerStyle = tickerSel ? tickerSel.value : 'marquee';
-    document.querySelectorAll('.pv-ticker-v').forEach(function (el) {
-      el.style.display = el.getAttribute('data-v') === tickerStyle ? 'flex' : 'none';
-    });
-
-    // Breaking news bar
-    var breakingChk = document.querySelector('input[name="breaking_news_enabled"]');
-    var breakingBar = document.getElementById('pvBreaking');
-    if (breakingBar && breakingChk) {
-      breakingBar.style.display = breakingChk.checked ? 'flex' : 'none';
+    var p = (document.getElementById('primaryColorPicker') || {}).value || '#1e3a8a';
+    var a = (document.getElementById('accentColorPicker') || {}).value || '#dc2626';
+    var pt = document.getElementById('primaryColorText');
+    var at = document.getElementById('accentColorText');
+    if (pt) pt.value = p;
+    if (at) at.value = a;
+    if (stage) {
+      stage.style.setProperty('--pv-primary', p);
+      stage.style.setProperty('--pv-accent', a);
     }
     var txtKm = document.querySelector('input[name="breaking_news_text_km"]');
     var txtEn = document.querySelector('input[name="breaking_news_text_en"]');
     var bt = document.getElementById('pvBreakingText');
-    if (bt) {
-      bt.textContent = (txtKm && txtKm.value.trim()) || (txtEn && txtEn.value.trim()) || 'Live breaking news updates';
-    }
+    if (bt) bt.textContent = (txtEn && txtEn.value.trim()) || (txtKm && txtKm.value.trim()) || 'Live updates from Phnom Penh';
 
-    // Custom CSS injection (scoped to the preview so it can be tested live)
-    var css = document.querySelector('textarea[name="custom_css"]');
-    var styleEl = document.getElementById('pvCustomCss');
-    if (css && styleEl) styleEl.textContent = css.value || '';
+    if (themeSaveTimer) clearTimeout(themeSaveTimer);
+    themeSaveTimer = setTimeout(function() {
+      var form = document.getElementById('themeSettingsForm');
+      if (!form) return;
+      var data = new URLSearchParams(new FormData(form));
+      fetch('/admin/layout/save', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest' },
+        body: data.toString()
+      }).then(function() {
+        showToast('<i class="fas fa-palette"></i> Brand & Theme settings auto-saved');
+      });
+    }, 500);
   }
 
   function setTheme(primary, accent) {
@@ -1340,82 +1701,50 @@
     if (p) p.value = primary;
     if (a) a.value = accent;
     themeChanged();
-    showToast('<i class="fas fa-palette"></i> Theme palette applied — auto-saved to your site');
-  }
-
-  function applyThemeDefaultsToBlocks() {
-    var heroSel = document.getElementById('heroStyleSelect');
-    var tickerSel = document.getElementById('tickerStyleSelect');
-    var changed = 0;
-    blocks.forEach(function (b) {
-      if (b.type === 'hero' || b.type === 'ticker') {
-        if (b.style) { b.style = ''; changed++; }
-      }
-    });
-    renderBlocks();
-    scheduleSave();
-    refreshThemeOverrideNotice();
-    showToast(changed > 0 ? ('<i class="fas fa-bolt"></i> Cleared ' + changed + ' block override(s) — theme style now applies everywhere') : '<i class="fas fa-check"></i> All blocks already follow the theme setting');
-  }
-
-  function refreshThemeOverrideNotice() {
-    var notice = document.getElementById('themeOverrideNotice');
-    if (!notice) return;
-    var overrides = blocks.filter(function (b) { return (b.type === 'hero' || b.type === 'ticker') && b.style; });
-    if (overrides.length > 0) {
-      notice.style.display = 'block';
-      notice.innerHTML = '<i class="fas fa-triangle-exclamation"></i> <strong>' + overrides.length + ' block(s)</strong> on your homepage have their own pinned style and will <strong>ignore this theme default</strong> until set to "Follow Theme Setting". Click the green button below to clear them.';
-    } else {
-      notice.style.display = 'none';
-    }
   }
 
   function saveCurrentAsTemplate() {
-    if (!blocks || blocks.length === 0) { showToast('Add some blocks first', true); return; }
-    var name = prompt('Name this custom layout template:');
+    var name = prompt('Enter a name for this custom layout preset:');
     if (!name || !name.trim()) return;
-    var payload = { name: name.trim(), blocks: blocks, page: currentPage };
     fetch('/admin/layout/templates/save', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
+      body: JSON.stringify({ name: name.trim(), blocks: blocks, page: currentPage })
     })
-    .then(function (r) { return r.json(); })
-    .then(function (data) {
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
       if (data.success) {
         customTemplates = data.templates || [];
         renderCustomTemplates();
-        showToast('<i class="fas fa-folder-tree"></i> Template "' + name.trim() + '" saved');
-      } else {
-        showToast(data.error || 'Failed to save template', true);
+        showToast('<i class="fas fa-bookmark"></i> Saved preset "' + name.trim() + '"');
       }
     });
   }
 
   function applyCustomTemplate(name) {
-    var t = customTemplates.find(function (x) { return x.name === name && (x.page || 'home') === currentPage; });
-    if (!t) { showToast('Template not found', true); return; }
-    if (!confirm('Apply custom layout "' + name + '"? This replaces your current block arrangement.')) return;
-    var tplPage = t.page || 'home';
-    blocksByPage[tplPage] = JSON.parse(JSON.stringify(t.blocks));
-    switchPage(tplPage);
+    var t = customTemplates.find(function(x) { return x.name === name && (x.page || 'home') === currentPage; });
+    if (!t) return;
+    pushHistory();
+    blocks = JSON.parse(JSON.stringify(t.blocks));
+    blocksByPage[currentPage] = blocks;
+    renderAll();
+    switchTab('blocks');
     scheduleSave();
-    showToast('<i class="fas fa-folder-tree"></i> Custom layout "' + name + '" applied — saved automatically');
+    showToast('<i class="fas fa-check"></i> Applied custom preset "' + name + '"');
   }
 
   function deleteCustomTemplate(name) {
-    if (!confirm('Delete custom layout "' + name + '"?')) return;
     fetch('/admin/layout/templates/delete', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ name: name, page: currentPage })
     })
-    .then(function (r) { return r.json(); })
-    .then(function (data) {
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
       if (data.success) {
         customTemplates = data.templates || [];
         renderCustomTemplates();
-        showToast('<i class="fas fa-trash"></i> Template "' + name + '" deleted');
+        showToast('<i class="fas fa-trash"></i> Deleted preset "' + name + '"');
       }
     });
   }
@@ -1423,44 +1752,28 @@
   function renderCustomTemplates() {
     var list = document.getElementById('customTemplatesList');
     if (!list) return;
-    var pageLabel = currentPage === 'category' ? 'category' : (currentPage === 'article' ? 'article' : 'homepage');
-    var mine = customTemplates.filter(function (t) { return (t.page || 'home') === currentPage; });
+    var mine = customTemplates.filter(function(t) { return (t.page || 'home') === currentPage; });
     if (mine.length === 0) {
-      list.innerHTML = '<span style="font-size: 0.82rem; color: rgba(255,255,255,0.55);">No custom ' + pageLabel + ' layouts saved yet — click "Save Current Layout as Template" to create your first one.</span>';
+      list.innerHTML = '<span style="font-size:0.82rem;color:#64748b;">No custom presets saved yet. Click "Save Preset" in the top bar to save your current layout!</span>';
       return;
     }
-    list.innerHTML = '';
-    mine.forEach(function (t) {
-      var card = document.createElement('div');
-      card.className = 'custom-tpl-card';
-      card.style.cssText = 'background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); border-radius: 10px; padding: 12px 14px; display: flex; align-items: center; gap: 10px;';
-      var safeName = t.name.replace(/'/g, "\\'");
-      card.innerHTML = '<span style="font-size: 1rem;"><i class="fas fa-folder-tree"></i></span>' +
-        '<span style="font-size: 0.88rem; font-weight: 700; color: #ffffff;">' + t.name + '</span>' +
-        '<span style="font-size: 0.72rem; color: rgba(255,255,255,0.6);">' + (t.blocks || []).length + ' blocks</span>' +
-        '<button type="button" onclick="applyCustomTemplate(\'' + safeName + '\')" style="background: #2563eb; border: none; color: #fff; padding: 5px 12px; border-radius: 6px; font-size: 0.78rem; font-weight: 700; cursor: pointer;">Apply</button>' +
-        '<button type="button" onclick="deleteCustomTemplate(\'' + safeName + '\')" style="background: transparent; border: 1px solid rgba(248,113,113,0.6); color: #fca5a5; padding: 5px 10px; border-radius: 6px; font-size: 0.78rem; cursor: pointer;"><i class="fas fa-xmark"></i></button>';
-      list.appendChild(card);
-    });
+    list.innerHTML = mine.map(function(t) {
+      var safe = t.name.replace(/'/g, "\\'");
+      return '<div style="border:1px solid #cbd5e1;padding:10px 14px;background:#f8fafc;display:flex;align-items:center;gap:10px;">' +
+        '<strong>' + t.name + '</strong>' +
+        '<span style="font-size:0.75rem;color:#64748b;">(' + (t.blocks || []).length + ' sections)</span>' +
+        '<button type="button" class="studio-mini-btn" onclick="applyCustomTemplate(\'' + safe + '\')">Apply</button>' +
+        '<button type="button" class="studio-mini-btn" onclick="deleteCustomTemplate(\'' + safe + '\')"><i class="fas fa-xmark"></i></button>' +
+      '</div>';
+    }).join('');
   }
 
   document.addEventListener('DOMContentLoaded', function() {
     if (activeTab === 'theme') switchTab('theme');
-    refreshThemeOverrideNotice();
-    renderBlocks();
-
-    // Live preview event wiring — every change also auto-saves
-    ['primaryColorPicker', 'accentColorPicker', 'heroStyleSelect', 'tickerStyleSelect'].forEach(function (id) {
-      var el = document.getElementById(id);
-      if (!el) return;
-      el.addEventListener('change', themeChanged);
-      if (el.type === 'color') el.addEventListener('input', themeChanged);
-    });
-    document.querySelectorAll('input[name="breaking_news_enabled"], input[name="breaking_news_text_km"], input[name="breaking_news_text_en"], textarea[name="custom_css"]').forEach(function (el) {
-      el.addEventListener('input', themeChanged);
-      el.addEventListener('change', themeChanged);
-    });
-
-    refreshThemePreview();
+    renderAll();
+    var p = document.getElementById('primaryColorPicker');
+    var a = document.getElementById('accentColorPicker');
+    if (p) p.addEventListener('input', themeChanged);
+    if (a) a.addEventListener('input', themeChanged);
   });
 </script>

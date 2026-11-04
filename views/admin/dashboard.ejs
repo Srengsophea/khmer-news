@@ -1,85 +1,183 @@
 <div class="admin-page">
-  <h1 class="admin-page-title" style="margin-bottom: 24px;"><i class="fas fa-chart-simple"></i> <%= t('admin.dashboard') %></h1>
-  <div class="stat-grid" style="grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));">
-    <div class="stat-card">
-      <div class="stat-number"><%= stats.articles %></div>
-      <div class="stat-label"><i class="fas fa-newspaper"></i> <%= t('admin.stats_articles') %></div>
+  <div class="cms-page-header">
+    <div>
+      <span class="cms-kicker">PHNOM PENH NEWSROOM COMMAND CENTER</span>
+      <h1 class="admin-page-title"><%= t('admin.dashboard') %></h1>
     </div>
-    <div class="stat-card">
-      <div class="stat-number"><%= stats.categories %></div>
-      <div class="stat-label"><i class="fas fa-folder"></i> <%= t('admin.stats_categories') %></div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-number"><%= stats.views.toLocaleString() %></div>
-      <div class="stat-label"><i class="fas fa-eye"></i> <%= t('admin.stats_views') %></div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-number"><%= stats.subscribers %></div>
-      <div class="stat-label"><i class="fas fa-envelope-open-text"></i> <%= t('admin.stats_subscribers') %></div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-number"><%= stats.messages %></div>
-      <div class="stat-label"><i class="fas fa-envelope"></i> <%= t('admin.stats_messages') %></div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-number"><%= stats.tags %></div>
-      <div class="stat-label"><i class="fas fa-tags"></i> <%= t('admin.stats_tags') %></div>
+    <div class="cms-header-actions">
+      <form method="POST" action="/admin/articles/sync-today" style="margin:0;">
+        <button type="submit" class="cms-btn cms-btn-live">
+          <i class="fas fa-bolt"></i> <%= lang === 'km' ? 'ធ្វើបច្ចុប្បន្នភាពព័ត៌មានថ្ងៃនេះឥឡូវនេះ' : "Sync & Refresh Today's News Now" %>
+        </button>
+      </form>
+      <a href="/admin/articles/edit/0" class="cms-btn cms-btn-primary">
+        <i class="fas fa-plus"></i> <%= t('admin.add_article') %>
+      </a>
     </div>
   </div>
 
-  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 28px;" class="dashboard-columns">
-    <div>
-      <h2 style="margin: 0 0 16px; font-size: 1.2rem; font-weight: 800; color: #0f172a;"><%= t('admin.recent_articles') %></h2>
-      <div style="background: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0; overflow: hidden;">
-        <table class="admin-table" style="margin: 0;">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th><%= t('labels.title') %></th>
-              <th><%= t('labels.category') %></th>
-              <th><%= t('labels.action') %></th>
-            </tr>
-          </thead>
-          <tbody>
-            <% if (recent && recent.length > 0) { %>
-              <% recent.forEach(function(a, i) { %>
-                <tr>
-                  <td><%= i + 1 %></td>
-                  <td><a href="/admin/articles/edit/<%= a.id %>" style="color: #1e3a8a;"><%= a[`title_${lang}`] %></a></td>
-                  <td><%= a.name_km || a.name_en || '' %></td>
-                  <td><a href="/article/<%= a.slug %>" target="_blank" style="color: #2563eb;">View ↗</a></td>
-                </tr>
-              <% }) %>
-            <% } %>
-          </tbody>
-        </table>
-      </div>
+  <% if (typeof success !== 'undefined' && success) { %>
+    <div class="cms-alert cms-alert-success">
+      <i class="fas fa-circle-check"></i> <%= success %>
     </div>
+  <% } %>
 
-    <div>
-      <h2 style="margin: 0 0 16px; font-size: 1.2rem; font-weight: 800; color: #0f172a;"><i class="fas fa-fire"></i> <%= t('admin.top_articles') %></h2>
-      <div style="background: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0; overflow: hidden;">
-        <table class="admin-table" style="margin: 0;">
+  <!-- 6 KPI METRICS STRIP -->
+  <div class="cms-kpi-strip">
+    <div class="cms-kpi-cell">
+      <span class="cms-kpi-label">TOTAL DISPATCHES</span>
+      <div class="cms-kpi-value"><%= stats.articles %></div>
+      <span class="cms-kpi-sub">Published in database</span>
+    </div>
+    <div class="cms-kpi-cell is-live">
+      <span class="cms-kpi-label"><span class="live-pulse-dot"></span> TODAY'S LIVE WIRE</span>
+      <div class="cms-kpi-value"><%= stats.today %></div>
+      <span class="cms-kpi-sub">Fresh in last 24 hours</span>
+    </div>
+    <div class="cms-kpi-cell">
+      <span class="cms-kpi-label">TOTAL READERSHIP</span>
+      <div class="cms-kpi-value"><%= stats.views.toLocaleString() %></div>
+      <span class="cms-kpi-sub">Article reads</span>
+    </div>
+    <div class="cms-kpi-cell">
+      <span class="cms-kpi-label">EDITORIAL DESKS</span>
+      <div class="cms-kpi-value"><%= stats.categories %></div>
+      <span class="cms-kpi-sub">Active categories</span>
+    </div>
+    <div class="cms-kpi-cell">
+      <span class="cms-kpi-label">SUBSCRIBERS</span>
+      <div class="cms-kpi-value"><%= stats.subscribers %></div>
+      <span class="cms-kpi-sub">Daily briefing list</span>
+    </div>
+    <div class="cms-kpi-cell">
+      <span class="cms-kpi-label">TOPIC TAGS</span>
+      <div class="cms-kpi-value"><%= stats.tags %></div>
+      <span class="cms-kpi-sub">Indexed topics</span>
+    </div>
+  </div>
+
+  <!-- QUICK BREAKING NEWS WIRE EDITOR + DESK COVERAGE BREAKDOWN -->
+  <div class="cms-grid-2">
+    <section class="cms-panel">
+      <div class="cms-panel-head">
+        <h2><i class="fas fa-bolt" style="color:#dc2626"></i> Live Breaking News Wire Control</h2>
+        <span class="cms-badge-live">INSTANT UPDATE</span>
+      </div>
+      <form method="POST" action="/admin/dashboard/breaking" class="cms-compact-form">
+        <div class="cms-form-row">
+          <label class="cms-checkbox-label">
+            <input type="checkbox" name="breaking_news_enabled" value="1" <%= (siteSettings && siteSettings.breaking_news_enabled) ? 'checked' : '' %>>
+            Enable Breaking News Ticker Banner Across Site
+          </label>
+        </div>
+        <div class="cms-form-row">
+          <label>Breaking Wire Headline (Khmer)</label>
+          <input type="text" name="breaking_news_text_km" value="<%= (siteSettings && siteSettings.breaking_news_text_km) || '' %>" class="form-control" placeholder="ព័ត៌មានទាន់ហេតុការណ៍...">
+        </div>
+        <div class="cms-form-row">
+          <label>Breaking Wire Headline (English)</label>
+          <input type="text" name="breaking_news_text_en" value="<%= (siteSettings && siteSettings.breaking_news_text_en) || '' %>" class="form-control" placeholder="BREAKING NEWS: ...">
+        </div>
+        <div class="cms-form-actions">
+          <button type="submit" class="cms-btn cms-btn-primary">Update Breaking Wire</button>
+          <a href="/admin/layout" class="cms-btn cms-btn-outline">Open Layout Studio</a>
+        </div>
+      </form>
+    </section>
+
+    <section class="cms-panel">
+      <div class="cms-panel-head">
+        <h2><i class="fas fa-layer-group"></i> Editorial Desks Coverage (<%= stats.articles %> total)</h2>
+        <a href="/admin/categories" class="cms-link-sm">Manage Desks &rarr;</a>
+      </div>
+      <div class="cms-desk-list">
+        <% (categories || []).forEach(function(c) { %>
+          <% var pct = stats.articles > 0 ? Math.round(((c.article_count || 0) / stats.articles) * 100) : 0; %>
+          <div class="cms-desk-row">
+            <div class="cms-desk-info">
+              <strong><%= c.name_en %> / <%= c.name_km %></strong>
+              <span><%= c.article_count || 0 %> articles (<%= pct %>%) • <%= (c.total_views || 0).toLocaleString() %> reads</span>
+            </div>
+            <div class="cms-desk-bar-track">
+              <div class="cms-desk-bar-fill" style="width: <%= Math.max(6, pct) %>%"></div>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+    </section>
+  </div>
+
+  <!-- LATEST DISPATCHES & MOST READ TABLES -->
+  <div class="cms-grid-2" style="margin-top: 24px;">
+    <section class="cms-panel">
+      <div class="cms-panel-head">
+        <h2><%= t('admin.recent_articles') %></h2>
+        <a href="/admin/articles" class="cms-link-sm">All <%= stats.articles %> Articles &rarr;</a>
+      </div>
+      <div class="cms-table-wrap">
+        <table class="admin-table">
           <thead>
             <tr>
-              <th>#</th>
-              <th><%= t('labels.title') %></th>
-              <th><%= t('labels.views_count') %></th>
+              <th>Dispatch</th>
+              <th>Desk</th>
+              <th>Published</th>
+              <th>Quick Actions</th>
             </tr>
           </thead>
           <tbody>
-            <% if (topArticles && topArticles.length > 0) { %>
-              <% topArticles.forEach(function(a, i) { %>
-                <tr>
-                  <td><%= i + 1 %></td>
-                  <td><a href="/admin/articles/edit/<%= a.id %>" style="color: #1e3a8a;"><%= a[`title_${lang}`] %></a></td>
-                  <td><strong><i class="fas fa-eye"></i> <%= a.views_count || 0 %> <%= t('admin.article_views') %></strong></td>
-                </tr>
-              <% }) %>
-            <% } %>
+            <% (recent || []).forEach(function(a) { %>
+              <tr>
+                <td>
+                  <a href="/admin/articles/edit/<%= a.id %>" class="cms-table-title"><%= a[`title_${lang}`] || a.title_en %></a>
+                  <% if (a.is_featured) { %>
+                    <span class="cms-tag-featured">★ Lead</span>
+                  <% } %>
+                </td>
+                <td><span class="cms-desk-pill"><%= a.name_en || a.name_km || 'News' %></span></td>
+                <td class="cms-time-cell"><%= timeAgo(a.created_at) %></td>
+                <td>
+                  <div class="cms-row-actions">
+                    <form method="POST" action="/admin/articles/bump/<%= a.id %>" style="margin:0;">
+                      <button type="submit" class="cms-action-btn" title="Bump timestamp to Right Now"><i class="fas fa-bolt"></i> Now</button>
+                    </form>
+                    <a href="/admin/articles/edit/<%= a.id %>" class="cms-action-btn">Edit</a>
+                    <a href="/article/<%= a.slug %>" target="_blank" class="cms-action-btn">↗</a>
+                  </div>
+                </td>
+              </tr>
+            <% }) %>
           </tbody>
         </table>
       </div>
-    </div>
+    </section>
+
+    <section class="cms-panel">
+      <div class="cms-panel-head">
+        <h2><i class="fas fa-fire" style="color:#dc2626"></i> <%= t('admin.top_articles') %></h2>
+        <a href="/today" target="_blank" class="cms-link-sm">View Today's Wire ↗</a>
+      </div>
+      <div class="cms-table-wrap">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Headline</th>
+              <th>Desk</th>
+              <th>Readership</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% (topArticles || []).forEach(function(a, i) { %>
+              <tr>
+                <td><strong><%= String(i + 1).padStart(2, '0') %></strong></td>
+                <td><a href="/admin/articles/edit/<%= a.id %>" class="cms-table-title"><%= a[`title_${lang}`] || a.title_en %></a></td>
+                <td><span class="cms-desk-pill"><%= a.name_en || '' %></span></td>
+                <td><strong><%= (a.views_count || 0).toLocaleString() %></strong> reads</td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </section>
   </div>
 </div>

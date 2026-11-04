@@ -78,19 +78,26 @@ router.get('/', (req, res) => {
 
                   // Group articles by category_id
                   const articlesByCat = {};
+                  const nowMs = Date.now();
+                  const todayArticles = [];
                   (allArticles || []).forEach(a => {
                     if (a.category_id) {
                       if (!articlesByCat[a.category_id]) articlesByCat[a.category_id] = [];
                       articlesByCat[a.category_id].push(a);
                     }
+                    const d = new Date(String(a.created_at || '').replace(' ', 'T'));
+                    if (!isNaN(d.getTime()) && (nowMs - d.getTime()) <= 24 * 60 * 60 * 1000) {
+                      todayArticles.push(a);
+                    }
                   });
 
                   res.render('index', {
                     articles: allArticles || [],
+                    todayArticles: todayArticles.length > 0 ? todayArticles : (allArticles || []).slice(0, 40),
                     articlesByCat: articlesByCat,
                     homepageBlocks: blocks,
                     categories: categories || [],
-                    featured: (featured && featured.length > 0) ? featured : (allArticles || []).slice(0, 3),
+                    featured: (featured && featured.length > 0) ? featured : (allArticles || []).slice(0, 6),
                     trending: trending || [],
                     tags: tags || [],
                     lang,
@@ -99,6 +106,47 @@ router.get('/', (req, res) => {
                 });
               }
             );
+          });
+        }
+      );
+    });
+  });
+});
+
+router.get('/today', (req, res) => {
+  const db = getDb();
+  const lang = req.lang;
+  const catSlug = (req.query.cat || '').trim();
+
+  db.all(getArticleQuery(), [], (err, allArticles) => {
+    db.all(`SELECT * FROM categories ORDER BY id`, [], (err2, categories) => {
+      db.all(
+        `SELECT a.*, c.slug as category_slug, c.name_km as category_name_km, c.name_en as category_name_en FROM articles a LEFT JOIN categories c ON a.category_id = c.id ORDER BY COALESCE(a.views_count, 0) DESC LIMIT 8`,
+        [],
+        (err3, trending) => {
+          db.all(`SELECT * FROM tags ORDER BY name_en`, [], (err4, tags) => {
+            const nowMs = Date.now();
+            let todayArticles = (allArticles || []).filter(a => {
+              const d = new Date(String(a.created_at || '').replace(' ', 'T'));
+              return !isNaN(d.getTime()) && (nowMs - d.getTime()) <= 36 * 60 * 60 * 1000;
+            });
+            if (todayArticles.length < 20) {
+              todayArticles = (allArticles || []).slice(0, 50);
+            }
+            const filteredArticles = catSlug
+              ? todayArticles.filter(a => a.category_slug === catSlug)
+              : todayArticles;
+
+            res.render('today', {
+              todayArticles: filteredArticles,
+              allTodayCount: todayArticles.length,
+              activeCat: catSlug,
+              categories: categories || [],
+              trending: trending || [],
+              tags: tags || [],
+              lang,
+              title: lang === 'km' ? 'ព័ត៌មានថ្ងៃនេះ • Today Live' : "Today's Live News"
+            });
           });
         }
       );

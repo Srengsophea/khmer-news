@@ -1,19 +1,20 @@
 {
   "nav": {
-    "home": "Home",
+    "home": "Front Page",
+    "today": "Today's News",
     "about": "About",
     "search": "Search",
-    "admin": "Admin",
+    "admin": "Newsroom CMS",
     "contact": "Contact Us",
     "advertise": "Advertise",
     "privacy": "Privacy Policy",
     "terms": "Terms of Service"
   },
   "common": {
-    "read_more": "Read More",
-    "view_all": "View All",
+    "read_more": "Continue Reading",
+    "view_all": "Full Coverage",
     "no_articles": "No articles found",
-    "search_placeholder": "Search news...",
+    "search_placeholder": "Search headlines, topics, desks...",
     "language": "Language",
     "english": "English",
     "khmer": "Khmer",
@@ -22,7 +23,11 @@
     "next": "Next",
     "back_to_top": "Back to top",
     "minutes_read": "min read",
-    "views": "views"
+    "views": "reads",
+    "today_live": "Today's Live Wire",
+    "breaking": "Breaking",
+    "lead_story": "Lead Report",
+    "editors_picks": "Editors' Picks"
   },
   "categories": {
     "national": "National News",

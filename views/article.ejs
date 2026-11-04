@@ -1,441 +1,281 @@
-<section class="section" style="padding: 32px 0;">
+<section class="editorial-article-page">
   <div class="container">
-    <!-- Breadcrumb Bar -->
-    <nav class="breadcrumb"
-      style="display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: #64748b; margin-bottom: 24px; background: #ffffff; padding: 10px 16px; border-radius: 30px; border: 1px solid #e2e8f0; width: fit-content;">
-      <a href="/" style="color: var(--primary-color, #1e3a8a); font-weight: 600;">
-        <%= t('nav.home') %>
-      </a>
-      <span>&rsaquo;</span>
-      <a href="/category/<%= article.category_slug %>" style="color: var(--primary-color, #1e3a8a); font-weight: 600;">
-        <%= article[`category_name_${lang}`] %>
-      </a>
-      <span>&rsaquo;</span>
-      <span style="color: #94a3b8; max-width: 180px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-        <%= article[`title_${lang}`] %>
-      </span>
+    <!-- Clean Editorial Breadcrumb -->
+    <nav class="editorial-breadcrumb" aria-label="Breadcrumb">
+      <a href="/"><%= t('nav.home') %></a>
+      <span>/</span>
+      <a href="/category/<%= article.category_slug %>"><%= article[`category_name_${lang}`] %></a>
+      <span>/</span>
+      <span class="editorial-breadcrumb-current"><%= stripHtml(article[`title_${lang}`], 65) %></span>
     </nav>
 
-    <div class="content-layout">
-      <div class="main-column">
-        <article class="article-detail"
-          style="background: #ffffff; border-radius: 16px; padding: 36px; border: 1px solid #e2e8f0; box-shadow: 0 4px 20px -4px rgba(15,23,42,0.04);">
-          <div class="article-header" style="margin-bottom: 24px;">
-            <span class="article-category badge-cat-<%= article.category_slug %>"
-              style="display: inline-block; padding: 4px 14px; border-radius: 20px; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; margin-bottom: 12px;">
-              <%= article[`category_name_${lang}`] %>
-            </span>
-
-            <h1 class="article-title"
-              style="font-size: 2.2rem; font-weight: 800; color: #0f172a; line-height: 1.4; margin-bottom: 16px;">
-              <%= article[`title_${lang}`] %>
-            </h1>
-
-            <div class="article-meta-row"
-              style="display: flex; flex-wrap: wrap; gap: 16px; align-items: center; padding: 14px 0; border-top: 1px solid #f1f5f9; border-bottom: 1px solid #f1f5f9; font-size: 0.88rem; color: #475569;">
-              <span style="display: flex; align-items: center; gap: 6px;"><i class="fas fa-user-pen"></i> <strong>
-                  <%= article.author_name || 'Khmer News Desk' %>
-                </strong></span>
-              <span>&bull;</span>
-              <span><i class="fas fa-calendar-days"></i> <%= new Date(article.created_at).toLocaleDateString(lang==='km' ? 'km-KH' : 'en-US' , {
-                  weekday: 'long' , year: 'numeric' , month: 'long' , day: 'numeric' }) %></span>
-              <span>&bull;</span>
-              <span><i class="fas fa-stopwatch"></i> <%= article.read_time_minutes || 3 %>
-                  <%= lang==='km' ? 'នាទីអាន' : 'min read' %></span>
-              <span>&bull;</span>
-              <span><i class="fas fa-eye"></i> <%= article.views_count || 120 %>
-                  <%= lang==='km' ? 'ការទស្សនា' : 'views' %></span>
+    <div class="editorial-two-col-layout">
+      <!-- MAIN ARTICLE COLUMN (No Box/Card Wrapper) -->
+      <div class="editorial-article-main">
+        <article class="editorial-article">
+          <header class="editorial-article-header">
+            <div class="editorial-meta-row">
+              <a href="/category/<%= article.category_slug %>" class="editorial-kicker"><%= article[`category_name_${lang}`] %></a>
+              <span class="editorial-meta-sep">•</span>
+              <time class="editorial-time-fresh"><%= timeAgo(article.created_at) %></time>
+              <span class="editorial-meta-sep">•</span>
+              <span class="editorial-time">
+                <%= new Date(article.created_at).toLocaleDateString(lang === 'km' ? 'km-KH' : 'en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) %>
+              </span>
             </div>
 
-            <!-- Reading Tools + Social Share Bar -->
-            <div class="article-tools-row" style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin-top: 16px;">
-              <div class="share-toolbar" style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-                <span style="font-weight: 700; font-size: 0.85rem; color: #64748b;">
-                  <%= lang==='km' ? 'ចែករំលែក៖' : 'Share:' %>
-                </span>
-                <a href="#" target="_blank" rel="noopener" data-share="facebook" class="share-btn share-fb"
-                  style="background: #1877f2; color: white; padding: 7px 14px; border-radius: 30px; font-size: 0.8rem; font-weight: 700; text-decoration: none;">Facebook</a>
-                <a href="#" target="_blank" rel="noopener" data-share="telegram" class="share-btn share-tg"
-                  style="background: #229ed9; color: white; padding: 7px 14px; border-radius: 30px; font-size: 0.8rem; font-weight: 700; text-decoration: none;">Telegram</a>
-                <a href="#" target="_blank" rel="noopener" data-share="twitter" class="share-btn share-x"
-                  style="background: #000000; color: white; padding: 7px 14px; border-radius: 30px; font-size: 0.8rem; font-weight: 700; text-decoration: none;">𝕏 Post</a>
-                <a href="#" target="_blank" rel="noopener" data-share="whatsapp" class="share-btn share-wa"
-                  style="background: #25d366; color: white; padding: 7px 14px; border-radius: 30px; font-size: 0.8rem; font-weight: 700; text-decoration: none;">WhatsApp</a>
-                <button type="button" data-copy-link
-                  class="share-btn share-copy"
-                  style="background: #f1f5f9; color: #1e293b; border: 1px solid #cbd5e1; padding: 7px 14px; border-radius: 30px; font-size: 0.8rem; font-weight: 700; cursor: pointer;"><i class="fas fa-clipboard"></i> Copy</button>
+            <h1 class="editorial-article-headline"><%= article[`title_${lang}`] %></h1>
+
+            <% if (article[`summary_${lang}`]) { %>
+              <p class="editorial-article-standfirst"><%= article[`summary_${lang}`] %></p>
+            <% } %>
+
+            <div class="editorial-article-byline-bar">
+              <div class="editorial-byline-author">
+                <strong><%= article.author_name || 'Khmer News Desk' %></strong>
+                <span>• Phnom Penh</span>
+                <span>• <%= article.read_time_minutes || 3 %> <%= t('common.minutes_read') %></span>
+                <span>• <%= article.views_count || 120 %> <%= t('common.views') %></span>
               </div>
-              <div class="reading-tools" style="display: flex; align-items: center; gap: 8px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 30px; padding: 4px 8px;">
-                <button type="button" data-font="-1" class="font-btn" title="Decrease font size" aria-label="Decrease font size">A−</button>
-                <span class="font-indicator" style="font-size: 0.8rem; font-weight: 700; color: #64748b;">A</span>
-                <button type="button" data-font="1" class="font-btn" title="Increase font size" aria-label="Increase font size">A+</button>
-                <button type="button" onclick="window.print()" class="font-btn" title="Print article" aria-label="Print article"><i class="fas fa-print"></i></button>
+
+              <div class="editorial-share-bar">
+                <a href="#" target="_blank" rel="noopener" data-share="facebook" class="editorial-share-link" title="Share on Facebook"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" target="_blank" rel="noopener" data-share="telegram" class="editorial-share-link" title="Share on Telegram"><i class="fab fa-telegram-plane"></i></a>
+                <a href="#" target="_blank" rel="noopener" data-share="twitter" class="editorial-share-link" title="Share on X"><i class="fab fa-x-twitter"></i></a>
+                <button type="button" data-copy-link class="editorial-share-link" title="Copy Link"><i class="fas fa-link"></i></button>
+                <span class="editorial-meta-sep">|</span>
+                <button type="button" data-font="-1" class="editorial-share-link" title="Smaller text">A−</button>
+                <button type="button" data-font="1" class="editorial-share-link" title="Larger text">A+</button>
+                <button type="button" onclick="window.print()" class="editorial-share-link" title="Print"><i class="fas fa-print"></i></button>
               </div>
             </div>
+          </header>
+
+          <% if (article.image_url) { %>
+            <figure class="editorial-article-figure">
+              <img src="<%= article.image_url %>" alt="<%= article[`title_${lang}`] %>" class="article-hero-img">
+            </figure>
+          <% } %>
+
+          <div class="editorial-article-body article-content">
+            <%- article[`content_${lang}`] %>
           </div>
 
-          <!-- Featured Hero Image Frame -->
-          <div
-            style="border-radius: 12px; overflow: hidden; margin-bottom: 28px; border: 1px solid #e2e8f0; background: #f8fafc;">
-            <img src="<%= article.image_url %>" alt="<%= article[`title_${lang}`] %>" class="article-hero-img"
-              style="width: 100%; max-height: 480px; object-fit: cover;">
-          </div>
+          <!-- Inline Ad Slot -->
+          <% if (typeof getAd === 'function') { %>
+            <% var inlineAd = getAd('article_inline') || getAd('inline'); %>
+            <% if (inlineAd) { %>
+              <div class="editorial-ad-slot">
+                <span class="editorial-ad-label">ADVERTISEMENT</span>
+                <% if (inlineAd.ad_type === 'html' && inlineAd.html_code) { %>
+                  <%- inlineAd.html_code %>
+                <% } else { %>
+                  <a href="<%= inlineAd.link_url || '#' %>" target="_blank" onclick="fetch('/api/ads/click/<%= inlineAd.id %>', {method:'POST'})">
+                    <img src="<%= inlineAd.image_url %>" alt="<%= inlineAd.title %>">
+                  </a>
+                <% } %>
+              </div>
+            <% } %>
+          <% } %>
 
-          <div class="article-body">
-            <div class="article-content" style="font-size: 1.12rem; line-height: 2.0; color: #1e293b;">
-              <%- article[`content_${lang}`] %>
-            </div>
-
-            <!-- DYNAMIC AD SLOT: Inline Article Ad -->
-            <% if (typeof getAd==='function' ) { %>
-              <% var inlineAd=getAd('article_inline') || getAd('inline'); %>
-                <% if (inlineAd) { %>
-                  <div class="inline-ad-banner"
-                    style="margin: 36px 0; text-align: center; background: #f8fafc; padding: 12px; border-radius: 12px; border: 1px dashed #cbd5e1;">
-                    <% if (inlineAd.ad_type==='html' && inlineAd.html_code) { %>
-                      <%- inlineAd.html_code %>
-                        <% } else { %>
-                          <a href="<%= inlineAd.link_url || '#' %>" target="_blank"
-                            onclick="fetch('/api/ads/click/<%= inlineAd.id %>', {method:'POST'})">
-                            <img src="<%= inlineAd.image_url %>" alt="<%= inlineAd.title %>"
-                              style="max-height: 140px; border-radius: 8px; width: 100%; object-fit: contain;">
-                          </a>
-                          <% } %>
-                  </div>
-                  <% } %>
-                    <% } %>
-
-                      <!-- DYNAMIC AD SLOT: Article Bottom Ad -->
-                      <% if (typeof getAd==='function' ) { %>
-                        <% var bottomAd=getAd('article_bottom'); %>
-                          <% if (bottomAd) { %>
-                            <div class="article-bottom-ad" style="margin-top: 28px; text-align: center;">
-                              <% if (bottomAd.ad_type==='html' && bottomAd.html_code) { %>
-                                <%- bottomAd.html_code %>
-                                  <% } else { %>
-                                    <a href="<%= bottomAd.link_url || '#' %>" target="_blank"
-                                      onclick="fetch('/api/ads/click/<%= bottomAd.id %>', {method:'POST'})">
-                                      <img src="<%= bottomAd.image_url %>" alt="<%= bottomAd.title %>"
-                                        style="max-height: 120px; border-radius: 8px; border: 1px solid #e2e8f0; width: 100%; object-fit: contain;">
-                                    </a>
-                                    <% } %>
-                            </div>
-                            <% } %>
-                              <% } %>
-
-          <!-- Article Tags -->
+          <!-- Article Topics -->
           <% if (tags && tags.length > 0) { %>
-            <div class="article-tags-row" style="margin-top: 32px; padding-top: 20px; border-top: 1px solid #e2e8f0; display: flex; flex-wrap: wrap; align-items: center; gap: 8px;">
-              <span style="font-weight: 700; font-size: 0.88rem; color: #64748b;"><i class="fas fa-tags"></i> <%= t('labels.tags') %>:</span>
-              <% tags.forEach(function(tag) { %>
-                <a href="/tag/<%= tag.slug %>" class="tag-chip" style="font-size: 0.82rem;"><%= tag[`name_${lang}`] %></a>
-              <% }) %>
+            <div class="editorial-topics-bar" style="margin-top: 32px;">
+              <span class="editorial-topics-label"><%= t('labels.tags') %>:</span>
+              <div class="editorial-topic-links">
+                <% tags.forEach(function(tag) { %>
+                  <a href="/tag/<%= tag.slug %>" class="editorial-topic-link">#<%= tag[`name_${lang}`] %></a>
+                <% }) %>
+              </div>
             </div>
           <% } %>
 
-          <!-- Prev / Next Article Navigation -->
-          <div class="article-prevnext" style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 28px;">
-            <% if (prevArticle) { %>
-              <a href="/article/<%= prevArticle.slug %>" class="prevnext-card prevnext-prev" style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px; text-decoration: none; transition: all 0.2s; display: block;">
-                <span style="font-size: 0.78rem; font-weight: 700; color: #64748b;">← <%= lang==='km' ? 'អត្ថបទមុន' : 'Previous Article' %></span>
-                <span style="display: block; font-weight: 700; color: #0f172a; margin-top: 6px; font-size: 0.95rem; line-height: 1.4;"><%= prevArticle[`title_${lang}`] %></span>
-              </a>
-            <% } else { %>
-              <div></div>
-            <% } %>
-            <% if (nextArticle) { %>
-              <a href="/article/<%= nextArticle.slug %>" class="prevnext-card prevnext-next" style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px; text-decoration: none; transition: all 0.2s; display: block; text-align: right;">
-                <span style="font-size: 0.78rem; font-weight: 700; color: #64748b;"><%= lang==='km' ? 'អត្ថបទបន្ទាប់' : 'Next Article' %> →</span>
-                <span style="display: block; font-weight: 700; color: #0f172a; margin-top: 6px; font-size: 0.95rem; line-height: 1.4;"><%= nextArticle[`title_${lang}`] %></span>
-              </a>
-            <% } %>
-          </div>
-
-          </div>
+          <!-- Hairline Previous / Next Dispatch Navigation -->
+          <nav class="editorial-prevnext" aria-label="Adjacent dispatches">
+            <div class="editorial-prevnext-col">
+              <% if (prevArticle) { %>
+                <span class="editorial-prevnext-label">&larr; <%= lang === 'km' ? 'អត្ថបទមុន' : 'PREVIOUS DISPATCH' %></span>
+                <a href="/article/<%= prevArticle.slug %>" class="editorial-prevnext-title"><%= prevArticle[`title_${lang}`] %></a>
+              <% } %>
+            </div>
+            <div class="editorial-prevnext-col is-right">
+              <% if (nextArticle) { %>
+                <span class="editorial-prevnext-label"><%= lang === 'km' ? 'អត្ថបទបន្ទាប់' : 'NEXT DISPATCH' %> &rarr;</span>
+                <a href="/article/<%= nextArticle.slug %>" class="editorial-prevnext-title"><%= nextArticle[`title_${lang}`] %></a>
+              <% } %>
+            </div>
+          </nav>
         </article>
 
-        <!-- ARTICLE PAGE BLOCKS (ordered sections configured in Layout Studio) -->
-        <% if (typeof articleBlocks !== 'undefined' && articleBlocks) { %>
-          <% articleBlocks.forEach(function(block) { %>
-            <% if (!block.enabled) return; %>
-            <% if (block.type === 'ad_slot' && typeof getAd === 'function') { %>
-              <% var artAd = getAd(block.position_slot || 'article_bottom'); %>
-              <% if (artAd) { %>
-                <div class="block-section block-ad" style="margin: 28px 0; text-align: center; overflow: hidden;">
-                  <% if (artAd.ad_type === 'html' && artAd.html_code) { %>
-                    <%- artAd.html_code %>
-                  <% } else { %>
-                    <a href="<%= artAd.link_url || '#' %>" target="_blank" onclick="fetch('/api/ads/click/<%= artAd.id %>', {method:'POST'})">
-                      <img src="<%= artAd.image_url %>" alt="<%= artAd.title %>" style="max-width: 100%; border-radius: 8px; max-height: 120px; object-fit: contain;">
-                    </a>
-                  <% } %>
-                </div>
-              <% } %>
-            <% } %>
-          <% }) %>
-        <% } %>
-
+        <!-- Reader Discussion / Comments (Hairline Section, No Box Card) -->
         <% if (typeof articleBlocks === 'undefined' || !articleBlocks || articleBlocks.some(function(b) { return b.enabled && b.type === 'article_comments'; })) { %>
-        <!-- COMMENTS SECTION -->
-        <div id="comments" class="comments-section"
-          style="margin-top: 28px; background: #ffffff; border-radius: 16px; padding: 32px; border: 1px solid #e2e8f0; box-shadow: 0 4px 20px -4px rgba(15,23,42,0.04);">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-            <h3 style="font-size: 1.3rem; font-weight: 800; color: #0f172a; margin: 0;"><i class="fas fa-comments"></i> <%= t('comments.title') %> <span
-                style="font-size: 0.85rem; color: #64748b; font-weight: 600;">(<%= comments.length %> <%= t('comments.count')
-                  %>)</span></h3>
-          </div>
-
-          <% if (commentSuccess) { %>
-            <div style="background-color: #dcfce7; border: 1px solid #86efac; color: #166534; padding: 12px 16px; border-radius: 8px; margin-bottom: 20px; font-weight: 500;"><i class="fas fa-circle-check"></i> <%= t('comments.success') %></div>
-          <% } else if (commentError) { %>
-            <div style="background-color: #fee2e2; border: 1px solid #fca5a5; color: #991b1b; padding: 12px 16px; border-radius: 8px; margin-bottom: 20px; font-weight: 500;"><i class="fas fa-triangle-exclamation"></i> <%= t('comments.error') %></div>
-          <% } %>
-
-          <!-- Comment list -->
-          <% if (comments && comments.length > 0) { %>
-            <div class="comment-list" style="display: flex; flex-direction: column; gap: 18px; margin-bottom: 28px;">
-              <% comments.forEach(function(c) { %>
-                <div class="comment-item" style="display: flex; gap: 14px; padding-bottom: 18px; border-bottom: 1px solid #f1f5f9;">
-                  <span class="comment-avatar"
-                    style="width: 42px; height: 42px; border-radius: 50%; background: var(--primary-color, #1e3a8a); color: white; font-weight: 800; display: inline-flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0;"><%= (c.name || '?').charAt(0).toUpperCase() %></span>
-                  <div style="flex: 1;">
-                    <div style="display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; margin-bottom: 6px;">
-                      <strong style="color: #0f172a; font-size: 0.95rem;"><%= c.name %></strong>
-                      <span style="color: #94a3b8; font-size: 0.8rem;">• <%= new
-                          Date(c.created_at).toLocaleDateString(lang==='km' ? 'km-KH' : 'en-US' , { year: 'numeric' ,
-                          month: 'long' , day: 'numeric' }) %></span>
-                    </div>
-                    <p style="color: #334155; font-size: 0.95rem; line-height: 1.7; margin: 0;"><%= c.content %></p>
-                  </div>
-                </div>
-                <% }) %>
+          <section id="comments" class="editorial-comments-section">
+            <div class="editorial-section-rule">
+              <h2><%= t('comments.title') %> (<%= comments.length %>)</h2>
             </div>
-            <% } else { %>
-              <p style="color: #64748b; font-size: 0.95rem; text-align: center; padding: 16px 0; margin-bottom: 20px;"><i class="fas fa-comments"></i> <%= t('comments.no_comments') %></p>
-              <% } %>
 
-                <!-- Comment form -->
-                <form action="/article/<%= article.slug %>/comment" method="POST" class="comment-form"
-                  style="background: #f8fafc; border-radius: 12px; padding: 24px;">
-                  <h4 style="font-size: 1.05rem; font-weight: 800; color: #0f172a; margin: 0 0 16px;"><i class="fas fa-pen-nib"></i> <%= t('comments.leave') %></h4>
-                  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px;">
-                    <div>
-                      <label style="display: block; font-weight: 600; margin-bottom: 6px; font-size: 0.88rem; color: #1e293b;"><%= t('comments.name') %> *</label>
-                      <input type="text" name="name" required
-                        style="width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.92rem;"
-                        placeholder="Sok Dara">
+            <% if (commentSuccess) { %>
+              <div class="editorial-notice is-success"><i class="fas fa-check-circle"></i> <%= t('comments.success') %></div>
+            <% } else if (commentError) { %>
+              <div class="editorial-notice is-error"><i class="fas fa-exclamation-circle"></i> <%= t('comments.error') %></div>
+            <% } %>
+
+            <% if (comments && comments.length > 0) { %>
+              <div class="editorial-comment-list">
+                <% comments.forEach(function(c) { %>
+                  <div class="editorial-comment-row">
+                    <div class="editorial-comment-head">
+                      <strong><%= c.name %></strong>
+                      <span>•</span>
+                      <time><%= timeAgo(c.created_at) %></time>
                     </div>
-                    <div>
-                      <label style="display: block; font-weight: 600; margin-bottom: 6px; font-size: 0.88rem; color: #1e293b;"><%= t('comments.email') %> *</label>
-                      <input type="email" name="email" required
-                        style="width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.92rem;"
-                        placeholder="you@example.com">
-                    </div>
+                    <p><%= c.content %></p>
                   </div>
-                  <div style="margin-bottom: 14px;">
-                    <label style="display: block; font-weight: 600; margin-bottom: 6px; font-size: 0.88rem; color: #1e293b;"><%= t('comments.content') %> *</label>
-                    <textarea name="content" rows="4" required
-                      style="width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.92rem; resize: vertical;"
-                      placeholder="<%= t('comments.placeholder') %>"></textarea>
-                  </div>
-                  <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap;">
-                    <span style="color: #94a3b8; font-size: 0.8rem;"><i class="fas fa-lock"></i> <%= t('comments.email_note') %></span>
-                    <button type="submit"
-                      style="background: var(--primary-color, #1e3a8a); color: white; border: none; padding: 11px 28px; border-radius: 8px; font-weight: 700; font-size: 0.92rem; cursor: pointer;"><i class="fas fa-paper-plane"></i> <%= t('comments.submit') %></button>
-                  </div>
-                </form>
-        </div>
+                <% }) %>
+              </div>
+            <% } else { %>
+              <p class="editorial-muted-note"><%= t('comments.no_comments') %></p>
+            <% } %>
+
+            <form action="/article/<%= article.slug %>/comment" method="POST" class="editorial-comment-form">
+              <h4><%= t('comments.leave') %></h4>
+              <div class="editorial-form-row-2">
+                <div>
+                  <label><%= t('comments.name') %> *</label>
+                  <input type="text" name="name" required placeholder="Sok Dara">
+                </div>
+                <div>
+                  <label><%= t('comments.email') %> *</label>
+                  <input type="email" name="email" required placeholder="you@example.com">
+                </div>
+              </div>
+              <div class="editorial-form-field">
+                <label><%= t('comments.content') %> *</label>
+                <textarea name="content" rows="3" required placeholder="<%= t('comments.placeholder') %>"></textarea>
+              </div>
+              <div class="editorial-form-actions">
+                <span class="editorial-muted-note"><%= t('comments.email_note') %></span>
+                <button type="submit" class="editorial-submit-btn"><%= t('comments.submit') %></button>
+              </div>
+            </form>
+          </section>
         <% } %>
       </div>
 
-      <!-- SIDEBAR WIDGETS -->
-      <aside class="sidebar" style="display: flex; flex-direction: column; gap: 24px;">
+      <!-- RIGHT EDITORIAL RAIL (Hairline Divided, No Box Cards) -->
+      <aside class="editorial-right-rail">
+        <div class="editorial-rail-section">
+          <div class="editorial-wire-header">
+            <div class="editorial-wire-title">
+              <span class="live-pulse-dot"></span>
+              <span><%= t('common.today_live') %></span>
+            </div>
+            <a href="/today" class="editorial-wire-all-link"><%= t('common.view_all') %> &rarr;</a>
+          </div>
+          <p class="editorial-muted-note" style="margin-bottom: 12px;">
+            <%= lang === 'km' ? 'តាមដានព័ត៌មានថ្មីៗទាន់ហេតុការណ៍ក្នុងថ្ងៃនេះ' : 'Follow real-time updates from our newsroom.' %>
+          </p>
+          <a href="/today" class="editorial-wire-footer-btn">
+            <%= lang === 'km' ? 'ទៅកាន់ទំព័រព័ត៌មានថ្ងៃនេះ' : "Open Today's Live Wire" %> (<%= typeof todayCount !== 'undefined' ? todayCount : 48 %>) &rarr;
+          </a>
+        </div>
 
-        <!-- SIDEBAR WIDGET 1: CATEGORIES LIST -->
-        <div class="sidebar-widget"
-          style="background: #ffffff; border-radius: 16px; padding: 24px; border: 1px solid #e2e8f0; box-shadow: 0 2px 8px rgba(0,0,0,0.02);">
-          <h3 class="widget-title"
-            style="font-size: 1.15rem; font-weight: 800; color: #0f172a; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 2px solid var(--accent-color, #dc2626);">
-            <i class="fas fa-folder"></i> <%= t('admin.categories') %>
-          </h3>
-          <ul class="category-list"
-            style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px;">
-            <% if (categories && categories.length> 0) { %>
+        <div class="editorial-rail-section">
+          <h3 class="editorial-rail-heading"><%= lang === 'km' ? 'ព័ត៌មានពេញនិយម' : 'Most Read Today' %></h3>
+          <ol class="editorial-ranked-list">
+            <% if (typeof trending !== 'undefined' && trending && trending.length > 0) { %>
+              <% trending.slice(0, 5).forEach(function(a, idx) { %>
+                <li class="editorial-ranked-item">
+                  <span class="editorial-rank-num"><%= String(idx + 1).padStart(2, '0') %></span>
+                  <div class="editorial-ranked-body">
+                    <% if (a.category_name_en) { %>
+                      <span class="editorial-kicker"><%= a[`category_name_${lang}`] %></span>
+                    <% } %>
+                    <h4><a href="/article/<%= a.slug %>"><%= a[`title_${lang}`] %></a></h4>
+                    <span class="editorial-byline-sm"><%= timeAgo(a.created_at) %></span>
+                  </div>
+                </li>
+              <% }) %>
+            <% } %>
+          </ol>
+        </div>
+
+        <div class="editorial-rail-section">
+          <h3 class="editorial-rail-heading"><%= t('admin.categories') %></h3>
+          <ul class="editorial-desk-links">
+            <% if (categories && categories.length > 0) { %>
               <% categories.forEach(function(c) { %>
-                <li class="category-item">
-                  <a href="/category/<%= c.slug %>"
-                    style="display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; border-radius: 8px; background: #f8fafc; color: #1e293b; font-weight: 600; text-decoration: none; transition: all 0.2s;">
-                    <span style="display: flex; align-items: center; gap: 8px;">
-                      <span><i class="fas fa-newspaper"></i></span>
-                      <span>
-                        <%= c[`name_${lang}`] %>
-                      </span>
-                    </span>
-                    <span
-                      style="font-size: 0.8rem; color: #94a3b8; background: #ffffff; padding: 2px 8px; border-radius: 12px; border: 1px solid #e2e8f0;">&rarr;</span>
+                <li>
+                  <a href="/category/<%= c.slug %>">
+                    <span><%= c[`name_${lang}`] %></span>
+                    <span>&rarr;</span>
                   </a>
                 </li>
-                <% }) %>
-                  <% } %>
-          </ul>
-        </div>
-
-        <!-- SIDEBAR WIDGET 2: TOP TRENDING STORIES -->
-        <div class="sidebar-widget"
-          style="background: #ffffff; border-radius: 16px; padding: 24px; border: 1px solid #e2e8f0; box-shadow: 0 2px 8px rgba(0,0,0,0.02);">
-          <h3 class="widget-title"
-            style="font-size: 1.15rem; font-weight: 800; color: #0f172a; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 2px solid var(--primary-color, #1e3a8a);">
-            <i class="fas fa-fire"></i> <%= lang==='km' ? 'ព័ត៌មានពេញនិយម' : 'Trending Stories' %>
-          </h3>
-          <ul class="trending-list"
-            style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 14px;">
-            <% if (typeof trending !== 'undefined' && trending && trending.length> 0) { %>
-              <% trending.slice(0, 5).forEach(function(a, idx) { %>
-                <li class="trending-item" style="display: flex; gap: 12px; align-items: flex-start;">
-                  <span class="trending-number"
-                    style="background: <%= idx === 0 ? '#b91c1c' : (idx === 1 ? '#d97706' : '#1e3a8a') %>; color: white; font-weight: 800; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; flex-shrink: 0;">
-                    <%= idx + 1 %>
-                  </span>
-                  <span class="trending-title" style="font-size: 0.95rem; font-weight: 700; line-height: 1.4;">
-                    <a href="/article/<%= a.slug %>" style="color: #0f172a; text-decoration: none;">
-                      <%= a[`title_${lang}`] %>
-                    </a>
-                  </span>
-                </li>
-                <% }) %>
-                  <% } %>
-          </ul>
-        </div>
-
-        <!-- SIDEBAR WIDGET 3: TAG CLOUD -->
-        <% if (typeof allTags !== 'undefined' && allTags && allTags.length > 0) { %>
-          <div class="sidebar-widget"
-            style="background: #ffffff; border-radius: 16px; padding: 24px; border: 1px solid #e2e8f0; box-shadow: 0 2px 8px rgba(0,0,0,0.02);">
-            <h3 class="widget-title"
-              style="font-size: 1.15rem; font-weight: 800; color: #0f172a; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 2px solid var(--accent-color, #dc2626);">
-              <i class="fas fa-tags"></i> <%= t('tags.cloud_title') %>
-            </h3>
-            <div class="tag-cloud" style="display: flex; flex-wrap: wrap; gap: 8px;">
-              <% allTags.slice(0, 15).forEach(function(tag) { %>
-                <a href="/tag/<%= tag.slug %>" class="tag-chip" style="font-size: 0.8rem;"><%= tag[`name_${lang}`] %></a>
               <% }) %>
-            </div>
-          </div>
-        <% } %>
-
-        <!-- DYNAMIC AD SLOT: Sidebar Ad Banner -->
-        <% if (typeof getAd==='function' ) { %>
-          <% var sidebarAd=getAd('sidebar'); %>
-            <% if (sidebarAd) { %>
-              <div class="sidebar-widget ad-widget"
-                style="padding: 12px; display: flex; justify-content: center; overflow: hidden; text-align: center; background: #ffffff; border-radius: 16px; border: 1px solid #e2e8f0;">
-                <% if (sidebarAd.ad_type==='html' && sidebarAd.html_code) { %>
-                  <%- sidebarAd.html_code %>
-                    <% } else { %>
-                      <a href="<%= sidebarAd.link_url || '#' %>" target="_blank"
-                        onclick="fetch('/api/ads/click/<%= sidebarAd.id %>', {method:'POST'})">
-                        <img src="<%= sidebarAd.image_url %>" alt="<%= sidebarAd.title %>"
-                          style="width: 100%; border-radius: 12px; border: 1px solid #e2e8f0; max-height: 280px; object-fit: cover;">
-                      </a>
-                      <% } %>
-              </div>
-              <% } %>
-                <% } %>
-
+            <% } %>
+          </ul>
+        </div>
       </aside>
     </div>
-  </div>
-</section>
 
-<% if (typeof articleBlocks === 'undefined' || !articleBlocks || articleBlocks.some(function(b) { return b.enabled && b.type === 'article_related'; })) { %>
-<!-- RELATED ARTICLES SECTION -->
-<section class="related-section" style="background: #f8fafc; padding: 48px 0; border-top: 1px solid #e2e8f0;">
-  <div class="container">
-    <div class="section-header" style="margin-bottom: 24px;">
-      <h2 class="section-title" style="font-size: 1.5rem; font-weight: 800; color: #0f172a;">
-        <%= lang==='km' ? 'ព័ត៌មានទាក់ទង' : 'Related Articles' %>
-      </h2>
-    </div>
-    <div class="related-grid"
-      style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px;">
-      <% if (articles && articles.length> 0) { %>
-        <% articles.forEach(function(a) { %>
-          <article class="card-template-standard"
-            style="background: #ffffff; border-radius: 16px; border: 1px solid #e2e8f0; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.02);">
-            <a href="/article/<%= a.slug %>">
-              <img src="<%= a.image_url %>" alt="<%= a[`title_${lang}`] %>" class="article-card-img"
-                style="width: 100%; height: 180px; object-fit: cover;">
-            </a>
-            <div class="article-card-body" style="padding: 16px;">
-              <div class="article-card-meta" style="margin-bottom: 8px; font-size: 0.8rem; color: #64748b;">
-                <span class="article-card-category badge-cat-<%= a.category_slug %>"
-                  style="padding: 2px 8px; border-radius: 12px; font-weight: 700;">
-                  <%= a[`category_name_${lang}`] %>
-                </span>
-                <span>&bull; <%= new Date(a.created_at).toLocaleDateString(lang==='km' ? 'km-KH' : 'en-US' , {
-                    year: 'numeric' , month: 'short' , day: 'numeric' }) %></span>
+    <!-- RELATED DISPATCHES (Hairline 4-Column Row) -->
+    <% if (articles && articles.length > 0) { %>
+      <section class="editorial-related-section">
+        <div class="editorial-section-rule">
+          <h2><%= lang === 'km' ? 'អត្ថបទពាក់ព័ន្ធ' : 'More Coverage From This Desk' %></h2>
+          <a href="/category/<%= article.category_slug %>" class="editorial-section-more"><%= t('common.view_all') %> &rarr;</a>
+        </div>
+        <div class="editorial-hairline-grid-4">
+          <% articles.slice(0, 4).forEach(function(a) { %>
+            <article class="editorial-story-unit">
+              <a href="/article/<%= a.slug %>" class="editorial-media-link">
+                <img src="<%= a.image_url %>" alt="<%= a[`title_${lang}`] %>" loading="lazy">
+              </a>
+              <div class="editorial-meta-row">
+                <span class="editorial-kicker"><%= a[`category_name_${lang}`] %></span>
+                <span class="editorial-meta-sep">•</span>
+                <time class="editorial-time"><%= timeAgo(a.created_at) %></time>
               </div>
-              <h3 class="article-card-title"
-                style="font-size: 1rem; font-weight: 700; line-height: 1.4; margin-bottom: 12px;">
-                <a href="/article/<%= a.slug %>" style="color: #0f172a; text-decoration: none;">
-                  <%= a[`title_${lang}`] %>
-                </a>
+              <h3 class="editorial-story-title">
+                <a href="/article/<%= a.slug %>"><%= a[`title_${lang}`] %></a>
               </h3>
-              <div class="article-card-footer">
-                <a href="/article/<%= a.slug %>" class="read-more"
-                  style="color: var(--primary-color, #1e3a8a); font-weight: 700; font-size: 0.85rem;">
-                  <%= t('common.read_more') %> &rarr;
-                </a>
-              </div>
-            </div>
-          </article>
+            </article>
           <% }) %>
-            <% } %>
-    </div>
+        </div>
+      </section>
+    <% } %>
   </div>
 </section>
-<% } %>
 
 <script>
   window.addEventListener('scroll', function () {
     var winScroll = document.body.scrollTop || document.documentElement.scrollTop;
     var height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-    var scrolled = (winScroll / height) * 100;
+    var scrolled = height > 0 ? (winScroll / height) * 100 : 0;
     var bar = document.getElementById('readingProgress');
-    if (bar) {
-      bar.style.width = scrolled + '%';
-    }
+    if (bar) bar.style.width = scrolled + '%';
   });
 
   document.addEventListener('DOMContentLoaded', function () {
     var pageUrl = encodeURIComponent(window.location.href);
     var pageTitle = encodeURIComponent(document.title);
-
-    // Share links
     var shareMap = {
       facebook: 'https://www.facebook.com/sharer/sharer.php?u=' + pageUrl,
       telegram: 'https://t.me/share/url?url=' + pageUrl + '&text=' + pageTitle,
-      twitter: 'https://twitter.com/intent/tweet?url=' + pageUrl + '&text=' + pageTitle,
-      whatsapp: 'https://wa.me/?text=' + pageTitle + '%20' + pageUrl
+      twitter: 'https://twitter.com/intent/tweet?url=' + pageUrl + '&text=' + pageTitle
     };
     document.querySelectorAll('[data-share]').forEach(function (el) {
       var key = el.getAttribute('data-share');
-      if (shareMap[key]) {
-        el.setAttribute('href', shareMap[key]);
-      }
+      if (shareMap[key]) el.setAttribute('href', shareMap[key]);
     });
-
-    // Copy link
     document.querySelectorAll('[data-copy-link]').forEach(function (btn) {
       btn.addEventListener('click', function () {
         navigator.clipboard.writeText(window.location.href).then(function () {
-          btn.innerHTML = '<i class="fas fa-check"></i> <%= lang === 'km' ? 'បានចម្លង' : 'Copied' %>';
-          setTimeout(function () { btn.innerHTML = '<i class="fas fa-clipboard"></i> Copy'; }, 2000);
+          btn.innerHTML = '<i class="fas fa-check"></i>';
+          setTimeout(function () { btn.innerHTML = '<i class="fas fa-link"></i>'; }, 2000);
         });
       });
     });
-
-    // Font size controls
     var content = document.querySelector('.article-content');
     var fontLevel = 0;
     document.querySelectorAll('[data-font]').forEach(function (btn) {
@@ -444,7 +284,6 @@
         var dir = parseInt(btn.getAttribute('data-font'), 10);
         fontLevel = Math.max(-2, Math.min(3, fontLevel + dir));
         content.style.fontSize = (1.12 + fontLevel * 0.08) + 'rem';
-        content.style.lineHeight = (2.0 - fontLevel * 0.06).toFixed(2);
       });
     });
   });

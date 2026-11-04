@@ -1,0 +1,193 @@
+<section class="editorial-today-page">
+  <div class="container">
+    <!-- Newspaper Section Masthead -->
+    <header class="editorial-section-banner">
+      <div class="editorial-section-banner-top">
+        <span class="live-pulse-indicator">
+          <span class="live-pulse-dot"></span>
+          <%= lang === 'km' ? 'ផ្សាយផ្ទាល់ • ព័ត៌មានថ្ងៃនេះ' : 'LIVE WIRE • TODAY NOW' %>
+        </span>
+        <span class="editorial-dateline">
+          <%= new Date().toLocaleDateString(lang === 'km' ? 'km-KH' : 'en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) %>
+        </span>
+      </div>
+      <div class="editorial-section-banner-main">
+        <div>
+          <h1 class="editorial-page-title">
+            <%= lang === 'km' ? 'ព័ត៌មានថ្មីៗទាន់ហេតុការណ៍ថ្ងៃនេះ' : "Today's Breaking & Live Dispatches" %>
+          </h1>
+          <p class="editorial-page-subtitle">
+            <%= lang === 'km'
+              ? `បច្ចុប្បន្នភាពព័ត៌មានតាមលំដាប់ម៉ោងពីបន្ទប់ព័ត៌មានខ្មែរញូស៍ (${allTodayCount} អត្ថបទក្នុងរយៈពេល ២៤ ម៉ោងចុងក្រោយ)`
+              : `Real-time chronological dispatches from the Khmer News desk (${allTodayCount} reports filed in the last 24 hours)` %>
+          </p>
+        </div>
+      </div>
+
+      <!-- Category Filter Tabs (Hairline Tab Bar) -->
+      <nav class="editorial-filter-bar" aria-label="Filter Today's News">
+        <a href="/today" class="editorial-filter-tab <%= !activeCat ? 'active' : '' %>">
+          <%= lang === 'km' ? 'ទាំងអស់' : 'All Desks' %> (<%= allTodayCount %>)
+        </a>
+        <% (categories || []).forEach(c => { %>
+          <a href="/today?cat=<%= c.slug %>" class="editorial-filter-tab <%= activeCat === c.slug ? 'active' : '' %>">
+            <%= c[`name_${lang}`] %>
+          </a>
+        <% }) %>
+      </nav>
+    </header>
+
+    <% if (todayArticles && todayArticles.length > 0) { %>
+      <% const leadToday = todayArticles[0]; %>
+      <% const subLeads = todayArticles.slice(1, 3); %>
+      <% const wireStream = todayArticles.slice(3); %>
+
+      <!-- Top Lead Dispatch of the Hour -->
+      <div class="editorial-today-lead-grid">
+        <article class="editorial-today-lead-main">
+          <a href="/article/<%= leadToday.slug %>" class="editorial-media-link">
+            <img src="<%= leadToday.image_url || 'https://picsum.photos/seed/todaylead/900/500' %>" alt="<%= leadToday[`title_${lang}`] %>" loading="eager">
+          </a>
+          <div class="editorial-today-lead-body">
+            <div class="editorial-meta-row">
+              <span class="editorial-live-tag"><%= lang === 'km' ? 'ទាន់ហេតុការណ៍' : 'DEVELOPING NOW' %></span>
+              <% if (leadToday.category_name_en) { %>
+                <a href="/category/<%= leadToday.category_slug %>" class="editorial-kicker"><%= leadToday[`category_name_${lang}`] %></a>
+              <% } %>
+              <span class="editorial-meta-sep">•</span>
+              <time class="editorial-time-fresh"><%= timeAgo(leadToday.created_at) %></time>
+            </div>
+            <h2 class="editorial-lead-headline">
+              <a href="/article/<%= leadToday.slug %>"><%= leadToday[`title_${lang}`] %></a>
+            </h2>
+            <p class="editorial-lead-Deck">
+              <%= leadToday[`summary_${lang}`] ? leadToday[`summary_${lang}`] : stripHtml(leadToday[`content_${lang}`], 240) %>
+            </p>
+            <div class="editorial-byline">
+              <span><%= leadToday.author_name || 'Khmer News Desk' %></span>
+              <span>•</span>
+              <span><%= leadToday.read_time_minutes || 3 %> <%= t('common.minutes_read') %></span>
+            </div>
+          </div>
+        </article>
+
+        <% if (subLeads.length > 0) { %>
+        <div class="editorial-today-subleads">
+          <div class="editorial-col-label">
+            <%= lang === 'km' ? 'ព័ត៌មានសំខាន់ៗក្នុងម៉ោងនេះ' : 'KEY DEVELOPMENTS THIS HOUR' %>
+          </div>
+          <% subLeads.forEach(sub => { %>
+            <article class="editorial-sublead-item">
+              <a href="/article/<%= sub.slug %>" class="editorial-sublead-thumb">
+                <img src="<%= sub.image_url || 'https://picsum.photos/seed/sub/600/360' %>" alt="<%= sub[`title_${lang}`] %>" loading="lazy">
+              </a>
+              <div class="editorial-meta-row">
+                <% if (sub.category_name_en) { %>
+                  <a href="/category/<%= sub.category_slug %>" class="editorial-kicker"><%= sub[`category_name_${lang}`] %></a>
+                  <span class="editorial-meta-sep">•</span>
+                <% } %>
+                <time class="editorial-time-fresh"><%= timeAgo(sub.created_at) %></time>
+              </div>
+              <h3 class="editorial-sublead-headline">
+                <a href="/article/<%= sub.slug %>"><%= sub[`title_${lang}`] %></a>
+              </h3>
+              <p class="editorial-sublead-excerpt">
+                <%= sub[`summary_${lang}`] ? sub[`summary_${lang}`] : stripHtml(sub[`content_${lang}`], 130) %>
+              </p>
+            </article>
+          <% }) %>
+        </div>
+        <% } %>
+      </div>
+
+      <!-- Chronological Wire Stream + Right Rail -->
+      <div class="editorial-two-col-layout">
+        <div class="editorial-wire-main">
+          <div class="editorial-section-rule">
+            <h2><%= lang === 'km' ? 'បញ្ជីព័ត៌មានតាមលំដាប់ម៉ោង' : 'Chronological Dispatch Feed' %></h2>
+            <span><%= wireStream.length %> <%= lang === 'km' ? 'អត្ថបទបន្តបន្ទាប់' : 'dispatches' %></span>
+          </div>
+
+          <div class="editorial-chronological-wire">
+            <% wireStream.forEach((item, idx) => { %>
+              <article class="editorial-wire-row">
+                <div class="editorial-wire-time-col">
+                  <time class="editorial-wire-badge"><%= timeAgo(item.created_at) %></time>
+                  <span class="editorial-wire-clock">
+                    <%= item.created_at ? String(item.created_at).slice(11, 16) : 'LIVE' %>
+                  </span>
+                </div>
+                <div class="editorial-wire-content-col">
+                  <div class="editorial-meta-row">
+                    <% if (item.category_name_en) { %>
+                      <a href="/category/<%= item.category_slug %>" class="editorial-kicker"><%= item[`category_name_${lang}`] %></a>
+                    <% } %>
+                    <% if (item.is_featured) { %>
+                      <span class="editorial-meta-sep">•</span>
+                      <span class="editorial-pick-label"><%= t('common.editors_picks') %></span>
+                    <% } %>
+                  </div>
+                  <h3 class="editorial-wire-headline">
+                    <a href="/article/<%= item.slug %>"><%= item[`title_${lang}`] %></a>
+                  </h3>
+                  <p class="editorial-wire-summary">
+                    <%= item[`summary_${lang}`] ? item[`summary_${lang}`] : stripHtml(item[`content_${lang}`], 180) %>
+                  </p>
+                  <div class="editorial-byline">
+                    <span><%= item.author_name || 'Khmer News Desk' %></span>
+                    <span>•</span>
+                    <span><%= item.read_time_minutes || 3 %> <%= t('common.minutes_read') %></span>
+                    <span>•</span>
+                    <span><%= item.views_count || 0 %> <%= t('common.views') %></span>
+                  </div>
+                </div>
+                <% if (item.image_url) { %>
+                  <a href="/article/<%= item.slug %>" class="editorial-wire-thumb">
+                    <img src="<%= item.image_url %>" alt="<%= item[`title_${lang}`] %>" loading="lazy">
+                  </a>
+                <% } %>
+              </article>
+            <% }) %>
+          </div>
+        </div>
+
+        <!-- Right Editorial Rail (No Cards) -->
+        <aside class="editorial-right-rail">
+          <div class="editorial-rail-section">
+            <h3 class="editorial-rail-heading">
+              <%= lang === 'km' ? 'អត្ថបទដែលមានអ្នកអានច្រើនបំផុត' : 'Most Read Today' %>
+            </h3>
+            <ol class="editorial-ranked-list">
+              <% (trending || []).forEach((tr, i) => { %>
+                <li class="editorial-ranked-item">
+                  <span class="editorial-rank-num"><%= String(i + 1).padStart(2, '0') %></span>
+                  <div class="editorial-ranked-body">
+                    <% if (tr.category_name_en) { %>
+                      <span class="editorial-kicker"><%= tr[`category_name_${lang}`] %></span>
+                    <% } %>
+                    <h4><a href="/article/<%= tr.slug %>"><%= tr[`title_${lang}`] %></a></h4>
+                    <span class="editorial-byline-sm"><%= timeAgo(tr.created_at) %> • <%= tr.views_count || 0 %> <%= t('common.views') %></span>
+                  </div>
+                </li>
+              <% }) %>
+            </ol>
+          </div>
+
+          <% if (tags && tags.length > 0) { %>
+            <div class="editorial-rail-section">
+              <h3 class="editorial-rail-heading"><%= t('tags.cloud_title') %></h3>
+              <div class="editorial-topic-links">
+                <% tags.forEach(tag => { %>
+                  <a href="/tag/<%= tag.slug %>" class="editorial-topic-link">#<%= tag[`name_${lang}`] %></a>
+                <% }) %>
+              </div>
+            </div>
+          <% } %>
+        </aside>
+      </div>
+    <% } else { %>
+      <p class="empty-state"><%= t('common.no_articles') %></p>
+    <% } %>
+  </div>
+</section>
+

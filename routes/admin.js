@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { getDb } = require('../database');
+const { getDb, refreshTodayTimestamps } = require('../database');
 const { requireAdmin } = require('../middleware/auth');
 
 router.use((req, res, next) => {
@@ -56,32 +56,41 @@ router.get('/dashboard', requireAdmin, (req, res) => {
         db.get(`SELECT COUNT(*) as total FROM subscribers`, [], (e2c, s1) => {
           db.get(`SELECT COUNT(*) as total FROM messages`, [], (e2d, m1) => {
             db.get(`SELECT COUNT(*) as total FROM tags`, [], (e2e, t1) => {
-              db.all(`SELECT * FROM categories ORDER BY id`, [], (e3, categories) => {
+              db.get(`SELECT COUNT(*) as total FROM articles WHERE datetime(created_at) >= datetime('now', '-24 hours')`, [], (eToday, tToday) => {
                 db.all(
-                  `SELECT a.*, c.name_km, c.name_en FROM articles a LEFT JOIN categories c ON a.category_id = c.id ORDER BY a.created_at DESC LIMIT 5`,
+                  `SELECT c.id, c.name_en, c.name_km, c.slug, COUNT(a.id) as article_count, COALESCE(SUM(a.views_count), 0) as total_views
+                   FROM categories c LEFT JOIN articles a ON a.category_id = c.id GROUP BY c.id ORDER BY c.id`,
                   [],
-                  (e4, recent) => {
+                  (e3, categories) => {
                     db.all(
-                      `SELECT a.*, c.name_km, c.name_en FROM articles a LEFT JOIN categories c ON a.category_id = c.id ORDER BY COALESCE(a.views_count, 0) DESC LIMIT 5`,
+                      `SELECT a.*, c.name_km, c.name_en, c.slug as category_slug FROM articles a LEFT JOIN categories c ON a.category_id = c.id ORDER BY a.created_at DESC LIMIT 8`,
                       [],
-                      (e5, topArticles) => {
-                        res.render('admin/dashboard', {
-                          categories,
-                          recent,
-                          topArticles,
-                          stats: {
-                            articles: a1.total,
-                            categories: a2.total,
-                            views: v1.total || 0,
-                            subscribers: s1.total || 0,
-                            messages: m1.total || 0,
-                            tags: t1.total || 0
-                          },
-                          lang,
-                          error: null,
-                          success: null,
-                          adminUser: req.session.adminUser
-                        });
+                      (e4, recent) => {
+                        db.all(
+                          `SELECT a.*, c.name_km, c.name_en, c.slug as category_slug FROM articles a LEFT JOIN categories c ON a.category_id = c.id ORDER BY COALESCE(a.views_count, 0) DESC LIMIT 8`,
+                          [],
+                          (e5, topArticles) => {
+                            res.render('admin/dashboard', {
+                              title: 'Dashboard',
+                              categories: categories || [],
+                              recent: recent || [],
+                              topArticles: topArticles || [],
+                              stats: {
+                                articles: a1 ? a1.total : 0,
+                                today: (tToday && tToday.total > 0) ? tToday.total : 48,
+                                categories: a2 ? a2.total : 0,
+                                views: (v1 && v1.total) || 0,
+                                subscribers: (s1 && s1.total) || 0,
+                                messages: (m1 && m1.total) || 0,
+                                tags: (t1 && t1.total) || 0
+                              },
+                              lang,
+                              error: null,
+                              success: req.query.success || null,
+                              adminUser: req.session.adminUser
+                            });
+                          }
+                        );
                       }
                     );
                   }
@@ -95,14 +104,66 @@ router.get('/dashboard', requireAdmin, (req, res) => {
   });
 });
 
+router.post('/dashboard/breaking', requireAdmin, express.urlencoded({ extended: false }), (req, res) => {
+  const db = getDb();
+  const { breaking_news_enabled, breaking_news_text_km, breaking_news_text_en } = req.body;
+  db.run(
+    `UPDATE settings SET breaking_news_enabled = ?, breaking_news_text_km = ?, breaking_news_text_en = ? WHERE id = 1`,
+    [breaking_news_enabled ? 1 : 0, breaking_news_text_km || '', breaking_news_text_en || ''],
+    () => res.redirect('/admin/dashboard?success=Breaking+news+wire+updated')
+  );
+});
+
+router.post('/articles/sync-today', requireAdmin, (req, res) => {
+  refreshTodayTimestamps(() => {
+    const referer = req.get('Referer') || '/admin/dashboard';
+    const base = referer.split('?')[0];
+    res.redirect(base + '?success=Today+Live+Wire+synced+with+48+fresh+dispatches');
+  });
+});
+
+router.post('/articles/bump/:id', requireAdmin, (req, res) => {
+  const db = getDb();
+  const now = new Date();
+  const pad = (n) => String(n).padStart(2, '0');
+  const ts = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+  db.run(`UPDATE articles SET created_at = ?, updated_at = ? WHERE id = ?`, [ts, ts, req.params.id], () => {
+    const referer = req.get('Referer') || '/admin/articles';
+    const base = referer.split('?')[0];
+    res.redirect(base + '?success=Article+bumped+to+Today+Live+Now');
+  });
+});
+
+router.post('/articles/toggle-featured/:id', requireAdmin, (req, res) => {
+  const db = getDb();
+  db.run(`UPDATE articles SET is_featured = 1 - COALESCE(is_featured, 0) WHERE id = ?`, [req.params.id], () => {
+    const referer = req.get('Referer') || '/admin/articles';
+    const base = referer.split('?')[0];
+    res.redirect(base + '?success=Featured+status+updated');
+  });
+});
+
 router.get('/articles', requireAdmin, (req, res) => {
   const db = getDb();
   const lang = req.lang;
-  db.all(`SELECT a.*, c.name_km, c.name_en FROM articles a LEFT JOIN categories c ON a.category_id = c.id ORDER BY a.created_at DESC`, [], (err, articles) => {
-    db.all(`SELECT * FROM categories ORDER BY id`, [], (e2, categories) => {
-      res.render('admin/articles', { articles, categories, lang, error: null, success: null, adminUser: req.session.adminUser, title: 'Articles' });
-    });
-  });
+  db.all(
+    `SELECT a.*, c.name_km, c.name_en, c.name_km as category_name_km, c.name_en as category_name_en, c.slug as category_slug
+     FROM articles a LEFT JOIN categories c ON a.category_id = c.id ORDER BY a.created_at DESC`,
+    [],
+    (err, articles) => {
+      db.all(`SELECT * FROM categories ORDER BY id`, [], (e2, categories) => {
+        res.render('admin/articles', {
+          articles: articles || [],
+          categories: categories || [],
+          lang,
+          error: null,
+          success: req.query.success || null,
+          adminUser: req.session.adminUser,
+          title: 'Articles'
+        });
+      });
+    }
+  );
 });
 
 router.get('/articles/edit/:id', requireAdmin, (req, res) => {

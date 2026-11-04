@@ -3,13 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title><%= typeof title !== 'undefined' ? title : 'Admin Panel' %> | Khmer News</title>
+  <title><%= typeof title !== 'undefined' ? title : 'Newsroom CMS' %> | Khmer News</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Koh+Santepheap:wght@300;400;700;900&family=Noto+Sans+Khmer:wght@300;400;500;600;700;800;900&family=Noto+Serif+Khmer:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
   <script>
+    window.addEventListener('error', function (e) {
+      if (e.target && e.target.tagName === 'IMG' && !e.target.dataset.fallbackApplied) {
+        e.target.dataset.fallbackApplied = '1';
+        e.target.src = 'https://picsum.photos/seed/khmernews-editorial/800/450';
+      }
+    }, true);
     (function () {
       try {
         var stored = localStorage.getItem('khmer-news-dark-mode');
@@ -22,37 +28,104 @@
     })();
   </script>
 </head>
-<body>
+<body class="cms-body">
   <div class="admin-layout">
     <aside class="admin-sidebar">
-      <div class="admin-brand">Khmer<span style="color:#b91c1c">News</span> Admin</div>
+      <div class="admin-brand">
+        <div class="admin-brand-main">Khmer<span style="color:#ef4444">News</span></div>
+        <span class="admin-brand-sub">NEWSROOM EDITORIAL CMS</span>
+      </div>
+
+      <div class="admin-sidebar-cta">
+        <a href="/admin/articles/edit/0" class="admin-compose-btn">
+          <i class="fas fa-plus"></i> <%= lang === 'km' ? 'បង្កើតអត្ថបទថ្មី' : 'New Dispatch' %>
+        </a>
+      </div>
+
       <nav class="admin-nav">
-        <a href="/admin/dashboard" class="admin-nav-item <%= typeof title !== 'undefined' && title === 'Dashboard' ? 'active' : '' %>"><i class="fas fa-chart-simple"></i> <%= t('admin.dashboard') %></a>
-        <a href="/admin/layout" class="admin-nav-item <%= typeof title !== 'undefined' && title === 'Layout & Theme Studio' ? 'active' : '' %>"><i class="fas fa-palette"></i> Layout Studio</a>
-        <a href="/admin/articles" class="admin-nav-item <%= typeof title !== 'undefined' && (title === 'Articles' || title === 'Add Article' || title === 'Edit Article') ? 'active' : '' %>"><i class="fas fa-newspaper"></i> <%= t('admin.articles') %></a>
-        <a href="/admin/categories" class="admin-nav-item <%= typeof title !== 'undefined' && (title === 'Categories' || title === 'Add Category' || title === 'Edit Category') ? 'active' : '' %>"><i class="fas fa-folder"></i> <%= t('admin.categories') %></a>
-        <a href="/admin/tags" class="admin-nav-item <%= typeof title !== 'undefined' && (title === 'Tags' || title === 'Add Tag' || title === 'Edit Tag') ? 'active' : '' %>"><i class="fas fa-tags"></i> Tags</a>
-        <a href="/admin/ads" class="admin-nav-item <%= typeof title !== 'undefined' && (title === 'Ads Management' || title === 'Edit Ad' || title === 'Add Ad') ? 'active' : '' %>"><i class="fas fa-bullhorn"></i> Ads Management</a>
-        <a href="/admin/subscribers" class="admin-nav-item <%= typeof title !== 'undefined' && title === 'Subscribers' ? 'active' : '' %>"><i class="fas fa-envelope-open-text"></i> Subscribers</a>
-        <a href="/admin/messages" class="admin-nav-item <%= typeof title !== 'undefined' && title === 'Messages' ? 'active' : '' %>"><i class="fas fa-envelope"></i> Messages</a>
-        <a href="/admin/comments" class="admin-nav-item <%= typeof title !== 'undefined' && title === 'Comments' ? 'active' : '' %>"><i class="fas fa-comments"></i> Comments<% if (typeof pendingComments !== 'undefined' && pendingComments > 0) { %><span style="background: #f59e0b; color: #0f172a; font-size: 0.7rem; font-weight: 800; padding: 1px 8px; border-radius: 10px; margin-left: 6px;"><%= pendingComments %></span><% } %></a>
-        <a href="/admin/settings" class="admin-nav-item <%= typeof title !== 'undefined' && title === 'Settings' ? 'active' : '' %>"><i class="fas fa-gear"></i> Settings</a>
-        <a href="/" target="_blank" class="admin-nav-item"><i class="fas fa-globe"></i> View Live Site ↗</a>
-        <a href="/admin/logout" class="admin-nav-item" style="margin-top: auto; border-top: 1px solid #1e293b; padding-top: 16px; color: #f87171;"><i class="fas fa-right-from-bracket"></i> <%= t('admin.logout') %></a>
+        <div class="admin-nav-group-label">NEWSROOM DESK</div>
+        <a href="/admin/dashboard" class="admin-nav-item <%= typeof title !== 'undefined' && title === 'Dashboard' ? 'active' : '' %>">
+          <i class="fas fa-chart-line"></i> <%= t('admin.dashboard') %>
+        </a>
+        <a href="/admin/articles" class="admin-nav-item <%= typeof title !== 'undefined' && (title === 'Articles' || title === 'Add Article' || title === 'Edit Article') ? 'active' : '' %>">
+          <i class="fas fa-newspaper"></i> <%= t('admin.articles') %>
+        </a>
+        <a href="/admin/categories" class="admin-nav-item <%= typeof title !== 'undefined' && (title === 'Categories' || title === 'Add Category' || title === 'Edit Category') ? 'active' : '' %>">
+          <i class="fas fa-layer-group"></i> <%= t('admin.categories') %>
+        </a>
+        <a href="/admin/tags" class="admin-nav-item <%= typeof title !== 'undefined' && (title === 'Tags' || title === 'Add Tag' || title === 'Edit Tag') ? 'active' : '' %>">
+          <i class="fas fa-hashtag"></i> <%= t('admin.tags') %>
+        </a>
+
+        <div class="admin-nav-group-label">DESIGN & MONETIZATION</div>
+        <a href="/admin/layout" class="admin-nav-item <%= typeof title !== 'undefined' && title === 'Layout & Theme Studio' ? 'active' : '' %>">
+          <i class="fas fa-sliders"></i> Layout Studio
+        </a>
+        <a href="/admin/ads" class="admin-nav-item <%= typeof title !== 'undefined' && (title === 'Ads Management' || title === 'Edit Ad' || title === 'Add Ad') ? 'active' : '' %>">
+          <i class="fas fa-rectangle-ad"></i> Ads Management
+        </a>
+
+        <div class="admin-nav-group-label">AUDIENCE & SYSTEM</div>
+        <a href="/admin/comments" class="admin-nav-item <%= typeof title !== 'undefined' && title === 'Comments' ? 'active' : '' %>">
+          <i class="fas fa-comments"></i> Comments
+          <% if (typeof pendingComments !== 'undefined' && pendingComments > 0) { %>
+            <span class="admin-nav-badge"><%= pendingComments %></span>
+          <% } %>
+        </a>
+        <a href="/admin/subscribers" class="admin-nav-item <%= typeof title !== 'undefined' && title === 'Subscribers' ? 'active' : '' %>">
+          <i class="fas fa-user-check"></i> Subscribers
+        </a>
+        <a href="/admin/messages" class="admin-nav-item <%= typeof title !== 'undefined' && title === 'Messages' ? 'active' : '' %>">
+          <i class="fas fa-inbox"></i> Inbox Messages
+        </a>
+        <a href="/admin/settings" class="admin-nav-item <%= typeof title !== 'undefined' && title === 'Settings' ? 'active' : '' %>">
+          <i class="fas fa-gear"></i> Site Settings
+        </a>
+
+        <div class="admin-nav-footer">
+          <a href="/today" target="_blank" class="admin-nav-item">
+            <span class="live-pulse-dot"></span> Today's Live Wire ↗
+          </a>
+          <a href="/" target="_blank" class="admin-nav-item">
+            <i class="fas fa-arrow-up-right-from-square"></i> Front Page ↗
+          </a>
+          <a href="/admin/logout" class="admin-nav-item is-logout">
+            <i class="fas fa-right-from-bracket"></i> <%= t('admin.logout') %>
+          </a>
+        </div>
       </nav>
     </aside>
+
     <main class="admin-main">
-      <div class="admin-topbar">
-        <div class="admin-user-greeting">Welcome, <strong><%= adminUser %></strong></div>
-        <div style="display: flex; align-items: center; gap: 16px;">
+      <header class="admin-topbar">
+        <div class="admin-topbar-left">
+          <span class="admin-status-dot"></span>
+          <span class="admin-user-greeting">
+            Newsroom Editor: <strong><%= adminUser || 'admin' %></strong>
+          </span>
+          <span class="admin-topbar-sep">|</span>
+          <span class="admin-topbar-meta">
+            <%= typeof todayCount !== 'undefined' ? todayCount : 48 %> live dispatches today
+          </span>
+        </div>
+
+        <div class="admin-topbar-actions">
+          <form method="POST" action="/admin/articles/sync-today" style="margin:0;">
+            <button type="submit" class="cms-btn cms-btn-live" title="Refresh timestamps of top 48 articles to Today Now">
+              <i class="fas fa-bolt"></i> <%= lang === 'km' ? 'ធ្វើបច្ចុប្បន្នភាពព័ត៌មានថ្ងៃនេះ' : "Sync Today's Wire Now" %>
+            </button>
+          </form>
+          <a href="/today" target="_blank" class="cms-btn cms-btn-outline">
+            <i class="fas fa-tower-broadcast"></i> <%= lang === 'km' ? 'មើលព័ត៌មានថ្ងៃនេះ' : 'Live Wire ↗' %>
+          </a>
           <button id="darkModeToggle" class="dark-mode-toggle" aria-label="Toggle dark mode" title="Toggle dark mode"><i class="fas fa-moon"></i></button>
           <select id="langSwitcher" class="lang-select">
             <option value="km" <%= lang === 'km' ? 'selected' : '' %>>ខ្មែរ</option>
             <option value="en" <%= lang === 'en' ? 'selected' : '' %>>English</option>
           </select>
-          <a href="/admin/logout" class="btn btn-sm btn-danger"><%= t('admin.logout') %></a>
         </div>
-      </div>
+      </header>
+
       <div class="admin-content">
         <%- body %>
       </div>
@@ -60,15 +133,21 @@
   </div>
 
   <script>
+    // Global automatic fallback for any broken article or ad image
+    window.addEventListener('error', function(e) {
+      if (e.target && e.target.tagName === 'IMG' && !e.target.dataset.fallbackApplied) {
+        e.target.dataset.fallbackApplied = '1';
+        e.target.src = 'https://picsum.photos/seed/khmernews-editorial/800/450';
+      }
+    }, true);
+
     document.addEventListener('DOMContentLoaded', function() {
       var switcher = document.getElementById('langSwitcher');
       if (switcher) {
         switcher.addEventListener('change', function() {
-          var lang = this.value;
-          window.location.href = '/change-lang/' + lang;
+          window.location.href = '/change-lang/' + this.value;
         });
       }
-
       var darkToggle = document.getElementById('darkModeToggle');
       if (darkToggle) {
         function syncDarkIcon() {
@@ -77,9 +156,7 @@
         }
         darkToggle.addEventListener('click', function() {
           var isDark = document.documentElement.classList.toggle('dark-mode');
-          try {
-            localStorage.setItem('khmer-news-dark-mode', isDark ? '1' : '0');
-          } catch (e) {}
+          try { localStorage.setItem('khmer-news-dark-mode', isDark ? '1' : '0'); } catch (e) {}
           syncDarkIcon();
         });
         syncDarkIcon();

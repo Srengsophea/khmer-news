@@ -1178,6 +1178,52 @@ function ensureAdmin(callback) {
   });
 }
 
+function refreshTodayTimestamps(callback) {
+  if (db) { db.run('UPDATE articles SET image_url = "https://images.unsplash.com/photo-1522778119026-d647f0596c20?auto=format&fit=crop&w=1000&q=80" WHERE id = 255'); }
+  if (!db) return callback && callback();
+  const upgradedBlocks = JSON.stringify([
+    { id: "b-hero", type: "hero", title_km: "ព័ត៌មានលេចធ្លោប្រចាំថ្ងៃ", title_en: "Front Page Lead & Live Wire", style: "grid_3", enabled: true, limit: 6 },
+    { id: "b-ticker", type: "ticker", title_km: "ព័ត៌មានទាន់ហេតុការណ៍ថ្ងៃនេះ", title_en: "Today's Live Wire", enabled: true, limit: 12 },
+    { id: "b-cat-national", type: "category", category_id: 1, title_km: "ព័ត៌មានជាតិ", title_en: "National News", style: "featured_top", enabled: true, limit: 7 },
+    { id: "b-cat-international", type: "category", category_id: 2, title_km: "ព័ត៌មានអន្តរជាតិ", title_en: "International Desk", style: "grid_3_col", enabled: true, limit: 6 },
+    { id: "b-spotlight", type: "spotlight", title_km: "បទវិភាគស៊ីជម្រៅប្រចាំថ្ងៃ", title_en: "In-Depth Editorial Spotlight", style: "wide_card", enabled: true, limit: 1 },
+    { id: "b-cat-economy", type: "category", category_id: 5, title_km: "សេដ្ឋកិច្ច និងធុរកិច្ច", title_en: "Economy & Markets", style: "big_first", enabled: true, limit: 5 },
+    { id: "b-ad-mid", type: "ad_slot", title_km: "ផ្ទាំងពាណិជ្ជកម្មកណ្តាល", title_en: "Mid Content Banner", position_slot: "homepage_mid_banner", enabled: true },
+    { id: "b-cat-tech", type: "category", category_id: 4, title_km: "បច្ចេកវិទ្យា និងឌីជីថល", title_en: "Technology & Innovation", style: "grid_2_col", enabled: true, limit: 4 },
+    { id: "b-cat-sports", type: "category", category_id: 3, title_km: "កីឡាជាតិ និងអន្តរជាតិ", title_en: "Sports Desk", style: "list_view", enabled: true, limit: 5 },
+    { id: "b-headlines", type: "headlines", title_km: "កំពូលព័ត៌មានពេញនិយមទាំង ១០", title_en: "Top 10 Most Read Briefings", enabled: true, limit: 10 },
+    { id: "b-tags", type: "tags", title_km: "ប្រធានបទកំពុងពេញនិយម", title_en: "Trending Topics & Desks", enabled: true, limit: 20 },
+    { id: "b-ad-bottom", type: "ad_slot", title_km: "ផ្ទាំងពាណិជ្ជកម្មខាងក្រោម", title_en: "Bottom Banner", position_slot: "homepage_bottom_banner", enabled: true },
+    { id: "b-newsletter", type: "newsletter", title_km: "ព្រឹត្តិបត្រព័ត៌មានប្រចាំថ្ងៃ", title_en: "Daily Editorial Briefing", enabled: true }
+  ]);
+
+  db.get("SELECT homepage_blocks FROM settings WHERE id = 1", [], (e, sRow) => {
+    const blocksStr = (sRow && sRow.homepage_blocks) ? sRow.homepage_blocks.trim() : '';
+    if (!blocksStr || (!blocksStr.includes('"category_id":2') && !blocksStr.includes('"category_id":5'))) {
+      db.run("UPDATE settings SET homepage_blocks = ?, corner_style = 'sharp' WHERE id = 1", [upgradedBlocks]);
+    }
+  });
+
+  db.all("SELECT id FROM articles ORDER BY id DESC LIMIT 48", [], (err, rows) => {
+    if (err || !rows || rows.length === 0) return callback && callback();
+    const now = Date.now();
+    db.serialize(() => {
+      const stmt = db.prepare("UPDATE articles SET created_at = ?, updated_at = ? WHERE id = ?");
+      rows.forEach((r, idx) => {
+        // Space top 48 articles across today: from 3 mins ago up to 16 hours ago
+        const minsAgo = idx < 10 ? (idx * 5 + 3) : (50 + (idx - 10) * 24);
+        const d = new Date(now - minsAgo * 60 * 1000);
+        const pad = (n) => String(n).padStart(2, '0');
+        const ts = `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+        stmt.run([ts, ts, r.id]);
+      });
+      stmt.finalize(() => {
+        callback && callback();
+      });
+    });
+  });
+}
+
 function getDb() { return db; }
 
-module.exports = { initDatabase, seedDatabase, getDb };
+module.exports = { initDatabase, seedDatabase, refreshTodayTimestamps, getDb };

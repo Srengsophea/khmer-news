@@ -1,62 +1,87 @@
-<section class="search-section">
+<section class="editorial-search-page">
   <div class="container">
-    <h1 class="section-title"><%= t('nav.search') %></h1>
-    <div class="search-suggest-wrap">
-      <form action="/search" method="GET" class="search-box" autocomplete="off">
-        <input type="text" name="q" id="searchInput" value="<%= query %>" placeholder="<%= t('common.search_placeholder') %>" autofocus>
-        <button type="submit"><%= t('nav.search') %></button>
-      </form>
-      <div class="search-suggest" id="searchSuggest" style="display: none;"></div>
-    </div>
+    <header class="editorial-section-banner">
+      <div class="editorial-section-banner-top">
+        <nav class="editorial-breadcrumb">
+          <a href="/"><%= t('nav.home') %></a>
+          <span>/</span>
+          <span><%= t('nav.search') %></span>
+        </nav>
+      </div>
+      <div class="editorial-section-banner-main">
+        <div>
+          <h1 class="editorial-page-title"><%= t('nav.search') %></h1>
+        </div>
+      </div>
+
+      <div class="search-suggest-wrap" style="margin-top: 16px;">
+        <form action="/search" method="GET" class="editorial-search-bar" autocomplete="off">
+          <input type="text" name="q" id="searchInput" value="<%= query %>" placeholder="<%= t('common.search_placeholder') %>" autofocus>
+          <button type="submit"><i class="fas fa-search"></i> <%= t('nav.search') %></button>
+        </form>
+        <div class="search-suggest" id="searchSuggest" style="display: none;"></div>
+      </div>
+    </header>
 
     <% if (query) { %>
-      <div style="margin: 20px 0 8px; color: #64748b; font-size: 0.92rem;">
-        <strong style="color: #0f172a;"><%= articles.length %></strong> <%= lang==='km' ? 'លទ្ធផលសម្រាប់' : 'results for' %> "<strong style="color: var(--primary-color, #1e3a8a);"><%= query %></strong>"
+      <div class="editorial-search-meta">
+        <strong><%= articles.length %></strong> <%= lang === 'km' ? 'លទ្ធផលសម្រាប់' : 'dispatches matching' %>
+        “<strong><%= query %></strong>”
       </div>
     <% } %>
 
     <% if (query && articles && articles.length > 0) { %>
-      <div class="grid grid-cols-3 gap-6">
+      <div class="editorial-chronological-wire">
         <% articles.forEach(function(a) { %>
-          <article class="card-template-standard">
-            <a href="/article/<%= a.slug %>">
-              <img src="<%= a.image_url %>" alt="<%= a[`title_${lang}`] %>" class="article-card-img">
-            </a>
-            <div class="article-card-body">
-              <div class="article-card-meta">
-                <span class="article-card-category badge-cat-<%= a.category_slug %>"><%= a[`category_name_${lang}`] %></span>
+          <article class="editorial-wire-row">
+            <div class="editorial-wire-time-col">
+              <time class="editorial-wire-badge"><%= timeAgo(a.created_at) %></time>
+              <span class="editorial-wire-clock"><%= String(a.created_at || '').slice(0, 10) %></span>
+            </div>
+            <div class="editorial-wire-content-col">
+              <div class="editorial-meta-row">
+                <% if (a.category_name_en) { %>
+                  <a href="/category/<%= a.category_slug %>" class="editorial-kicker"><%= a[`category_name_${lang}`] %></a>
+                <% } %>
               </div>
-              <h3 class="article-card-title">
+              <h3 class="editorial-wire-headline">
                 <a href="/article/<%= a.slug %>"><%= a[`title_${lang}`] %></a>
               </h3>
-              <p class="article-card-excerpt"><%= a[`content_${lang}`].replace(/<[^>]*>/g, '').substring(0, 160) %>...</p>
-              <div class="article-card-footer">
-                <span class="article-card-date"><%= new Date(a.created_at).toLocaleDateString(lang === 'km' ? 'km-KH' : 'en-US', { year: 'numeric', month: 'short', day: 'numeric' }) %></span>
-                <a href="/article/<%= a.slug %>" class="read-more"><%= t('common.read_more') %> &rarr;</a>
+              <p class="editorial-wire-summary">
+                <%= a[`summary_${lang}`] ? a[`summary_${lang}`] : stripHtml(a[`content_${lang}`], 190) %>
+              </p>
+              <div class="editorial-byline">
+                <span><%= a.author_name || 'Khmer News Desk' %></span>
+                <span>•</span>
+                <span><%= a.read_time_minutes || 3 %> <%= t('common.minutes_read') %></span>
               </div>
             </div>
+            <% if (a.image_url) { %>
+              <a href="/article/<%= a.slug %>" class="editorial-wire-thumb">
+                <img src="<%= a.image_url %>" alt="<%= a[`title_${lang}`] %>" loading="lazy">
+              </a>
+            <% } %>
           </article>
         <% }) %>
       </div>
 
       <% if (pagination && pagination.totalPages > 1) { %>
-        <nav class="pagination" style="display: flex; justify-content: center; align-items: center; gap: 8px; margin: 36px 0 12px; flex-wrap: wrap;">
+        <nav class="editorial-pagination">
           <% var basePath = '/search?q=' + encodeURIComponent(query); %>
           <% if (pagination.current > 1) { %>
-            <a href="<%= basePath %>&page=<%= pagination.current - 1 %>" class="page-link"><%= t('common.prev') %></a>
+            <a href="<%= basePath %>&page=<%= pagination.current - 1 %>" class="page-link">&larr; <%= t('common.prev') %></a>
           <% } %>
           <% pagination.pages.forEach(function(p) { %>
             <a href="<%= basePath %>&page=<%= p %>" class="page-link <%= p === pagination.current ? 'active' : '' %>"><%= p %></a>
           <% }) %>
           <% if (pagination.current < pagination.totalPages) { %>
-            <a href="<%= basePath %>&page=<%= pagination.current + 1 %>" class="page-link"><%= t('common.next') %></a>
+            <a href="<%= basePath %>&page=<%= pagination.current + 1 %>" class="page-link"><%= t('common.next') %> &rarr;</a>
           <% } %>
         </nav>
       <% } %>
     <% } else if (query) { %>
-      <div style="text-align:center; padding:60px 0; color:#64748b;">
-        <p style="font-size:1.1rem; font-weight:600;"><i class="fas fa-inbox"></i> <%= lang==='km' ? 'រកមិនឃើញលទ្ធផលសម្រាប់' : 'No results found for' %> "<%= query %>"</p>
-        <p style="margin-top:8px;"><%= lang==='km' ? 'សូមសាកល្បងស្វែងរកជាមួយពាក្យគន្លឹះផ្សេងទៀត។' : 'Try searching with different keywords.' %></p>
+      <div class="empty-state">
+        <p><%= lang === 'km' ? 'រកមិនឃើញលទ្ធផលសម្រាប់' : 'No dispatches found for' %> “<%= query %>”</p>
       </div>
     <% } %>
   </div>
@@ -68,7 +93,6 @@
     var suggest = document.getElementById('searchSuggest');
     if (!input || !suggest) return;
     var timer = null;
-
     input.addEventListener('input', function () {
       clearTimeout(timer);
       var q = input.value.trim();
@@ -90,7 +114,6 @@
           .catch(function () { suggest.style.display = 'none'; });
       }, 250);
     });
-
     document.addEventListener('click', function (e) {
       if (!suggest.contains(e.target) && e.target !== input) {
         suggest.style.display = 'none';
