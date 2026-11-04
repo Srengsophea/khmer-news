@@ -260,6 +260,54 @@
       </div>
     </div>
 
+    <!-- LAYOUT FLEXIBILITY -->
+    <div style="background: #ffffff; border-radius: 12px; padding: 24px; border: 1px solid #e2e8f0; margin-bottom: 32px;">
+      <h3 style="font-size: 1.15rem; font-weight: 700; color: #1e293b; margin-bottom: 6px;"><i class="fas fa-sliders"></i> Layout Flexibility</h3>
+      <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 16px;">Control the site width, base text size, card corners, and navigation behavior. Changes apply instantly after saving.</p>
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 16px;">
+        <div>
+          <label style="display: block; font-weight: 600; margin-bottom: 6px;">Content Width</label>
+          <select name="content_width" style="width: 100%; padding: 11px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.95rem; font-weight: 600; background: #ffffff;">
+            <option value="normal" <%= (settings.content_width === 'normal' || !settings.content_width) ? 'selected' : '' %>>Normal (1200px)</option>
+            <option value="wide" <%= settings.content_width === 'wide' ? 'selected' : '' %>>Wide (1400px)</option>
+            <option value="full" <%= settings.content_width === 'full' ? 'selected' : '' %>>Extra Wide (1720px)</option>
+          </select>
+        </div>
+        <div>
+          <label style="display: block; font-weight: 600; margin-bottom: 6px;">Base Text Size</label>
+          <select name="font_scale" style="width: 100%; padding: 11px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.95rem; font-weight: 600; background: #ffffff;">
+            <option value="small" <%= settings.font_scale === 'small' ? 'selected' : '' %>>Compact (94%)</option>
+            <option value="normal" <%= (settings.font_scale === 'normal' || !settings.font_scale) ? 'selected' : '' %>>Default (100%)</option>
+            <option value="large" <%= settings.font_scale === 'large' ? 'selected' : '' %>>Large (110%)</option>
+            <option value="xlarge" <%= settings.font_scale === 'xlarge' ? 'selected' : '' %>>Extra Large (120%)</option>
+          </select>
+        </div>
+        <div>
+          <label style="display: block; font-weight: 600; margin-bottom: 6px;">Card Corner Style</label>
+          <select name="corner_style" style="width: 100%; padding: 11px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.95rem; font-weight: 600; background: #ffffff;">
+            <option value="rounded" <%= (settings.corner_style === 'rounded' || !settings.corner_style) ? 'selected' : '' %>>Rounded (soft)</option>
+            <option value="crisp" <%= settings.corner_style === 'crisp' ? 'selected' : '' %>>Crisp (subtle)</option>
+            <option value="sharp" <%= settings.corner_style === 'sharp' ? 'selected' : '' %>>Sharp (editorial square)</option>
+          </select>
+        </div>
+      </div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; align-items: end;">
+        <div>
+          <label style="display: block; font-weight: 600; margin-bottom: 6px;">Articles Per Page</label>
+          <input type="number" name="pagination_size" min="3" max="48" value="<%= settings.pagination_size || 9 %>" style="width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.95rem; font-weight: 600;">
+          <p style="font-size: 0.75rem; color: #94a3b8; margin-top: 4px;">Category, tag &amp; search pages.</p>
+        </div>
+        <label style="display: flex; align-items: center; gap: 10px; font-weight: 600; cursor: pointer; padding-bottom: 8px;">
+          <input type="checkbox" name="sticky_nav" value="1" <%= (settings.sticky_nav == 1 || settings.sticky_nav === undefined) ? 'checked' : '' %> style="width: 18px; height: 18px;">
+          Sticky Navigation Bar
+        </label>
+        <label style="display: flex; align-items: center; gap: 10px; font-weight: 600; cursor: pointer; padding-bottom: 8px;">
+          <input type="checkbox" name="show_reading_progress" value="1" <%= (settings.show_reading_progress == 1 || settings.show_reading_progress === undefined) ? 'checked' : '' %> style="width: 18px; height: 18px;">
+          Article Reading Progress Bar
+        </label>
+      </div>
+    </div>
+
     <!-- Ticker and Custom CSS -->
     <div style="background: #ffffff; border-radius: 12px; padding: 24px; border: 1px solid #e2e8f0; margin-bottom: 32px;">
       <h3 style="font-size: 1.15rem; font-weight: 700; color: #1e293b; margin-bottom: 16px;"><i class="fas fa-bolt"></i> Live Breaking News Ticker</h3>

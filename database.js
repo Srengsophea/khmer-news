@@ -151,7 +151,13 @@ function runMigrations(callback) {
     "ALTER TABLE articles ADD COLUMN read_time_minutes INTEGER DEFAULT 3",
     "ALTER TABLE articles ADD COLUMN author_name TEXT DEFAULT 'Khmer News Desk'",
     "ALTER TABLE articles ADD COLUMN summary_km TEXT DEFAULT ''",
-    "ALTER TABLE articles ADD COLUMN summary_en TEXT DEFAULT ''"
+    "ALTER TABLE articles ADD COLUMN summary_en TEXT DEFAULT ''",
+    "ALTER TABLE settings ADD COLUMN content_width TEXT DEFAULT 'normal'",
+    "ALTER TABLE settings ADD COLUMN font_scale TEXT DEFAULT 'normal'",
+    "ALTER TABLE settings ADD COLUMN corner_style TEXT DEFAULT 'rounded'",
+    "ALTER TABLE settings ADD COLUMN sticky_nav INTEGER DEFAULT 1",
+    "ALTER TABLE settings ADD COLUMN show_reading_progress INTEGER DEFAULT 1",
+    "ALTER TABLE settings ADD COLUMN pagination_size INTEGER DEFAULT 9"
   ];
 
   let completed = 0;

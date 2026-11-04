@@ -396,8 +396,11 @@ router.post('/layout/save', requireAdmin, express.urlencoded({ extended: false }
     primary_color, accent_color, hero_layout_style,
     breaking_news_enabled, breaking_news_text_km, breaking_news_text_en,
     header_banner_ad_enabled, sidebar_position, custom_css, homepage_blocks,
-    ticker_style
+    ticker_style, content_width, font_scale, corner_style,
+    sticky_nav, show_reading_progress, pagination_size
   } = req.body;
+
+  const safePageSize = parseInt(pagination_size, 10);
 
   db.run(`
     UPDATE settings SET
@@ -405,13 +408,18 @@ router.post('/layout/save', requireAdmin, express.urlencoded({ extended: false }
       breaking_news_enabled = ?, breaking_news_text_km = ?, breaking_news_text_en = ?,
       header_banner_ad_enabled = ?, sidebar_position = ?, custom_css = ?,
       homepage_blocks = COALESCE(NULLIF(?, ''), homepage_blocks),
-      ticker_style = ?
+      ticker_style = ?,
+      content_width = ?, font_scale = ?, corner_style = ?,
+      sticky_nav = ?, show_reading_progress = ?, pagination_size = ?
     WHERE id = 1
   `, [
     primary_color || '#1e3a8a', accent_color || '#dc2626', hero_layout_style || 'grid_3',
     breaking_news_enabled ? 1 : 0, breaking_news_text_km || '', breaking_news_text_en || '',
     header_banner_ad_enabled ? 1 : 0, sidebar_position || 'right', custom_css || '',
-    homepage_blocks || '', ticker_style || 'marquee'
+    homepage_blocks || '', ticker_style || 'marquee',
+    content_width || 'normal', font_scale || 'normal', corner_style || 'rounded',
+    sticky_nav ? 1 : 0, show_reading_progress ? 1 : 0,
+    (!isNaN(safePageSize) && safePageSize >= 3 && safePageSize <= 48) ? safePageSize : 9
   ], (err) => {
     // Auto-save from the Layout Studio uses fetch -> return JSON instead of a redirect
     if (req.xhr) {

@@ -99,4 +99,50 @@ document.addEventListener('DOMContentLoaded', function () {
     if (prevBtn) prevBtn.addEventListener('click', function () { track.scrollBy({ left: -scrollByCard(), behavior: 'smooth' }); });
     if (nextBtn) nextBtn.addEventListener('click', function () { track.scrollBy({ left: scrollByCard(), behavior: 'smooth' }); });
   });
+
+  // Reader display controls: text zoom + density (persisted per visitor)
+  var zoomOutBtn = document.getElementById('zoomOutBtn');
+  var zoomInBtn = document.getElementById('zoomInBtn');
+  var zoomResetBtn = document.getElementById('zoomResetBtn');
+  var densityBtn = document.getElementById('densityToggleBtn');
+
+  function applyReaderZoom(step) {
+    if (step === 0) {
+      document.documentElement.style.removeProperty('--reader-zoom');
+    } else {
+      document.documentElement.style.setProperty('--reader-zoom', (1 + step * 0.075).toFixed(3));
+    }
+    try { localStorage.setItem('khmer-news-zoom', String(step)); } catch (e) {}
+    syncReaderButtons(step);
+  }
+
+  function syncReaderButtons(step) {
+    if (zoomResetBtn) zoomResetBtn.classList.toggle('active', step === 0);
+    if (zoomInBtn) zoomInBtn.classList.toggle('active', step > 0);
+    if (zoomOutBtn) zoomOutBtn.classList.toggle('active', step < 0);
+  }
+
+  function getReaderZoom() {
+    try { return Math.max(-2, Math.min(3, parseInt(localStorage.getItem('khmer-news-zoom') || '0', 10) || 0)); } catch (e) { return 0; }
+  }
+
+  if (zoomInBtn) zoomInBtn.addEventListener('click', function () { applyReaderZoom(Math.min(3, getReaderZoom() + 1)); });
+  if (zoomOutBtn) zoomOutBtn.addEventListener('click', function () { applyReaderZoom(Math.max(-2, getReaderZoom() - 1)); });
+  if (zoomResetBtn) zoomResetBtn.addEventListener('click', function () { applyReaderZoom(0); });
+
+  if (densityBtn) {
+    densityBtn.addEventListener('click', function () {
+      var compact = document.documentElement.getAttribute('data-density') === 'compact';
+      if (compact) {
+        document.documentElement.removeAttribute('data-density');
+        try { localStorage.setItem('khmer-news-density', 'comfortable'); } catch (e) {}
+      } else {
+        document.documentElement.setAttribute('data-density', 'compact');
+        try { localStorage.setItem('khmer-news-density', 'compact'); } catch (e) {}
+      }
+      densityBtn.classList.toggle('active', !compact);
+    });
+    if (document.documentElement.getAttribute('data-density') === 'compact') densityBtn.classList.add('active');
+  }
+  syncReaderButtons(getReaderZoom());
 });

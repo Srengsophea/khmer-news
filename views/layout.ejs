@@ -17,7 +17,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
   <script>
-    // Apply dark mode before first paint to avoid flash
+    // Apply dark mode + reader display prefs before first paint to avoid flash
     (function () {
       try {
         var stored = localStorage.getItem('khmer-news-dark-mode');
@@ -25,6 +25,13 @@
         var dark = stored === null ? prefersDark : (stored === '1');
         if (dark) {
           document.documentElement.classList.add('dark-mode');
+        }
+        var zoom = parseInt(localStorage.getItem('khmer-news-zoom') || '0', 10);
+        if (zoom) {
+          document.documentElement.style.setProperty('--reader-zoom', (1 + zoom * 0.075).toFixed(3));
+        }
+        if (localStorage.getItem('khmer-news-density') === 'compact') {
+          document.documentElement.setAttribute('data-density', 'compact');
         }
       } catch (e) {}
     })();
@@ -34,7 +41,47 @@
     :root {
       --primary-color: <%=(typeof siteSettings !=='undefined' && siteSettings && siteSettings.primary_color) ? siteSettings.primary_color: '#1e3a8a' %>;
       --accent-color: <%=(typeof siteSettings !=='undefined' && siteSettings && siteSettings.accent_color) ? siteSettings.accent_color: '#dc2626' %>;
+      <% var ssFlex = (typeof siteSettings !== 'undefined' && siteSettings) ? siteSettings : {};
+         var widthMap = { normal: '1200px', wide: '1400px', full: '1720px' };
+         var fontMap = { small: '15px', normal: '16px', large: '18px', xlarge: '19.5px' };
+         var cornerMap = { rounded: '14px', crisp: '7px', sharp: '2px' }; %>
+      --site-max-width: <%= widthMap[ssFlex.content_width] || '1200px' %>;
+      --site-radius: <%= cornerMap[ssFlex.corner_style] || '14px' %>;
     }
+
+    html { font-size: <%= fontMap[ssFlex.font_scale] || '16px' %>; zoom: var(--reader-zoom, 1); }
+    .container { width: min(94%, var(--site-max-width, 1200px)); }
+
+    /* Admin flexibility overrides */
+    body.no-sticky-nav .header-nav-row.is-sticky { position: static !important; box-shadow: none !important; }
+    body.no-progress .reading-progress, body.no-progress #readingProgress { display: none !important; }
+    body.corners-crisp [class*="card-template"],
+    body.corners-crisp [class*="card-template"] img,
+    body.corners-sharp [class*="card-template"],
+    body.corners-sharp [class*="card-template"] img { border-radius: var(--site-radius) !important; }
+
+    /* Reader density mode */
+    html[data-density="compact"] body { line-height: 1.45; }
+    html[data-density="compact"] [class*="card-template"] .article-card-body { padding-top: 10px; padding-bottom: 10px; }
+
+    /* Reader controls (top bar) */
+    .reader-controls { display: inline-flex; align-items: center; gap: 4px; margin-right: 10px; }
+    .reader-controls button {
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      color: inherit;
+      font-weight: 800;
+      min-width: 30px;
+      height: 30px;
+      padding: 0 7px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.78rem;
+      line-height: 1;
+      transition: background 0.2s ease, transform 0.15s ease;
+    }
+    .reader-controls button:hover { background: rgba(255, 255, 255, 0.28); transform: translateY(-1px); }
+    .reader-controls button.active { outline: 2px solid var(--accent-color); }
 
     <% if (typeof siteSettings !=='undefined' && siteSettings && siteSettings.custom_css) {
       %><%- siteSettings.custom_css %><%
@@ -44,7 +91,7 @@
   </style>
 </head>
 
-<body>
+<body class="<%= (typeof siteSettings !== 'undefined' && siteSettings && siteSettings.sticky_nav == 0) ? 'no-sticky-nav' : '' %> <%= (typeof siteSettings !== 'undefined' && siteSettings && siteSettings.show_reading_progress == 0) ? 'no-progress' : '' %> corners-<%= (typeof siteSettings !== 'undefined' && siteSettings && siteSettings.corner_style) || 'rounded' %>">
   <div id="readingProgress" class="reading-progress"></div>
   <div class="nav-overlay" id="navOverlay"></div>
 
@@ -57,6 +104,12 @@
         </a>
       </div>
       <div class="top-links">
+        <div class="reader-controls" id="readerControls" role="group" aria-label="Display settings">
+          <button id="zoomOutBtn" type="button" title="<%= lang === 'km' ? 'បង្រួមអក្សរ' : 'Decrease text size' %>">A−</button>
+          <button id="zoomResetBtn" type="button" title="<%= lang === 'km' ? 'កំណត់អក្សរត្រឡប់' : 'Reset text size' %>">A</button>
+          <button id="zoomInBtn" type="button" title="<%= lang === 'km' ? 'ពង្រីកអក្សរ' : 'Increase text size' %>">A+</button>
+          <button id="densityToggleBtn" type="button" title="<%= lang === 'km' ? 'ប្តូរដង់ស៊ីតេទម្រង់' : 'Toggle compact layout' %>"><i class="fas fa-compress-alt"></i></button>
+        </div>
         <button id="darkModeToggle" class="dark-mode-toggle" aria-label="Toggle dark mode" title="Toggle dark mode"><i class="fas fa-moon"></i></button>
         <span>
           <%= t('common.language') %>:

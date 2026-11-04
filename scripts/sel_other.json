@@ -1,0 +1,578 @@
+[
+ {
+  "i": 0,
+  "cat": "international",
+  "t": "Trump takes aim at Republicans but says Democrats did a 'good job'",
+  "d": "He wrote on Truth Social that Republicans would have won \"in a landslide\" if his name had been on the ballot.",
+  "src": "BBC News",
+  "date": "Wed, 04 Nov 2026 10:15:42 GMT",
+  "img": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/e6e2/live/3deac2d0-d81e-11f1-a9b6-0f4245e849b7.jpg"
+ },
+ {
+  "i": 1,
+  "cat": "international",
+  "t": "Left-wing Democrat Abdul El-Sayed wins in Michigan to become first Muslim senator",
+  "d": "El-Sayed bested Republican Mike Rogers to become the first Muslim senator in US history.",
+  "src": "BBC News",
+  "date": "Wed, 04 Nov 2026 10:03:19 GMT",
+  "img": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/7b2d/live/afbf5fd0-d83f-11f1-93e1-3b657b665bcf.jpg"
+ },
+ {
+  "i": 2,
+  "cat": "international",
+  "t": "James Talarico becomes first Democrat to win Texas Senate seat since 1988",
+  "d": "\"This wasn't just a tsunami, not just a referendum, but this was a bloodbath,\" one expert told the BBC on Democrats' historic wins in Texas.",
+  "src": "BBC News",
+  "date": "Wed, 04 Nov 2026 05:39:36 GMT",
+  "img": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/73ea/live/1e2e9940-d836-11f1-a701-fddedf244c16.jpg"
+ },
+ {
+  "i": 3,
+  "cat": "international",
+  "t": "Florida Republicans fend off Democrats as state elects first black governor",
+  "d": "Republican Byron Donalds, who was backed by President Donald Trump, will be the first black governor of Florida.",
+  "src": "BBC News",
+  "date": "Wed, 04 Nov 2026 07:12:21 GMT",
+  "img": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/ee47/live/138d4020-d80b-11f1-915d-779ac405bbbc.jpg"
+ },
+ {
+  "i": 4,
+  "cat": "international",
+  "t": "Iran's chief negotiator says Americans voted 'no to war'",
+  "d": "\"We endorse this message,\" Mohammed Bagher Ghalibaf says, as Donald Trump acknowledges the conflict's role in the Republican Party's defeat.",
+  "src": "BBC News",
+  "date": "Wed, 04 Nov 2026 12:21:21 GMT",
+  "img": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/fd62/live/d825bb50-d82f-11f1-a701-fddedf244c16.jpg"
+ },
+ {
+  "i": 5,
+  "cat": "international",
+  "t": "Delhi air quality worsens ahead of Diwali as firework restrictions enter force",
+  "d": "On Wednesday morning, Delhi's air quality index reading stood at 377, in the \"very poor\" category.",
+  "src": "BBC News",
+  "date": "Wed, 04 Nov 2026 07:39:38 GMT",
+  "img": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/f657/live/383e2830-d810-11f1-bc0e-b5a9e0785e4b.jpg"
+ },
+ {
+  "i": 6,
+  "cat": "international",
+  "t": "ANC under pressure to reverse South Africa decline",
+  "d": "As South Africans vote in local elections, residents tell the BBC they are tired of the poor quality of services they get.",
+  "src": "BBC News",
+  "date": "Wed, 04 Nov 2026 11:47:44 GMT",
+  "img": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/eb2c/live/fc87dad0-d7aa-11f1-93e1-3b657b665bcf.jpg"
+ },
+ {
+  "i": 7,
+  "cat": "international",
+  "t": "Sharp objects found in Halloween sweets in three European nations",
+  "d": "Dozens of cases are reported in Austria, Germany and Hungary, including a nine-year-old girl hurting her tongue while eating chocolate containing a pin.",
+  "src": "BBC News",
+  "date": "Wed, 04 Nov 2026 12:34:33 GMT",
+  "img": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/0b20/live/14aead80-d83e-11f1-9a87-07a62b4549a2.jpg"
+ },
+ {
+  "i": 8,
+  "cat": "international",
+  "t": "Rwanda's army team removed from Africa league after US sanctions, NBA says",
+  "d": "The US imposed sanctions on Rwanda's army over its role in the conflict in DR Congo.",
+  "src": "BBC News",
+  "date": "Wed, 04 Nov 2026 11:46:09 GMT",
+  "img": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/6062/live/1ba36940-d830-11f1-be97-417dbcdedd32.jpg"
+ },
+ {
+  "i": 9,
+  "cat": "international",
+  "t": "Killer who escaped Tennessee prison captured after week-long manhunt",
+  "d": "Jacob Allen Morley was serving a life sentence for murder before he escaped over a prison fence.",
+  "src": "BBC News",
+  "date": "Wed, 04 Nov 2026 02:11:40 GMT",
+  "img": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/35c5/live/aa0e52d0-d7f9-11f1-afc1-71ff3c391379.jpg"
+ },
+ {
+  "i": 12,
+  "cat": "international",
+  "t": "Spanish transport minister resigns days after deadly train crash",
+  "d": "At least 69 people were killed and dozens injured in the collision south of the capital, Madrid.",
+  "src": "BBC News",
+  "date": "Tue, 03 Nov 2026 22:45:59 GMT",
+  "img": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/6eee/live/c7353ed0-d81e-11f1-a701-fddedf244c16.jpg"
+ },
+ {
+  "i": 16,
+  "cat": "international",
+  "t": "'All this food is now useless': Piles of rubbish after shop freezers hit by cyber-attack",
+  "d": "Dozens of supermarkets in seven European countries dumped huge quantities of food after refrigerators and freezers were targeted in a cyber-attack.",
+  "src": "BBC News",
+  "date": "Mon, 02 Nov 2026 17:34:58 GMT",
+  "img": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/7ffe/live/f76751a0-d6ee-11f1-93e1-3b657b665bcf.png"
+ },
+ {
+  "i": 17,
+  "cat": "international",
+  "t": "What we know about the alert app hack in Ukraine and Russia",
+  "d": "Both Ukraine and Russia say their air raid alert apps were cyber-attacked - Joe Tidy explains what we know so far.",
+  "src": "BBC News",
+  "date": "Mon, 02 Nov 2026 14:24:25 GMT",
+  "img": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/1cbd/live/ab9f8ec0-d6c8-11f1-a701-fddedf244c16.jpg"
+ },
+ {
+  "i": 24,
+  "cat": "international",
+  "t": "Why a US-Russia showdown left Morocco celebrating",
+  "d": "An impasse between the US and Russia at the UN means its peacekeeping mission in Western Sahara has ended after 35 years.",
+  "src": "BBC News",
+  "date": "Tue, 03 Nov 2026 07:29:46 GMT",
+  "img": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/3276/live/8e9ad0f0-d6c8-11f1-ac20-7783925c811f.jpg"
+ },
+ {
+  "i": 25,
+  "cat": "international",
+  "t": "Canva announces major job cuts after 'our hardest year yet'",
+  "d": "CEO Melanie Perkins says more than 1,000 staff will either lose their jobs or be asked to change roles.",
+  "src": "BBC News Asia",
+  "date": "Wed, 04 Nov 2026 00:09:35 GMT",
+  "img": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/2d51/live/dae95de0-d7dc-11f1-ac18-75727aac8238.jpg"
+ },
+ {
+  "i": 26,
+  "cat": "international",
+  "t": "Indian tourist killed after two helicopters collide near Everest base camp",
+  "d": "The two aircraft crashed just metres from the ground after trying to land at the same spot.",
+  "src": "BBC News Asia",
+  "date": "Tue, 03 Nov 2026 11:51:08 GMT",
+  "img": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/029f/live/4eb51590-d772-11f1-a701-fddedf244c16.jpg"
+ },
+ {
+  "i": 27,
+  "cat": "international",
+  "t": "Major test for Australia's social media ban begins in High Court",
+  "d": "Lawyers for Reddit and a digital rights group are arguing the world-leading policy robs children of their right to free communication.",
+  "src": "BBC News Asia",
+  "date": "Tue, 03 Nov 2026 07:53:38 GMT",
+  "img": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/2ab0/live/69114010-d75b-11f1-8f6b-d71817972456.jpg"
+ },
+ {
+  "i": 28,
+  "cat": "international",
+  "t": "Wage protests force hundreds of Bangladesh garment factories to close",
+  "d": "These factories, which manufacture for brands like H&M and Uniqlo, rely on millions of lowly paid workers.",
+  "src": "BBC News Asia",
+  "date": "Tue, 03 Nov 2026 03:59:02 GMT",
+  "img": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/d998/live/f70c4ca0-d72b-11f1-9b56-c9b433d51ba8.jpg"
+ },
+ {
+  "i": 30,
+  "cat": "international",
+  "t": "North Korea denies being behind record $6.3bn Binance hack",
+  "d": "US government agencies and cyber analysts have blamed Pyongyang for the record-breaking heist.",
+  "src": "BBC News Asia",
+  "date": "Tue, 03 Nov 2026 08:33:20 GMT",
+  "img": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/7a90/live/75145840-d727-11f1-b237-93d5595d4291.jpg"
+ },
+ {
+  "i": 33,
+  "cat": "international",
+  "t": "China state broadcaster pulls La Liga matches following Mbappé joke",
+  "d": "China Media Group, which acknowledged Mbappé's apology, has not said how long the blackout will last.",
+  "src": "BBC News Asia",
+  "date": "Mon, 02 Nov 2026 03:58:38 GMT",
+  "img": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/e960/live/11376b60-d66d-11f1-856b-2f2ef225beb0.jpg"
+ },
+ {
+  "i": 35,
+  "cat": "international",
+  "t": "Indonesia's toxic haze is giving its neighbours a political headache",
+  "d": "Governments in Singapore and Malaysia are split between anxious citizens and an irascible neighbour.",
+  "src": "BBC News Asia",
+  "date": "Mon, 02 Nov 2026 23:02:01 GMT",
+  "img": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/302a/live/febcfd60-d293-11f1-9453-5fe901b3e69e.jpg"
+ },
+ {
+  "i": 36,
+  "cat": "international",
+  "t": "Why did this Korean content creator throw a divorce ceremony?",
+  "d": "Cho Seung-yeon marked the end of her marriage by having a divorce ceremony - however not everyone online was happy about it.",
+  "src": "BBC News Asia",
+  "date": "Sat, 31 Oct 2026 22:01:39 GMT",
+  "img": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/c5b8/live/2b5b2bb0-d430-11f1-b441-2b33b063138f.jpg"
+ },
+ {
+  "i": 38,
+  "cat": "international",
+  "t": "He questioned Thailand's monarchy dressed as Harry Potter. Now he's in jail for 34 years",
+  "d": "Thailand has prosecuted 294 people since 2020 under its lèse majesté law, with sentences going up to 50 years.",
+  "src": "BBC News Asia",
+  "date": "Fri, 30 Oct 2026 23:26:16 GMT",
+  "img": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/2371/live/1f84cb60-d4bd-11f1-a701-fddedf244c16.jpg"
+ },
+ {
+  "i": 39,
+  "cat": "economy",
+  "t": "Poundland owner in crunch talks with as retailer's collapse looms",
+  "d": "Gordon Brothers will meet Jonathan Reynolds on Wednesday as the investment firm faces scrutiny over Poundland.",
+  "src": "BBC Business",
+  "date": "Wed, 04 Nov 2026 12:20:42 GMT",
+  "img": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/0027/live/fe2f8c90-d848-11f1-b870-55415e6a9944.jpg"
+ },
+ {
+  "i": 40,
+  "cat": "economy",
+  "t": "UK and EU agree draft deal to scrap Brexit red tape over food exports",
+  "d": "The food deal, ahead of a UK-EU summit later this month, is the most significant part of the so-called Brexit reset agreed so far.",
+  "src": "BBC Business",
+  "date": "Tue, 03 Nov 2026 20:53:03 GMT",
+  "img": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/2a94/live/6d035ba0-d778-11f1-a701-fddedf244c16.jpg"
+ },
+ {
+  "i": 42,
+  "cat": "economy",
+  "t": "Binance says fake job interviews used as part of $6.3bn crypto hack",
+  "d": "An engineer was contacted through a legitimate job-hunting platform and invited to bogus job interviews with fake company representatives, Binance says.",
+  "src": "BBC Business",
+  "date": "Tue, 03 Nov 2026 16:19:29 GMT",
+  "img": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/b517/live/8d68c970-d7a0-11f1-84dd-e55f4bec0ecd.jpg"
+ },
+ {
+  "i": 43,
+  "cat": "economy",
+  "t": "Graduates are managing AI - but are they learning much else?",
+  "d": "Graduates are spending more time managing AI, but are they missing out on other work experience?",
+  "src": "BBC Business",
+  "date": "Wed, 04 Nov 2026 00:04:35 GMT",
+  "img": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/5bf4/live/9fa4f600-d844-11f1-a701-fddedf244c16.jpg"
+ },
+ {
+  "i": 44,
+  "cat": "economy",
+  "t": "Drivers may get compensation offers before car finance saga ends",
+  "d": "The regulator says it supports lenders offering early compensation offers, as long as they are fair.",
+  "src": "BBC Business",
+  "date": "Tue, 03 Nov 2026 11:56:31 GMT",
+  "img": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/fe5c/live/9c202ea0-d6dc-11f1-b2be-0146bf989691.jpg"
+ },
+ {
+  "i": 46,
+  "cat": "economy",
+  "t": "Mining giant joins fight to stop killer toad march across Australia",
+  "d": "Rio Tinto is jointly funding a A$28m \"toad containment zone\" to protect the Pilbara region.",
+  "src": "BBC Business",
+  "date": "Tue, 03 Nov 2026 15:05:01 GMT",
+  "img": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/1be5/live/c655d960-d770-11f1-a956-ff083523ef77.jpg"
+ },
+ {
+  "i": 50,
+  "cat": "economy",
+  "t": "Apple unsure when it will get more foldable iPhones ahead of Christmas",
+  "d": "The tech giant reports strong sales but admits \"constraints\" are affecting supplies of the iPhone Duo.",
+  "src": "BBC Business",
+  "date": "Tue, 03 Nov 2026 11:10:37 GMT",
+  "img": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/f701/live/34eec070-d79f-11f1-84dd-e55f4bec0ecd.jpg"
+ },
+ {
+  "i": 52,
+  "cat": "economy",
+  "t": "Ryanair says it may freeze workers' pay and raise airfares",
+  "d": "The airline says fuel prices may rise by €2bn in 2028 unless there is an end to the US-Israel war with Iran.",
+  "src": "BBC Business",
+  "date": "Mon, 02 Nov 2026 12:22:10 GMT",
+  "img": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/895b/live/a85523b0-d691-11f1-8f56-0b6ab08f384e.jpg"
+ },
+ {
+  "i": 53,
+  "cat": "economy",
+  "t": "How video game remakes tap the power of nostalgia",
+  "d": "Video games are good at triggering nostalgia, a key reason why classic games keep getting remade.",
+  "src": "BBC Business",
+  "date": "Fri, 30 Oct 2026 07:45:00 GMT",
+  "img": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/4f80/live/10dfbd10-c949-11f1-bc2e-018d645d8d21.jpg"
+ },
+ {
+  "i": 56,
+  "cat": "economy",
+  "t": "The Indian workers filming their work to train AI",
+  "d": "Indian workers are being paid to film themselves at work and the footage is used to train AI.",
+  "src": "BBC Business",
+  "date": "Fri, 23 Oct 2026 08:04:17 GMT",
+  "img": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/c6fc/live/3dab9740-bbe0-11f1-bd21-bdf910f2cec6.jpg"
+ },
+ {
+  "i": 60,
+  "cat": "economy",
+  "t": "As Christmas rush looms, how do China-made toys find their way to the US?",
+  "d": "With the festive season on the horizon, we trace toys from factories in China to US shelves.",
+  "src": "BBC Business",
+  "date": "Wed, 14 Oct 2026 23:01:28 GMT",
+  "img": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/c0d2/live/df74c9d0-c54e-11f1-b4f1-2359026a88ee.jpg"
+ },
+ {
+  "i": 66,
+  "cat": "economy",
+  "t": "What's happening to UK interest rates and what does it mean for mortgages?",
+  "d": "The interest rate set by the Bank of England affects mortgage, loan and savings rates for millions.",
+  "src": "BBC Business",
+  "date": "Wed, 04 Nov 2026 10:47:31 GMT",
+  "img": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/dfe8/live/54e10600-3e38-11f1-929e-dd2b5d4dae7a.jpg"
+ },
+ {
+  "i": 72,
+  "cat": "economy",
+  "t": "Binance's $6.3bn crypto hack biggest in history",
+  "d": "Cryptocurrency giant Binance said on Thursday that $6.3bn (£4.7bn) of digital assets have been impacted by what is thought to be the biggest crypto hack on record.",
+  "src": "BBC Business",
+  "date": "Fri, 30 Oct 2026 17:41:10 GMT",
+  "img": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/e1fa/live/c7f7b2b0-d474-11f1-93e1-3b657b665bcf.jpg"
+ },
+ {
+  "i": 74,
+  "cat": "sports",
+  "t": "Real Madrid reach verbal agreement to sign Gabriel",
+  "d": "Real Madrid are confident of winning the race to sign Manchester United forward JJ Gabriel after reaching a verbal agreement with the teenager.",
+  "src": "BBC Sport",
+  "date": "Wed, 04 Nov 2026 11:49:23 GMT",
+  "img": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/bef8/live/b0d4e5f0-d828-11f1-be97-417dbcdedd32.jpg"
+ },
+ {
+  "i": 76,
+  "cat": "sports",
+  "t": "Could Hyrox's Olympic ambition spell the end for triathlon?",
+  "d": "BBC Sport speaks to several triathletes about what World Triathlon's Hyrox partnership means for the future of the sport.",
+  "src": "BBC Sport",
+  "date": "Wed, 04 Nov 2026 11:52:19 GMT",
+  "img": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/5466/live/0c609c30-d7b0-11f1-9092-abeae3cab3b1.jpg"
+ },
+ {
+  "i": 77,
+  "cat": "sports",
+  "t": "West Ham confirm Parker as boss",
+  "d": "West Ham confirm the appointment of former midfielder Scott Parker as their head coach on a two-and-a-half-year deal.",
+  "src": "BBC Sport",
+  "date": "Wed, 04 Nov 2026 11:54:59 GMT",
+  "img": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/e9c1/live/c06b7600-d7b0-11f1-9092-abeae3cab3b1.jpg"
+ },
+ {
+  "i": 78,
+  "cat": "sports",
+  "t": "LIV aimed to 'destroy the European Tour' - McIlroy",
+  "d": "Six-time major winner Rory McIlroy says those connected to LIV Golf were expressing an ambition to \"destroy the European Tour\" at the 2026 Masters, only months before the league filed for bankruptcy protection.",
+  "src": "BBC Sport",
+  "date": "Wed, 04 Nov 2026 11:52:36 GMT",
+  "img": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/9cea/live/376d3fa0-d83c-11f1-9a87-07a62b4549a2.jpg"
+ },
+ {
+  "i": 80,
+  "cat": "sports",
+  "t": "Why rugby league needs Tonga-Samoa World Cup final",
+  "d": "Tonga will face New Zealand after winning all three group matches, before Samoa face Australia in a repeat of the 2022 final.",
+  "src": "BBC Sport",
+  "date": "Wed, 04 Nov 2026 07:00:16 GMT",
+  "img": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/6d8b/live/18463090-d798-11f1-93e1-3b657b665bcf.jpg"
+ },
+ {
+  "i": 86,
+  "cat": "sports",
+  "t": "Man Utd eye Man City's Ait-Nouri - Wednesday's gossip",
+  "d": "Manchester City defender Rayan Ait-Nouri a surprise target for Manchester United, Crystal Palace could turn to England assistant boss Anthony Barry if they sack Pierre Sage, Barcelona keen on Arsenal centre-back Piero Hincapie, plus more.",
+  "src": "BBC Sport",
+  "date": "Tue, 03 Nov 2026 22:55:00 GMT",
+  "img": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/48a5/live/464eefe0-d7ca-11f1-a719-bf3dc3a3d5b5.png"
+ },
+ {
+  "i": 88,
+  "cat": "sports",
+  "t": "Ocon dropped by Haas for rest of season after row",
+  "d": "F1 team Haas says Estaban Ocon will \"no longer compete on its behalf in the 2026 world championship\" after he was dropped for the Mexico Grand Prix.",
+  "src": "BBC Sport",
+  "date": "Tue, 03 Nov 2026 21:15:53 GMT",
+  "img": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/768d/live/8674eeb0-d7c7-11f1-a719-bf3dc3a3d5b5.jpg"
+ },
+ {
+  "i": 94,
+  "cat": "sports",
+  "t": "England thrash USA to secure place in World Cup semi-finals",
+  "d": "England score 23 tries as they secure a huge 134-0 win against USA at the Wollongong Entertainment Arena in New South Wales, to book their place in the semi-finals of the Wheelchair Rugby League World Cup semi-finals, with one group match to spare.",
+  "src": "BBC Sport",
+  "date": "Tue, 03 Nov 2026 15:05:14 GMT",
+  "img": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/f4eb/live/ebc77630-d771-11f1-b441-2b33b063138f.jpg"
+ },
+ {
+  "i": 100,
+  "cat": "sports",
+  "t": "Korda wins LPGA Tour player of the year",
+  "d": "World number one Nelly Korda claims her second points-based LPGA player-of-the-year award.",
+  "src": "BBC Sport",
+  "date": "Wed, 04 Nov 2026 11:37:15 GMT",
+  "img": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/5319/live/72580140-d841-11f1-9a87-07a62b4549a2.jpg"
+ },
+ {
+  "i": 101,
+  "cat": "sports",
+  "t": "Nadal set to join Real Madrid board of directors",
+  "d": "Tennis great Rafael Nadal is set to join the board of Spanish football giants Real Madrid.",
+  "src": "BBC Sport",
+  "date": "Wed, 04 Nov 2026 13:21:01 GMT",
+  "img": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/c75e/live/2dfb0e80-d84f-11f1-b870-55415e6a9944.jpg"
+ },
+ {
+  "i": 108,
+  "cat": "sports",
+  "t": "Djokovic keeps alive bid to squeeze into ATP Finals",
+  "d": "Novak Djokovic keeps alive his last-ditch bid to qualify for this year's ATP Finals by grinding out a first-round victory at the Paris Masters.",
+  "src": "BBC Sport",
+  "date": "Tue, 03 Nov 2026 16:57:17 GMT",
+  "img": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/92bb/live/d4138220-d7a5-11f1-b441-2b33b063138f.jpg"
+ },
+ {
+  "i": 116,
+  "cat": "sports",
+  "t": "How Antonelli 'blew everyone away' to make F1 history",
+  "d": "Kimi Antonelli seems destined for Formula 1 greatness after winning his first world title, writes Andrew Benson.",
+  "src": "BBC Sport",
+  "date": "Mon, 02 Nov 2026 01:47:30 GMT",
+  "img": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/6698/live/f3d07d40-d654-11f1-93e1-3b657b665bcf.jpg"
+ },
+ {
+  "i": 121,
+  "cat": "sports",
+  "t": "Arsenal move clear at the top with a rare win at Liverpool",
+  "d": "Arsenal win at Anfield for the first time since 2012 to earn a three-point lead at the top of the Premier League table following an end-to-end match that leaves Liverpool frustrated to have taken nothing.",
+  "src": "BBC Sport",
+  "date": "Sun, 01 Nov 2026 20:00:18 GMT",
+  "img": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/035d/live/adb0c650-d62a-11f1-a701-fddedf244c16.jpg"
+ },
+ {
+  "i": 126,
+  "cat": "sports",
+  "t": "Antonelli title win 'beginning of something special'",
+  "d": "The Chequered Flag's Harry Benjamin, Marc Priestley and Jennie Gow reflect on the impact of Kimi Antonelli becoming the youngest world champion in Formula 1 history.",
+  "src": "BBC Sport",
+  "date": "Mon, 02 Nov 2026 10:37:55 GMT",
+  "img": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/42d4/live/e5420e30-d6a7-11f1-a701-fddedf244c16.jpg"
+ },
+ {
+  "i": 128,
+  "cat": "sports",
+  "t": "Bellingham & Mbappe score as Real Madrid earn statement win",
+  "d": "Kylian Mbappe, Jude Bellingham and Yan Diomande score as Real Madrid cruise to a 3-0 win against Racing Santander, moving only three points behind Barcelona at the top of La Liga.",
+  "src": "BBC Sport",
+  "date": "Sun, 01 Nov 2026 18:37:48 GMT",
+  "img": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/9010/live/2011c5a0-d61c-11f1-a701-fddedf244c16.jpg"
+ },
+ {
+  "i": 131,
+  "cat": "sports",
+  "t": "Antonelli - the boy 'born in a garage' who became world champion",
+  "d": "Kimi Antonelli was a natural driver at the age of three, according to his dad. Here's how he developed to become the F1 champion at the age of 20.",
+  "src": "BBC Sport",
+  "date": "Sun, 01 Nov 2026 22:25:01 GMT",
+  "img": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/2c15/live/b16a1f00-94a6-11f1-afe9-fb1a837ec5d9.jpg"
+ },
+ {
+  "i": 132,
+  "cat": "sports",
+  "t": "'I would do it again' - Kaepernick reflects on price of protest, 10 years on",
+  "d": "In his first interview with BBC Sport since taking the knee for the first time, Colin Kaepernick reflects on his journey.",
+  "src": "BBC Sport",
+  "date": "Tue, 27 Oct 2026 06:15:24 GMT",
+  "img": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/410e/live/ed2848e0-c882-11f1-a2e8-f71844f8002e.jpg"
+ },
+ {
+  "i": 135,
+  "cat": "technology",
+  "t": "California fights \"preposterous\" Trump admin demand to scrap state broadband laws",
+  "d": "State tries to obtain broadband funds despite rejecting Trump admin condition.",
+  "src": "Ars Technica",
+  "date": "Tue, 03 Nov 2026 22:39:37 +0000",
+  "img": "https://cdn.arstechnica.net/wp-content/uploads/2023/06/getty-fiber-500x500.jpg"
+ },
+ {
+  "i": 136,
+  "cat": "technology",
+  "t": "Ukraine’s drone strikes spur hasty Russian plans for underground data centers",
+  "d": "Russia tries to fix exposed digital infrastructure as data center war backfires.",
+  "src": "Ars Technica",
+  "date": "Tue, 03 Nov 2026 20:39:55 +0000",
+  "img": "https://cdn.arstechnica.net/wp-content/uploads/2026/11/Russia-Borodinsky-coal-mine-500x500.jpg"
+ },
+ {
+  "i": 137,
+  "cat": "technology",
+  "t": "NYT demands Brave shut down its paywall blocker and end deals with AI firms",
+  "d": "Lawsuit calls Brave \"supplier, dealer, and distributor\" of stolen news content.",
+  "src": "Ars Technica",
+  "date": "Tue, 03 Nov 2026 18:30:27 +0000",
+  "img": "https://cdn.arstechnica.net/wp-content/uploads/2026/11/brave-500x500.jpg"
+ },
+ {
+  "i": 139,
+  "cat": "technology",
+  "t": "Google will let schools skip AI tools, but they have to give up search, too",
+  "d": "Google will offer schools AI tools that purportedly don't give away the answers.",
+  "src": "Ars Technica",
+  "date": "Tue, 03 Nov 2026 17:54:43 +0000",
+  "img": "https://cdn.arstechnica.net/wp-content/uploads/2025/05/google-logo-big-g-grooves-500x500.jpg"
+ },
+ {
+  "i": 141,
+  "cat": "technology",
+  "t": "Google dismantles botnet secretly running on 1.3 million Android TV boxes",
+  "d": "Google has cut ties with the company behind the botnet campaign.",
+  "src": "Ars Technica",
+  "date": "Tue, 03 Nov 2026 17:08:21 +0000",
+  "img": "https://cdn.arstechnica.net/wp-content/uploads/2026/11/mecool-malware-500x500.jpg"
+ },
+ {
+  "i": 143,
+  "cat": "technology",
+  "t": "UEFI bootkit infected fully patched Windows machines. Is Microsoft to blame?",
+  "d": "UEFI bootkit BlackX exploits Microsoft's lack of clarity around Secure Boot protections.",
+  "src": "Ars Technica",
+  "date": "Tue, 03 Nov 2026 16:03:13 +0000",
+  "img": "https://cdn.arstechnica.net/wp-content/uploads/2020/10/malware-500x500.jpg"
+ },
+ {
+  "i": 146,
+  "cat": "technology",
+  "t": "Beyond screens: Mercedes-Benz's new holographic heads-up display",
+  "d": "After pioneering the passenger screen, Mercedes has designs on the windshield.",
+  "src": "Ars Technica",
+  "date": "Tue, 03 Nov 2026 14:00:07 +0000",
+  "img": "https://cdn.arstechnica.net/wp-content/uploads/2026/11/26C0308_008-500x500.jpg"
+ },
+ {
+  "i": 149,
+  "cat": "technology",
+  "t": "Third person dies of bird flu since virus started jumping to livestock",
+  "d": "The threat is still considered to be low, but the virus continues to spread.",
+  "src": "Ars Technica",
+  "date": "Mon, 02 Nov 2026 21:21:43 +0000",
+  "img": "https://cdn.arstechnica.net/wp-content/uploads/2025/02/GettyImages-2190742287-500x500.jpg"
+ },
+ {
+  "i": 152,
+  "cat": "technology",
+  "t": "Coming in 2027: Apple’s $1,000 home robot for FaceTime and switching on lights",
+  "d": "Apple robot backed by CEO John Ternus may have hefty price tag and limited uses.",
+  "src": "Ars Technica",
+  "date": "Mon, 02 Nov 2026 18:32:21 +0000",
+  "img": "https://cdn.arstechnica.net/wp-content/uploads/2026/11/Apple-CEO-John-Ternus-500x500.jpg"
+ },
+ {
+  "i": 153,
+  "cat": "technology",
+  "t": "Claude’s new rules against game cloning won’t stop the AI copying boom",
+  "d": "The tsunami of imitators is way bigger than any one model maker can stem.",
+  "src": "Ars Technica",
+  "date": "Mon, 02 Nov 2026 18:05:31 +0000",
+  "img": "https://cdn.arstechnica.net/wp-content/uploads/2026/11/GettyImages-1180626096-500x500.jpg"
+ },
+ {
+  "i": 154,
+  "cat": "technology",
+  "t": "China publicly discloses plan for a lunar landing within three years",
+  "d": "The plan does not include a mission similar to Apollo 8 or Artemis II.",
+  "src": "Ars Technica",
+  "date": "Mon, 02 Nov 2026 17:09:13 +0000",
+  "img": "https://cdn.arstechnica.net/wp-content/uploads/2026/11/china-1-500x500.jpg"
+ }
+]

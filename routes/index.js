@@ -46,6 +46,13 @@ function renderPagination(total, page, perPage) {
   return { totalPages, pages, current: page };
 }
 
+// Admin-configurable page size (falls back to the constant when unset/invalid)
+function getPageSize(req) {
+  const s = (req.res && req.res.locals && req.res.locals.siteSettings) || {};
+  const n = parseInt(s.pagination_size, 10);
+  return (!isNaN(n) && n >= 3 && n <= 48) ? n : PAGE_SIZE;
+}
+
 router.get('/', (req, res) => {
   const db = getDb();
   const lang = req.lang;
@@ -225,7 +232,7 @@ router.get('/category/:slug', (req, res) => {
   const db = getDb();
   const lang = req.lang;
   const page = Math.max(1, parseInt(req.query.page, 10) || 1);
-  const limit = parseInt(req.query.limit, 10) || PAGE_SIZE;
+  const limit = parseInt(req.query.limit, 10) || getPageSize(req);
   const offset = (page - 1) * limit;
 
   db.get(`SELECT * FROM categories WHERE slug = ?`, [req.params.slug], (err, category) => {
@@ -273,7 +280,7 @@ router.get('/tag/:slug', (req, res) => {
   const db = getDb();
   const lang = req.lang;
   const page = Math.max(1, parseInt(req.query.page, 10) || 1);
-  const limit = PAGE_SIZE;
+  const limit = getPageSize(req);
   const offset = (page - 1) * limit;
 
   db.get(`SELECT * FROM tags WHERE slug = ?`, [req.params.slug], (err, tag) => {
@@ -312,7 +319,7 @@ router.get('/search', (req, res) => {
   const lang = req.lang;
   const q = req.query.q || '';
   const page = Math.max(1, parseInt(req.query.page, 10) || 1);
-  const limit = PAGE_SIZE;
+  const limit = getPageSize(req);
   const offset = (page - 1) * limit;
 
   const run = (callback) => {
