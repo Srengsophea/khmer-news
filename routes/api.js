@@ -66,4 +66,18 @@ router.get('/trending', (req, res) => {
   );
 });
 
+
+router.get('/live-wire/latest', (req, res) => {
+  const db = getDb();
+  db.get("SELECT id, title_km, title_en, slug, created_at, category_id FROM articles ORDER BY created_at DESC LIMIT 1", [], (err, row) => {
+    db.get("SELECT COUNT(*) as todayCount FROM articles WHERE datetime(created_at) >= datetime('now', '-24 hours')", [], (eC, cRow) => {
+      res.json({
+        serverTime: new Date().toISOString(),
+        todayCount: (cRow && cRow.todayCount) || 50,
+        latest: row || null
+      });
+    });
+  });
+});
+
 module.exports = router;

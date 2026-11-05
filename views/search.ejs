@@ -35,7 +35,7 @@
         <% articles.forEach(function(a) { %>
           <article class="editorial-wire-row">
             <div class="editorial-wire-time-col">
-              <time class="editorial-wire-badge"><%= timeAgo(a.created_at) %></time>
+              <time class="editorial-wire-badge" datetime="<%= a.created_at %>" data-live-time="<%= a.created_at %>"><%= timeAgo(a.created_at) %></time>
               <span class="editorial-wire-clock"><%= String(a.created_at || '').slice(0, 10) %></span>
             </div>
             <div class="editorial-wire-content-col">

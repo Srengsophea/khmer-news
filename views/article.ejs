@@ -14,14 +14,26 @@
       <div class="editorial-article-main">
         <article class="editorial-article">
           <header class="editorial-article-header">
-            <div class="editorial-meta-row">
+            <div class="editorial-meta-row" style="flex-wrap: wrap; gap: 6px 10px;">
               <a href="/category/<%= article.category_slug %>" class="editorial-kicker"><%= article[`category_name_${lang}`] %></a>
               <span class="editorial-meta-sep">•</span>
-              <time class="editorial-time-fresh"><%= timeAgo(article.created_at) %></time>
+              <time class="editorial-time-fresh" datetime="<%= article.created_at %>" data-live-time="<%= article.created_at %>"><%= timeAgo(article.created_at) %></time>
               <span class="editorial-meta-sep">•</span>
-              <span class="editorial-time">
-                <%= new Date(article.created_at).toLocaleDateString(lang === 'km' ? 'km-KH' : 'en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) %>
+              <span class="editorial-time" title="<%= article.created_at %>">
+                <i class="far fa-clock" style="margin-right: 4px;"></i>
+                <span class="editorial-wire-clock" data-clock-time="<%= article.created_at %>"><%= typeof formatExactTime === 'function' ? formatExactTime(article.created_at, lang) : String(article.created_at).slice(11, 16) %></span>
               </span>
+              <span class="editorial-meta-sep">•</span>
+              <span class="editorial-time-date">
+                <i class="far fa-calendar-alt" style="margin-right: 4px;"></i>
+                <span><%= typeof formatExactDate === 'function' ? formatExactDate(article.created_at, lang) : String(article.created_at).slice(0, 10) %></span>
+              </span>
+              <% if (article.updated_at && article.updated_at !== article.created_at) { %>
+                <span class="editorial-meta-sep">•</span>
+                <span style="font-size: 0.76rem; font-weight: 700; color: var(--accent, #dc2626); display: inline-flex; align-items: center; gap: 4px;">
+                  <i class="fas fa-rotate"></i> <%= lang === 'km' ? 'កែសម្រួល' : 'Updated' %> <time datetime="<%= article.updated_at %>" data-live-time="<%= article.updated_at %>"><%= timeAgo(article.updated_at) %></time>
+                </span>
+              <% } %>
             </div>
 
             <h1 class="editorial-article-headline"><%= article[`title_${lang}`] %></h1>
@@ -52,14 +64,57 @@
           </header>
 
           <% if (article.image_url) { %>
-            <figure class="editorial-article-figure">
-              <img src="<%= article.image_url %>" alt="<%= article[`title_${lang}`] %>" class="article-hero-img">
+            <figure class="editorial-article-figure" onclick="openArticleLightbox(this.querySelector('img').src, '<%= (article[`title_${lang}`] || '').replace(/'/g, "\\'") %>')">
+              <img src="<%= article.image_url %>" alt="<%= article[`title_${lang}`] %>" class="article-hero-img" loading="eager" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=1200&q=80';">
+              <figcaption class="editorial-figure-caption">
+                <span><i class="fas fa-camera"></i> <%= article[`title_${lang}`] %></span>
+                <span class="editorial-expand-badge"><i class="fas fa-expand"></i> <%= lang === 'km' ? 'ពង្រីក' : 'Expand Photo' %></span>
+              </figcaption>
             </figure>
           <% } %>
 
           <div class="editorial-article-body article-content">
             <%- article[`content_${lang}`] %>
           </div>
+
+          <!-- Multi-Image Editorial Visual Gallery (2–3 Images Showcase) -->
+          <% 
+            var gallery = [];
+            try {
+              if (article.gallery_images) {
+                gallery = typeof article.gallery_images === 'string' ? JSON.parse(article.gallery_images) : article.gallery_images;
+                if (!Array.isArray(gallery)) gallery = [];
+              }
+            } catch(e) { gallery = []; }
+            gallery = gallery.filter(function(img) {
+              return img && typeof img === 'string' && img.trim() !== '' && img.trim() !== (article.image_url || '').trim();
+            });
+          %>
+
+          <% if (gallery.length > 0) { %>
+            <section class="editorial-gallery-section" aria-label="Visual Dispatch">
+              <div class="editorial-gallery-header">
+                <span class="editorial-gallery-tag"><i class="fas fa-images"></i> <%= lang === 'km' ? 'វិចិត្រសាលរូបភាពលម្អិត' : 'VISUAL DISPATCH & GALLERY' %></span>
+                <span class="editorial-gallery-count"><%= (gallery.length + (article.image_url ? 1 : 0)) %> <%= lang === 'km' ? 'រូបភាព' : 'Photos in Story' %></span>
+              </div>
+              <div class="editorial-gallery-grid count-<%= gallery.length %>">
+                <% gallery.forEach(function(imgUrl, idx) { %>
+                  <figure class="editorial-gallery-item" onclick="openArticleLightbox('<%= imgUrl %>', '<%= (article[`title_${lang}`] || '').replace(/'/g, "\\'") %> — Photo <%= idx + 2 %>')">
+                    <div class="editorial-gallery-frame">
+                      <img src="<%= imgUrl %>" alt="<%= article[`title_${lang}`] %> - Visual <%= idx + 1 %>" loading="lazy" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1518770660439-4636190af475?w=1000&q=80';">
+                      <div class="editorial-gallery-overlay">
+                        <span class="editorial-gallery-zoom-btn"><i class="fas fa-search-plus"></i> <%= lang === 'km' ? 'មើលពេញទំហំ' : 'View Full-Res' %></span>
+                      </div>
+                    </div>
+                    <figcaption class="editorial-gallery-caption">
+                      <span class="gallery-photo-idx">PHOTO <%= idx + 2 %></span>
+                      <span class="gallery-photo-label"><%= lang === 'km' ? 'ទិដ្ឋភាពជាក់ស្តែង និងស្ថាបត្យកម្ម' : 'Hardware Detail & Architecture' %></span>
+                    </figcaption>
+                  </figure>
+                <% }) %>
+              </div>
+            </section>
+          <% } %>
 
           <!-- Inline Ad Slot -->
           <% if (typeof getAd === 'function') { %>
@@ -127,7 +182,7 @@
                     <div class="editorial-comment-head">
                       <strong><%= c.name %></strong>
                       <span>•</span>
-                      <time><%= timeAgo(c.created_at) %></time>
+                      <time datetime="<%= c.created_at %>" data-live-time="<%= c.created_at %>"><%= timeAgo(c.created_at) %></time>
                     </div>
                     <p><%= c.content %></p>
                   </div>
@@ -234,7 +289,7 @@
               <div class="editorial-meta-row">
                 <span class="editorial-kicker"><%= a[`category_name_${lang}`] %></span>
                 <span class="editorial-meta-sep">•</span>
-                <time class="editorial-time"><%= timeAgo(a.created_at) %></time>
+                <time class="editorial-time" datetime="<%= a.created_at %>" data-live-time="<%= a.created_at %>"><%= timeAgo(a.created_at) %></time>
               </div>
               <h3 class="editorial-story-title">
                 <a href="/article/<%= a.slug %>"><%= a[`title_${lang}`] %></a>
@@ -247,7 +302,50 @@
   </div>
 </section>
 
+<!-- EDITORIAL FULL-SCREEN LIGHTBOX MODAL -->
+<div id="articleLightbox" class="editorial-lightbox" role="dialog" aria-modal="true" style="display:none;" onclick="handleLightboxBackdropClick(event)">
+  <div class="editorial-lightbox-inner">
+    <button type="button" class="editorial-lightbox-close" onclick="closeArticleLightbox()" aria-label="Close photo">
+      <i class="fas fa-times"></i>
+    </button>
+    <div class="editorial-lightbox-stage">
+      <img id="lightboxImg" src="" alt="Expanded news visual">
+    </div>
+    <div class="editorial-lightbox-footer">
+      <div id="lightboxCaption" class="editorial-lightbox-caption"></div>
+      <div class="editorial-lightbox-hint"><i class="fas fa-keyboard"></i> Press ESC or click outside to return</div>
+    </div>
+  </div>
+</div>
+
 <script>
+  function openArticleLightbox(src, caption) {
+    var lb = document.getElementById('articleLightbox');
+    var img = document.getElementById('lightboxImg');
+    var cap = document.getElementById('lightboxCaption');
+    if (!lb || !img) return;
+    img.src = src;
+    if (cap) cap.textContent = caption || '';
+    lb.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeArticleLightbox() {
+    var lb = document.getElementById('articleLightbox');
+    if (!lb) return;
+    lb.style.display = 'none';
+    document.body.style.overflow = '';
+  }
+
+  function handleLightboxBackdropClick(e) {
+    if (e.target.id === 'articleLightbox' || e.target.classList.contains('editorial-lightbox-stage') || e.target.classList.contains('editorial-lightbox-inner')) {
+      closeArticleLightbox();
+    }
+  }
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeArticleLightbox();
+  });
   window.addEventListener('scroll', function () {
     var winScroll = document.body.scrollTop || document.documentElement.scrollTop;
     var height = document.documentElement.scrollHeight - document.documentElement.clientHeight;

@@ -477,20 +477,134 @@
         });
       }
 
-      var now = new Date();
-          var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-          var dateEl = document.getElementById('currentDate');
+      // ==================== REAL-TIME LIVE NEWS TICKER & TIME ENGINE ====================
+      (function() {
+        var isKm = '<%= lang %>' === 'km';
+        var kmDigits = ['០', '១', '២', '៣', '៤', '៥', '៦', '៧', '៨', '៩'];
+        function toKm(n) {
+          return String(n).replace(/\d/g, function(d) { return kmDigits[d]; });
+        }
+
+        var dateEl = document.getElementById('currentDate');
+        var clockEl = document.getElementById('liveClock');
+
+        // 1. Live Top Bar Clock (Ticks Every Second)
+        function updateLiveClock() {
+          var now = new Date();
           if (dateEl) {
-            dateEl.textContent = now.toLocaleDateString('<%= lang %>', options);
+            dateEl.textContent = now.toLocaleDateString(isKm ? 'km-KH' : 'en-US', {
+              weekday: 'long',
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric'
+            });
           }
-          var clockEl = document.getElementById('liveClock');
-          function updateClock() {
-            if (!clockEl) return;
-            var d = new Date();
-            clockEl.textContent = d.toLocaleTimeString('<%= lang === "km" ? "km-KH" : "en-US" %>', { hour: '2-digit', minute: '2-digit' }) + ' ICT';
+          if (clockEl) {
+            var timeFormatted = now.toLocaleTimeString(isKm ? 'km-KH' : 'en-US', {
+              hour: '2-digit',
+              minute: '2-digit',
+              second: '2-digit',
+              hour12: true
+            });
+            clockEl.innerHTML = '<span class="live-pulse-dot" style="width:6px;height:6px;display:inline-block;vertical-align:middle;margin-right:4px;"></span> ' + timeFormatted + ' ICT';
           }
-          updateClock();
-          setInterval(updateClock, 30000);
+        }
+        updateLiveClock();
+        setInterval(updateLiveClock, 1000);
+
+        // 2. Relative Live Time Formatter for News Dispatches
+        function calcRelativeTime(dateStr) {
+          if (!dateStr) return '';
+          var d = new Date(String(dateStr).replace(' ', 'T'));
+          if (isNaN(d.getTime())) return dateStr;
+          var now = Date.now();
+          var diffMs = now - d.getTime();
+          var diffSecs = Math.max(0, Math.floor(diffMs / 1000));
+          var diffMins = Math.floor(diffSecs / 60);
+
+          if (diffSecs < 60) {
+            return isKm ? 'អម្បាញ់មិញ' : 'Just now';
+          }
+          if (diffMins < 60) {
+            return isKm ? (toKm(diffMins) + ' នាទីមុន') : (diffMins + 'm ago');
+          }
+          var diffHours = Math.floor(diffMins / 60);
+          if (diffHours < 24) {
+            return isKm ? (toKm(diffHours) + ' ម៉ោងមុន') : (diffHours + 'h ago');
+          }
+          var diffDays = Math.floor(diffHours / 24);
+          if (diffDays === 1) {
+            return isKm ? 'ម្សិលមិញ' : 'Yesterday';
+          }
+          if (diffDays < 7) {
+            return isKm ? (toKm(diffDays) + ' ថ្ងៃមុន') : (diffDays + 'd ago');
+          }
+          return d.toLocaleDateString(isKm ? 'km-KH' : 'en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        }
+
+        // 3. Update All News Timestamps Across the Page
+        function updateAllNewsTimestamps() {
+          var nodes = document.querySelectorAll('[data-live-time], time[datetime], .editorial-wire-clock[data-clock-time]');
+          nodes.forEach(function(el) {
+            var ts = el.getAttribute('data-live-time') || el.getAttribute('datetime') || el.getAttribute('data-clock-time');
+            if (!ts) return;
+            var d = new Date(String(ts).replace(' ', 'T'));
+            if (isNaN(d.getTime())) return;
+
+            // Update tooltip title with full exact local time
+            if (!el.getAttribute('data-has-title')) {
+              el.title = d.toLocaleDateString(isKm ? 'km-KH' : 'en-US', {
+                weekday: 'short',
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+              }) + ' ' + d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true }) + ' ICT';
+              el.setAttribute('data-has-title', '1');
+            }
+
+            // If it's a wire clock element (HH:MM)
+            if (el.classList.contains('editorial-wire-clock')) {
+              var hh = String(d.getHours()).padStart(2, '0');
+              var mm = String(d.getMinutes()).padStart(2, '0');
+              el.textContent = (isKm ? toKm(hh + ':' + mm) : (hh + ':' + mm)) + ' ICT';
+              return;
+            }
+
+            // Otherwise update relative time
+            var relText = calcRelativeTime(ts);
+            el.textContent = relText;
+
+            // Highlight ultra-fresh news (< 15 mins)
+            var isRecent = (Date.now() - d.getTime()) < 15 * 60 * 1000;
+            if (isRecent) {
+              el.classList.add('is-just-now');
+            } else {
+              el.classList.remove('is-just-now');
+            }
+          });
+        }
+
+        updateAllNewsTimestamps();
+        // Recalculate news timestamps every 10 seconds live
+        setInterval(updateAllNewsTimestamps, 10000);
+
+        // 4. Softly sync with live wire API every 45 seconds
+        setInterval(function() {
+          fetch('/api/live-wire/latest')
+            .then(function(r) { return r.json(); })
+            .then(function(data) {
+              if (data && data.todayCount) {
+                var pills = document.querySelectorAll('.top-today-pill, .nav-link-today');
+                pills.forEach(function(pill) {
+                  var dot = pill.querySelector('.live-pulse-dot') ? '<span class="live-pulse-dot"></span> ' : '';
+                  var label = isKm ? 'ព័ត៌មានថ្ងៃនេះ' : "Today's News";
+                  pill.innerHTML = dot + label + ' (' + (isKm ? toKm(data.todayCount) : data.todayCount) + ')';
+                });
+              }
+            })
+            .catch(function() {});
+        }, 45000);
+      })();
 
           // Newsletter form (AJAX)
           var newsletterForms = document.querySelectorAll('.js-newsletter-form');

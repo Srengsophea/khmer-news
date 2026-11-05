@@ -134,7 +134,7 @@
                   <% } %>
                 </td>
                 <td><span class="cms-desk-pill"><%= a.name_en || a.name_km || 'News' %></span></td>
-                <td class="cms-time-cell"><%= timeAgo(a.created_at) %></td>
+                <td class="cms-time-cell" data-live-time="<%= a.created_at %>"><%= timeAgo(a.created_at) %></td>
                 <td>
                   <div class="cms-row-actions">
                     <form method="POST" action="/admin/articles/bump/<%= a.id %>" style="margin:0;">

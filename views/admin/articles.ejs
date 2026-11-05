@@ -33,7 +33,16 @@
 
   <% if (typeof article !== 'undefined' && article) { %>
     <!-- 2-COLUMN NEWSROOM ARTICLE EDITOR -->
-    <form method="POST" action="/admin/articles/save" class="cms-editor-grid">
+    <% 
+    var existingGallery = [];
+    try {
+      if (article.gallery_images) {
+        existingGallery = typeof article.gallery_images === 'string' ? JSON.parse(article.gallery_images) : article.gallery_images;
+      }
+    } catch(e) { existingGallery = []; }
+    if (!Array.isArray(existingGallery)) existingGallery = [];
+  %>
+  <form method="POST" action="/admin/articles/save" enctype="multipart/form-data" class="cms-editor-grid">
       <input type="hidden" name="id" value="<%= article.id %>">
 
       <!-- Left Main Column: Bilingual Headlines, Summaries & Body -->
@@ -123,16 +132,81 @@
           </div>
         </div>
 
+        <!-- LEAD PHOTO PANEL (LOCAL FILE UPLOAD + URL) -->
         <div class="cms-panel" style="margin-top: 20px;">
           <div class="cms-panel-head">
-            <h2><i class="fas fa-image"></i> Lead Photo</h2>
+            <h2><i class="fas fa-camera"></i> Primary Lead Photo</h2>
           </div>
-          <div class="form-group">
+          
+          <div class="cms-upload-type-bar">
+            <button type="button" id="btnLeadFile" class="cms-upload-type-btn active" onclick="switchLeadUpload('file')">
+              <i class="fas fa-upload"></i> Upload from Computer
+            </button>
+            <button type="button" id="btnLeadUrl" class="cms-upload-type-btn" onclick="switchLeadUpload('url')">
+              <i class="fas fa-link"></i> Web Image URL
+            </button>
+          </div>
+
+          <div id="leadFileBox" class="cms-dropzone-box" style="margin-top: 12px;">
+            <label class="cms-dropzone-label" for="leadImageFile">
+              <i class="fas fa-cloud-arrow-up" style="font-size: 1.8rem; color: var(--accent, #dc2626); margin-bottom: 6px;"></i>
+              <span style="font-weight: 700; color: #0f172a; font-size: 0.85rem;">Click to browse or drag image here</span>
+              <span style="font-size: 0.72rem; color: #64748b;">JPG, PNG, WEBP up to 15MB</span>
+              <input type="file" name="lead_image_file" id="leadImageFile" accept="image/*" style="display:none;" onchange="previewLocalFile(this, 'editorImagePreview', 'leadFileNameDisplay')">
+            </label>
+            <div id="leadFileNameDisplay" class="cms-filename-pill" style="display:none;"></div>
+          </div>
+
+          <div id="leadUrlBox" class="form-group" style="margin-top: 12px; display: none;">
             <label><%= t('labels.image_url') %></label>
-            <input type="text" name="image_url" id="editorImageUrl" value="<%= article.image_url || '' %>" class="form-control" placeholder="https://...">
+            <input type="text" name="image_url" id="editorImageUrl" value="<%= article.image_url || '' %>" class="form-control" placeholder="https://..." oninput="previewUrlInput(this, 'editorImagePreview')">
           </div>
-          <div class="cms-img-preview-frame">
+
+          <div class="cms-img-preview-frame" style="margin-top: 12px;">
             <img id="editorImagePreview" src="<%= article.image_url || 'https://picsum.photos/seed/khmernews/800/450' %>" alt="Preview" onerror="this.onerror=null;this.src='https://picsum.photos/seed/khmernews/800/450';">
+          </div>
+        </div>
+
+        <!-- MULTI-IMAGE STORY GALLERY (2-3 PHOTOS) -->
+        <div class="cms-panel" style="margin-top: 20px;">
+          <div class="cms-panel-head">
+            <h2><i class="fas fa-images"></i> Multi-Image Gallery (2–3 Photos)</h2>
+            <span style="font-size: 0.72rem; font-weight: 800; color: var(--accent, #dc2626);">Multi-Photo Story</span>
+          </div>
+          <p style="font-size: 0.78rem; line-height: 1.5; color: #64748b; margin: 0 0 14px;">
+            Add 1 or 2 extra photos for this story. In the published news article, photos render as an editorial photo gallery with click-to-enlarge lightbox.
+          </p>
+
+          <!-- Photo 2 -->
+          <div class="cms-gallery-slot-box" style="border: 1px solid #e2e8f0; padding: 12px; margin-bottom: 14px; background: #f8fafc;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+              <strong style="font-size: 0.78rem; text-transform: uppercase; color: #0f172a;"><i class="fas fa-image"></i> Photo 2 (Detail / In-Action)</strong>
+              <% if (existingGallery[0]) { %><span class="cms-tag-featured" style="font-size:0.65rem;">Attached</span><% } %>
+            </div>
+            <input type="hidden" name="existing_gallery_1" value="<%= existingGallery[0] || '' %>">
+            <div style="display: grid; gap: 6px;">
+              <input type="file" name="gallery_file_1" accept="image/*" class="form-control" style="font-size: 0.76rem;" onchange="previewLocalFile(this, 'galleryPrev1')">
+              <input type="text" name="gallery_url_1" value="<%= existingGallery[0] || '' %>" placeholder="Or paste Photo 2 URL https://..." class="form-control" style="font-size: 0.76rem;" oninput="previewUrlInput(this, 'galleryPrev1')">
+            </div>
+            <div class="cms-img-preview-frame" style="height: 100px; margin-top: 8px;">
+              <img id="galleryPrev1" src="<%= existingGallery[0] || 'https://picsum.photos/seed/gallery1/600/350' %>" alt="Photo 2" onerror="this.onerror=null;this.src='https://picsum.photos/seed/gallery1/600/350';">
+            </div>
+          </div>
+
+          <!-- Photo 3 -->
+          <div class="cms-gallery-slot-box" style="border: 1px solid #e2e8f0; padding: 12px; background: #f8fafc;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+              <strong style="font-size: 0.78rem; text-transform: uppercase; color: #0f172a;"><i class="fas fa-image"></i> Photo 3 (Specs / Diagram)</strong>
+              <% if (existingGallery[1]) { %><span class="cms-tag-featured" style="font-size:0.65rem;">Attached</span><% } %>
+            </div>
+            <input type="hidden" name="existing_gallery_2" value="<%= existingGallery[1] || '' %>">
+            <div style="display: grid; gap: 6px;">
+              <input type="file" name="gallery_file_2" accept="image/*" class="form-control" style="font-size: 0.76rem;" onchange="previewLocalFile(this, 'galleryPrev2')">
+              <input type="text" name="gallery_url_2" value="<%= existingGallery[1] || '' %>" placeholder="Or paste Photo 3 URL https://..." class="form-control" style="font-size: 0.76rem;" oninput="previewUrlInput(this, 'galleryPrev2')">
+            </div>
+            <div class="cms-img-preview-frame" style="height: 100px; margin-top: 8px;">
+              <img id="galleryPrev2" src="<%= existingGallery[1] || 'https://picsum.photos/seed/gallery2/600/350' %>" alt="Photo 3" onerror="this.onerror=null;this.src='https://picsum.photos/seed/gallery2/600/350';">
+            </div>
           </div>
         </div>
 
@@ -156,15 +230,50 @@
     </form>
 
     <script>
-      document.addEventListener('DOMContentLoaded', function() {
-        var inp = document.getElementById('editorImageUrl');
-        var prev = document.getElementById('editorImagePreview');
-        if (inp && prev) {
-          inp.addEventListener('input', function() {
-            if (inp.value.trim()) prev.src = inp.value.trim();
-          });
+      function switchLeadUpload(mode) {
+        var btnFile = document.getElementById('btnLeadFile');
+        var btnUrl = document.getElementById('btnLeadUrl');
+        var boxFile = document.getElementById('leadFileBox');
+        var boxUrl = document.getElementById('leadUrlBox');
+        if (mode === 'file') {
+          btnFile.classList.add('active');
+          btnUrl.classList.remove('active');
+          boxFile.style.display = 'block';
+          boxUrl.style.display = 'none';
+        } else {
+          btnUrl.classList.add('active');
+          btnFile.classList.remove('active');
+          boxUrl.style.display = 'block';
+          boxFile.style.display = 'none';
         }
-      });
+      }
+
+      function previewLocalFile(input, previewId, nameDisplayId) {
+        if (input.files && input.files[0]) {
+          var file = input.files[0];
+          var reader = new FileReader();
+          reader.onload = function(e) {
+            var img = document.getElementById(previewId);
+            if (img) img.src = e.target.result;
+          };
+          reader.readAsDataURL(file);
+          if (nameDisplayId) {
+            var nameBox = document.getElementById(nameDisplayId);
+            if (nameBox) {
+              nameBox.style.display = 'inline-block';
+              nameBox.innerHTML = '<i class="fas fa-file-image"></i> ' + file.name + ' (' + Math.round(file.size / 1024) + ' KB)';
+            }
+          }
+        }
+      }
+
+      function previewUrlInput(input, previewId) {
+        var val = input.value.trim();
+        var img = document.getElementById(previewId);
+        if (img && val) {
+          img.src = val;
+        }
+      }
     </script>
 
   <% } else { %>
@@ -225,7 +334,7 @@
                   <td>
                     <div class="cms-time-cell">
                       <% if (fresh) { %><span class="live-pulse-dot"></span><% } %>
-                      <strong><%= timeAgo(a.created_at) %></strong>
+                      <strong data-live-time="<%= a.created_at %>"><%= timeAgo(a.created_at) %></strong>
                     </div>
                     <div class="cms-date-sub"><%= String(a.created_at || '').slice(0, 16) %></div>
                   </td>

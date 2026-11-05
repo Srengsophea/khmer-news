@@ -2,6 +2,38 @@ const express = require('express');
 const router = express.Router();
 const { getDb, refreshTodayTimestamps } = require('../database');
 const { requireAdmin } = require('../middleware/auth');
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
+
+const uploadsDir = path.join(__dirname, '..', 'public', 'uploads');
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir, { recursive: true });
+}
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, uploadsDir);
+  },
+  filename: function (req, file, cb) {
+    const ext = path.extname(file.originalname).toLowerCase() || '.jpg';
+    const cleanBase = path.basename(file.originalname, ext).toLowerCase().replace(/[^a-z0-9]/g, '-').slice(0, 30);
+    const unique = Date.now() + '-' + Math.round(Math.random() * 1E6);
+    cb(null, `${cleanBase || 'upload'}-${unique}${ext}`);
+  }
+});
+
+const upload = multer({
+  storage: storage,
+  limits: { fileSize: 15 * 1024 * 1024 },
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype.startsWith('image/')) {
+      cb(null, true);
+    } else {
+      cb(new Error('Only image files are allowed'));
+    }
+  }
+});
 
 router.use((req, res, next) => {
   res.locals.layout = 'admin/layout';
@@ -187,16 +219,66 @@ router.get('/articles/edit/:id', requireAdmin, (req, res) => {
   });
 });
 
-router.post('/articles/save', requireAdmin, express.urlencoded({ extended: false }), (req, res) => {
+router.post('/articles/save', requireAdmin, upload.fields([
+  { name: 'lead_image_file', maxCount: 1 },
+  { name: 'gallery_file_1', maxCount: 1 },
+  { name: 'gallery_file_2', maxCount: 1 },
+  { name: 'gallery_file_3', maxCount: 1 }
+]), (req, res) => {
   const db = getDb();
-  const {
+  let {
     id, title_km, title_en, content_km, content_en, category_id, image_url, is_featured, card_template,
-    author_name, read_time_minutes, summary_km, summary_en
+    author_name, read_time_minutes, summary_km, summary_en,
+    gallery_url_1, gallery_url_2, gallery_url_3,
+    existing_gallery_1, existing_gallery_2, existing_gallery_3
   } = req.body;
+
+  // 1. Resolve lead image: local file upload takes priority over URL
+  let finalLeadImage = (image_url || '').trim();
+  if (req.files && req.files['lead_image_file'] && req.files['lead_image_file'][0]) {
+    finalLeadImage = '/uploads/' + req.files['lead_image_file'][0].filename;
+  }
+
+  // 2. Resolve additional story images (Photos 2, 3, etc.)
+  const galleryImages = [];
+
+  // Slot 1
+  if (req.files && req.files['gallery_file_1'] && req.files['gallery_file_1'][0]) {
+    galleryImages.push('/uploads/' + req.files['gallery_file_1'][0].filename);
+  } else if (gallery_url_1 && gallery_url_1.trim()) {
+    galleryImages.push(gallery_url_1.trim());
+  } else if (existing_gallery_1 && existing_gallery_1.trim()) {
+    galleryImages.push(existing_gallery_1.trim());
+  }
+
+  // Slot 2
+  if (req.files && req.files['gallery_file_2'] && req.files['gallery_file_2'][0]) {
+    galleryImages.push('/uploads/' + req.files['gallery_file_2'][0].filename);
+  } else if (gallery_url_2 && gallery_url_2.trim()) {
+    galleryImages.push(gallery_url_2.trim());
+  } else if (existing_gallery_2 && existing_gallery_2.trim()) {
+    galleryImages.push(existing_gallery_2.trim());
+  }
+
+  // Slot 3
+  if (req.files && req.files['gallery_file_3'] && req.files['gallery_file_3'][0]) {
+    galleryImages.push('/uploads/' + req.files['gallery_file_3'][0].filename);
+  } else if (gallery_url_3 && gallery_url_3.trim()) {
+    galleryImages.push(gallery_url_3.trim());
+  } else if (existing_gallery_3 && existing_gallery_3.trim()) {
+    galleryImages.push(existing_gallery_3.trim());
+  }
+
+  const galleryImagesJson = JSON.stringify(galleryImages);
+
   const tagIds = Array.isArray(req.body.tag_ids)
     ? req.body.tag_ids.map((x) => parseInt(x, 10)).filter((x) => !isNaN(x))
     : (req.body.tag_ids ? [parseInt(req.body.tag_ids, 10)].filter((x) => !isNaN(x)) : []);
-  const slug = (title_en || title_km).toLowerCase().replace(/[^a-z0-9\s]/gi, '').replace(/\s+/g, '-');
+  let generatedSlug = (title_en || title_km || '').toLowerCase().replace(/[^a-z0-9\s]/gi, '').trim().replace(/\s+/g, '-');
+  if (!generatedSlug || generatedSlug === '-') {
+    generatedSlug = 'news-dispatch-' + Date.now();
+  }
+  const slug = generatedSlug;
 
   const afterSave = (articleId) => {
     db.run(`DELETE FROM article_tags WHERE article_id = ?`, [articleId], () => {
@@ -206,16 +288,16 @@ router.post('/articles/save', requireAdmin, express.urlencoded({ extended: false
     });
   };
 
-  if (id) {
+  if (id && parseInt(id, 10) > 0) {
     db.run(
-      `UPDATE articles SET title_km=?, title_en=?, content_km=?, content_en=?, category_id=?, image_url=?, is_featured=?, card_template=?, author_name=?, read_time_minutes=?, summary_km=?, summary_en=?, updated_at=CURRENT_TIMESTAMP WHERE id=?`,
-      [title_km, title_en, content_km, content_en, category_id || null, image_url, is_featured ? 1 : 0, card_template || 'standard', author_name || 'Khmer News Desk', read_time_minutes || 3, summary_km || '', summary_en || '', id],
+      `UPDATE articles SET title_km=?, title_en=?, content_km=?, content_en=?, category_id=?, image_url=?, gallery_images=?, is_featured=?, card_template=?, author_name=?, read_time_minutes=?, summary_km=?, summary_en=?, updated_at=CURRENT_TIMESTAMP WHERE id=?`,
+      [title_km, title_en, content_km, content_en, category_id || null, finalLeadImage, galleryImagesJson, is_featured ? 1 : 0, card_template || 'standard', author_name || 'Khmer News Desk', read_time_minutes || 3, summary_km || '', summary_en || '', id],
       (err) => afterSave(id)
     );
   } else {
     db.run(
-      `INSERT INTO articles (title_km, title_en, content_km, content_en, slug, category_id, image_url, is_featured, card_template, author_name, read_time_minutes, summary_km, summary_en) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)`,
-      [title_km, title_en, content_km, content_en, slug, category_id || null, image_url, is_featured ? 1 : 0, card_template || 'standard', author_name || 'Khmer News Desk', read_time_minutes || 3, summary_km || '', summary_en || ''],
+      `INSERT INTO articles (title_km, title_en, content_km, content_en, slug, category_id, image_url, gallery_images, is_featured, card_template, author_name, read_time_minutes, summary_km, summary_en) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
+      [title_km, title_en, content_km, content_en, slug, category_id || null, finalLeadImage, galleryImagesJson, is_featured ? 1 : 0, card_template || 'standard', author_name || 'Khmer News Desk', read_time_minutes || 3, summary_km || '', summary_en || ''],
       function (err) { afterSave(this.lastID); }
     );
   }

@@ -55,7 +55,7 @@
                 <a href="/category/<%= leadToday.category_slug %>" class="editorial-kicker"><%= leadToday[`category_name_${lang}`] %></a>
               <% } %>
               <span class="editorial-meta-sep">•</span>
-              <time class="editorial-time-fresh"><%= timeAgo(leadToday.created_at) %></time>
+              <time class="editorial-time-fresh" datetime="<%= leadToday.created_at %>" data-live-time="<%= leadToday.created_at %>"><%= timeAgo(leadToday.created_at) %></time>
             </div>
             <h2 class="editorial-lead-headline">
               <a href="/article/<%= leadToday.slug %>"><%= leadToday[`title_${lang}`] %></a>
@@ -86,7 +86,7 @@
                   <a href="/category/<%= sub.category_slug %>" class="editorial-kicker"><%= sub[`category_name_${lang}`] %></a>
                   <span class="editorial-meta-sep">•</span>
                 <% } %>
-                <time class="editorial-time-fresh"><%= timeAgo(sub.created_at) %></time>
+                <time class="editorial-time-fresh" datetime="<%= sub.created_at %>" data-live-time="<%= sub.created_at %>"><%= timeAgo(sub.created_at) %></time>
               </div>
               <h3 class="editorial-sublead-headline">
                 <a href="/article/<%= sub.slug %>"><%= sub[`title_${lang}`] %></a>
@@ -112,8 +112,8 @@
             <% wireStream.forEach((item, idx) => { %>
               <article class="editorial-wire-row">
                 <div class="editorial-wire-time-col">
-                  <time class="editorial-wire-badge"><%= timeAgo(item.created_at) %></time>
-                  <span class="editorial-wire-clock">
+                  <time class="editorial-wire-badge" datetime="<%= item.created_at %>" data-live-time="<%= item.created_at %>"><%= timeAgo(item.created_at) %></time>
+                  <span class="editorial-wire-clock" data-clock-time="<%= item.created_at %>">
                     <%= item.created_at ? String(item.created_at).slice(11, 16) : 'LIVE' %>
                   </span>
                 </div>

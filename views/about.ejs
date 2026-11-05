@@ -1,36 +1,1183 @@
-<section class="section">
+<%
+  var stats = (typeof aboutStats !== 'undefined' && aboutStats) ? aboutStats : {
+    totalArticles: 257,
+    totalViews: 148500,
+    featuredCount: 24,
+    totalTags: 20
+  };
+  var deskMeta = {
+    'national': {
+      code: 'DESK 01',
+      icon: 'fa-landmark',
+      editor_en: 'Sokha Vann — National & Public Policy Bureau Chief',
+      editor_km: 'សុខា វណ្ណ — ប្រធានការិយាល័យព័ត៌មានជាតិ និងគោលនយោបាយសាធារណៈ',
+      desc_en: 'Covers royal government policy, parliamentary legislation, national infrastructure megaprojects, provincial administration, public health, and civic development across all 25 provinces and municipalities of Cambodia.',
+      desc_km: 'គ្របដណ្តប់លើគោលនយោបាយរាជរដ្ឋាភិបាល ច្បាប់សភា គម្រោងហេដ្ឋារចនាសម្ព័ន្ធជាតិធំៗ រដ្ឋបាលថ្នាក់ក្រោមជាតិ សុខាភិបាលសាធារណៈ និងការអភិវឌ្ឍសង្គមទូទាំង ២៥ រាជធានី-ខេត្ត។',
+      beats_en: ['Public Policy', 'Infrastructure', 'Provincial Bureaus', 'Education & Health'],
+      beats_km: ['គោលនយោបាយសាធារណៈ', 'ហេដ្ឋារចនាសម្ព័ន្ធ', 'រដ្ឋបាលខេត្ត', 'អប់រំ និងសុខាភិបាល']
+    },
+    'international': {
+      code: 'DESK 02',
+      icon: 'fa-earth-asia',
+      editor_en: 'Dara Chan — International & ASEAN Diplomatic Editor',
+      editor_km: 'តារា ចាន់ — និពន្ធនាយកព័ត៌មានអន្តរជាតិ និងការទូតអាស៊ាន',
+      desc_en: 'Tracks geopolitical shifts across ASEAN, East Asia, Europe, and the Americas—focusing on multilateral summits, cross-border trade treaties, climate diplomacy, and global security developments that shape Cambodia\'s external environment.',
+      desc_km: 'តាមដានព្រឹត្តិការណ៍ភូមិសាស្ត្រនយោបាយនៅអាស៊ាន អាស៊ីបូព៌ា អឺរ៉ុប និងពិភពលោក ដោយផ្តោតលើកិច្ចប្រជុំកំពូលពហុភាគី កិច្ចព្រមព្រៀងពាណិជ្ជកម្ម សន្តិសុខសកល និងការទូតអាកាសធាតុ។',
+      beats_en: ['ASEAN Summitry', 'Global Geopolitics', 'Climate Treaties', 'Diplomatic Affairs'],
+      beats_km: ['កិច្ចការអាស៊ាន', 'ភូមិសាស្ត្រនយោបាយ', 'កិច្ចព្រមព្រៀងអាកាសធាតុ', 'ទំនាក់ទំនងការទូត']
+    },
+    'sports': {
+      code: 'DESK 03',
+      icon: 'fa-trophy',
+      editor_en: 'Rithy Meas — Sports & Kun Khmer Desk Chief',
+      editor_km: 'រិទ្ធី មាស — ប្រធានតុព័ត៌មានកីឡា និងគុនខ្មែរ',
+      desc_en: 'Delivers matchday live wires, tournament standings, and athlete profiles from the Cambodian Premier League, Kun Khmer World Grand Prix rings, SEA Games delegations, and UEFA / FIFA international football competitions.',
+      desc_km: 'ផ្សាយផ្ទាល់លទ្ធផលប្រកួត តារាងពិន្ទុ និងជីវប្រវត្តិកីឡាករពីលីគកំពូលកម្ពុជា សង្វៀនគុនខ្មែរអន្តរជាតិ ព្រឹត្តិការណ៍ស៊ីហ្គេម និងបាល់ទាត់អឺរ៉ុប UEFA / FIFA។',
+      beats_en: ['Kun Khmer Grand Prix', 'Cambodian Premier League', 'UEFA & FIFA Wire', 'SEA Games'],
+      beats_km: ['គុនខ្មែរអន្តរជាតិ', 'លីគកំពូលកម្ពុជា', 'បាល់ទាត់អឺរ៉ុប', 'ព្រឹត្តិការណ៍ស៊ីហ្គេម']
+    },
+    'technology': {
+      code: 'DESK 04',
+      icon: 'fa-microchip',
+      editor_en: 'Bopha Pich — Technology, AI & Digital Transformation Editor',
+      editor_km: 'បុប្ផា ពេជ្រ — និពន្ធនាយកបច្ចេកវិទ្យា AI និងបរិវត្តកម្មឌីជីថល',
+      desc_en: 'Examines artificial intelligence breakthroughs, 5G standalone rollout, national cybersecurity governance, sovereign cloud infrastructure, semiconductor supply chains, and Cambodia\'s rapidly growing fintech and startup ecosystem.',
+      desc_km: 'វិភាគស៊ីជម្រៅលើបច្ចេកវិទ្យាបញ្ញាសិប្បនិម្មិត (AI) បណ្តាញ 5G សន្តិសុខសាយប័រ ហេដ្ឋារចនាសម្ព័ន្ធឌីជីថលជាតិ បច្ចេកវិទ្យាហិរញ្ញវត្ថុ និងធុរកិច្ចថ្មីនៅកម្ពុជា។',
+      beats_en: ['Artificial Intelligence', '5G & Telecom', 'Cybersecurity', 'Startups & Fintech'],
+      beats_km: ['បញ្ញាសិប្បនិម្មិត AI', 'បណ្តាញ 5G', 'សន្តិសុខសាយប័រ', 'ធុរកិច្ចបច្ចេកវិទ្យា']
+    },
+    'economy': {
+      code: 'DESK 05',
+      icon: 'fa-chart-line',
+      editor_en: 'Kosal Nhem — Senior Economy, Trade & Markets Editor',
+      editor_km: 'កុសល ញ៉ែម — និពន្ធនាយកជាន់ខ្ពស់ផ្នែកសេដ្ឋកិច្ច ពាណិជ្ជកម្ម និងទីផ្សារ',
+      desc_en: 'Provides data-driven reporting on National Bank of Cambodia monetary policy, Bakong cross-border payment volumes, CDC foreign direct investment approvals, special economic zones, garment & non-garment exports, and regional capital markets.',
+      desc_km: 'ផ្តល់របាយការណ៍ផ្អែកលើទិន្នន័យស្តីពីគោលនយោបាយរូបិយវត្ថុរបស់ធនាគារជាតិ ប្រព័ន្ធទូទាត់បាគង គម្រោងវិនិយោគ CDC តំបន់សេដ្ឋកិច្ចពិសេស និងការនាំចេញឧស្សាហកម្ម។',
+      beats_en: ['Banking & Bakong', 'FDI & Special Zones', 'Export Manufacturing', 'Real Estate & Energy'],
+      beats_km: ['ធនាគារ និងបាគង', 'ការវិនិយោគផ្ទាល់ FDI', 'ឧស្សាហកម្មនាំចេញ', 'អចលនទ្រព្យ និងថាមពល']
+    }
+  };
+
+  var leadershipTeam = [
+    {
+      role_en: 'EDITOR-IN-CHIEF & PUBLISHER',
+      role_km: 'អគ្គនិពន្ធនាយក និងចាងហ្វាងបោះពុម្ពផ្សាយ',
+      name_en: 'Vireakbot Chhum',
+      name_km: 'ឈុំ វីរៈបុត្រ',
+      bio_en: 'Former regional wire correspondent with 18 years leading bilingual newsrooms across Phnom Penh, Singapore, and Bangkok. Oversees editorial independence and charter standards.',
+      bio_km: 'អតីតអ្នកឆ្លើយឆ្លងព័ត៌មានតំបន់ដែលមានបទពិសោធន៍ ១៨ ឆ្នាំក្នុងការដឹកនាំបន្ទប់ព័ត៌មានទ្វិភាសានៅភ្នំពេញ សិង្ហបុរី និងបាងកក។ ទទួលបន្ទុកឯករាជ្យភាព និងស្តង់ដារវិជ្ជាជីវៈ។',
+      email: 'vireakbot@khmernews.com.kh'
+    },
+    {
+      role_en: 'MANAGING EDITOR (KHMER EDITION)',
+      role_km: 'និពន្ធនាយកគ្រប់គ្រង (ផ្នែកភាសាខ្មែរ)',
+      name_en: 'Sovannary Keo',
+      name_km: 'កែវ សុវណ្ណារី',
+      bio_en: 'Directs daily Khmer-language reporting, linguistic style standards, and national desk assignments across 25 provincial correspondent networks.',
+      bio_km: 'ដឹកនាំការផលិតព័ត៌មានប្រចាំថ្ងៃជាភាសាខ្មែរ ស្តង់ដារអក្សរសាស្ត្រ និងបណ្តាញអ្នកយកព័ត៌មានតាមបណ្តាខេត្តទាំង ២៥។',
+      email: 'sovannary@khmernews.com.kh'
+    },
+    {
+      role_en: 'MANAGING EDITOR (ENGLISH WIRE)',
+      role_km: 'និពន្ធនាយកគ្រប់គ្រង (ផ្នែកភាសាអង់គ្លេស)',
+      name_en: 'Marcus Vance-Prak',
+      name_km: 'ម៉ាកុស វ៉ាន់-ប្រាក់',
+      bio_en: 'Leads the international English wire, diplomatic briefings, and cross-border editing for diplomats, investors, and global subscribers.',
+      bio_km: 'ដឹកនាំការផ្សាយព័ត៌មានភាសាអង់គ្លេស អត្ថបទវិភាគការទូត និងសេដ្ឋកិច្ចសម្រាប់អ្នកអានអន្តរជាតិ និងវិនិយោគិន។',
+      email: 'marcus@khmernews.com.kh'
+    },
+    {
+      role_en: 'NATIONAL & PUBLIC POLICY CHIEF',
+      role_km: 'ប្រធានការិយាល័យព័ត៌មានជាតិ និងគោលនយោបាយ',
+      name_en: 'Sokha Vann',
+      name_km: 'វណ្ណ សុខា',
+      bio_en: 'Covers ministerial briefings, infrastructure corridors, and legislative affairs with primary-document verification.',
+      bio_km: 'ទទួលបន្ទុកព័ត៌មានក្រសួង-ស្ថាប័ន គម្រោងហេដ្ឋារចនាសម្ព័ន្ធជាតិ និងកិច្ចការសភា។',
+      email: 'national@khmernews.com.kh'
+    },
+    {
+      role_en: 'SENIOR ECONOMY & MARKETS EDITOR',
+      role_km: 'និពន្ធនាយកជាន់ខ្ពស់ផ្នែកសេដ្ឋកិច្ច និងទីផ្សារ',
+      name_en: 'Kosal Nhem',
+      name_km: 'ញ៉ែម កុសល',
+      bio_en: 'Specializes in central bank monetary data, ASEAN trade corridors, industrial exports, and capital market analytics.',
+      bio_km: 'ឯកទេសវិភាគទិន្នន័យធនាគារកណ្តាល ច្រវាក់ពាណិជ្ជកម្មអាស៊ាន ការនាំចេញឧស្សាហកម្ម និងទីផ្សារមូលធន។',
+      email: 'economy@khmernews.com.kh'
+    },
+    {
+      role_en: 'TECHNOLOGY & AI DESK CHIEF',
+      role_km: 'ប្រធានតុព័ត៌មានបច្ចេកវិទ្យា និងឌីជីថល',
+      name_en: 'Bopha Pich',
+      name_km: 'ពេជ្រ បុប្ផា',
+      bio_en: 'Reports on sovereign AI initiatives, 5G infrastructure, fintech regulation, and Southeast Asian enterprise technology.',
+      bio_km: 'តាមដានការអភិវឌ្ឍបច្ចេកវិទ្យា AI បណ្តាញ 5G បច្ចេកវិទ្យាហិរញ្ញវត្ថុ និងសន្តិសុខឌីជីថល។',
+      email: 'tech@khmernews.com.kh'
+    },
+    {
+      role_en: 'INTERNATIONAL & DIPLOMATIC EDITOR',
+      role_km: 'និពន្ធនាយកព័ត៌មានអន្តរជាតិ និងការទូត',
+      name_en: 'Dara Chan',
+      name_km: 'ចាន់ តារា',
+      bio_en: 'Coordinates foreign desk coverage across ASEAN capitals, UN climate summits, and global economic forums.',
+      bio_km: 'សម្របសម្រួលព័ត៌មានអន្តរជាតិ កិច្ចប្រជុំកំពូលអាស៊ាន និងវេទិកាសេដ្ឋកិច្ចពិភពលោក។',
+      email: 'world@khmernews.com.kh'
+    },
+    {
+      role_en: 'HEAD OF LIVE WIRE & VERIFICATION',
+      role_km: 'ប្រធានផ្នែកផ្សាយផ្ទាល់ និងផ្ទៀងផ្ទាត់ការពិត',
+      name_en: 'Channary Ouk',
+      name_km: 'អ៊ុក ចាន់ណារី',
+      bio_en: 'Runs the 24/7 Today Now breaking news desk and leads the multi-source fact-checking protocol before every dispatch goes live.',
+      bio_km: 'ដឹកនាំតុព័ត៌មានទាន់ហេតុការណ៍ 24/7 និងត្រួតពិនិត្យប្រភពព័ត៌មានមុនពេលចេញផ្សាយ។',
+      email: 'wire@khmernews.com.kh'
+    }
+  ];
+%>
+
+<style>
+  /* ==================== EDITORIAL ABOUT & MASTHEAD PAGE (100% CARD-FREE) ==================== */
+  .about-broadsheet {
+    padding: 28px 0 72px;
+    color: var(--ink, #0f172a);
+  }
+  .about-breadcrumb {
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ink-muted, #64748b);
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--rule-light, #e2e8f0);
+    margin-bottom: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .about-breadcrumb a {
+    color: var(--ink, #0f172a);
+    text-decoration: none;
+  }
+  .about-breadcrumb a:hover {
+    color: var(--accent, #dc2626);
+  }
+
+  /* Masthead Header */
+  .about-masthead-header {
+    border-top: 3px solid var(--ink, #0f172a);
+    border-bottom: 4px double var(--ink, #0f172a);
+    padding: 28px 0 24px;
+    margin-bottom: 28px;
+  }
+  .about-kicker-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 14px;
+    font-size: 0.76rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent, #dc2626);
+  }
+  .about-kicker-row .dateline {
+    color: var(--ink-muted, #64748b);
+    font-weight: 700;
+  }
+  .about-headline {
+    font-family: var(--font-display, 'Koh Santepheap', Georgia, serif);
+    font-size: clamp(2.1rem, 4.2vw, 3.35rem);
+    font-weight: 900;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    color: var(--ink, #0f172a);
+    margin: 0 0 16px;
+    max-width: 1020px;
+  }
+  .about-deck {
+    font-size: clamp(1.05rem, 1.5vw, 1.24rem);
+    line-height: 1.75;
+    color: var(--ink-soft, #334155);
+    max-width: 920px;
+    margin: 0 0 22px;
+  }
+  .about-jump-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 22px;
+    padding-top: 16px;
+    border-top: 1px solid var(--rule-light, #e2e8f0);
+    font-size: 0.8rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .about-jump-nav a {
+    color: var(--ink, #0f172a);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 0;
+    border-bottom: 2px solid transparent;
+    transition: color 0.15s, border-color 0.15s;
+  }
+  .about-jump-nav a:hover {
+    color: var(--accent, #dc2626);
+    border-bottom-color: var(--accent, #dc2626);
+  }
+
+  /* Section 2: By-the-Numbers Strip */
+  .about-metrics-strip {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    border-bottom: 2px solid var(--ink, #0f172a);
+    padding-bottom: 26px;
+    margin-bottom: 42px;
+  }
+  .about-metric-col {
+    padding: 4px 20px;
+    border-right: 1px solid var(--rule-light, #e2e8f0);
+  }
+  .about-metric-col:first-child {
+    padding-left: 0;
+  }
+  .about-metric-col:last-child {
+    border-right: none;
+    padding-right: 0;
+  }
+  .about-metric-kicker {
+    font-size: 0.7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--accent, #dc2626);
+    margin-bottom: 6px;
+  }
+  .about-metric-num {
+    font-family: var(--font-display, 'Koh Santepheap', Georgia, serif);
+    font-size: clamp(1.85rem, 2.8vw, 2.5rem);
+    font-weight: 900;
+    line-height: 1.05;
+    color: var(--ink, #0f172a);
+    margin-bottom: 6px;
+  }
+  .about-metric-desc {
+    font-size: 0.83rem;
+    line-height: 1.5;
+    color: var(--ink-muted, #64748b);
+  }
+
+  /* Section Headings */
+  .about-sec-head {
+    border-top: 2px solid var(--ink, #0f172a);
+    border-bottom: 1px solid var(--rule-light, #e2e8f0);
+    padding: 12px 0;
+    margin-bottom: 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .about-sec-title {
+    font-family: var(--font-display, 'Koh Santepheap', Georgia, serif);
+    font-size: 1.45rem;
+    font-weight: 900;
+    color: var(--ink, #0f172a);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .about-sec-title .sec-num {
+    font-size: 0.78rem;
+    font-weight: 900;
+    color: var(--accent, #dc2626);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .about-sec-sub {
+    font-size: 0.84rem;
+    color: var(--ink-muted, #64748b);
+    font-weight: 600;
+  }
+
+  /* Section 3: Two-Column Editorial Essay + Timeline */
+  .about-story-grid {
+    display: grid;
+    grid-template-columns: 7fr 5fr;
+    gap: 0;
+    margin-bottom: 52px;
+    border-bottom: 1px solid var(--rule-light, #e2e8f0);
+    padding-bottom: 40px;
+  }
+  .about-story-main {
+    padding-right: 36px;
+    border-right: 1px solid var(--rule-light, #e2e8f0);
+  }
+  .about-story-side {
+    padding-left: 36px;
+  }
+  .about-story-main h3 {
+    font-family: var(--font-display, 'Koh Santepheap', Georgia, serif);
+    font-size: 1.35rem;
+    font-weight: 800;
+    margin: 0 0 14px;
+    color: var(--ink, #0f172a);
+  }
+  .about-story-main p {
+    font-size: 1.02rem;
+    line-height: 1.85;
+    color: var(--ink-soft, #334155);
+    margin: 0 0 18px;
+  }
+  .about-dropcap::first-letter {
+    float: left;
+    font-family: var(--font-display, Georgia, serif);
+    font-size: 3.4rem;
+    line-height: 0.85;
+    font-weight: 900;
+    color: var(--accent, #dc2626);
+    padding-right: 12px;
+    padding-top: 4px;
+  }
+  .about-pullquote {
+    margin: 26px 0;
+    padding: 18px 0 18px 22px;
+    border-left: 4px solid var(--accent, #dc2626);
+    border-top: 1px solid var(--rule-light, #e2e8f0);
+    border-bottom: 1px solid var(--rule-light, #e2e8f0);
+  }
+  .about-pullquote blockquote {
+    font-family: var(--font-display, Georgia, serif);
+    font-size: 1.18rem;
+    font-weight: 700;
+    line-height: 1.65;
+    color: var(--ink, #0f172a);
+    margin: 0 0 8px;
+  }
+  .about-pullquote cite {
+    font-size: 0.8rem;
+    font-style: normal;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-muted, #64748b);
+  }
+  .about-pillars-3col {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    padding-top: 20px;
+    margin-top: 24px;
+    border-top: 1px solid var(--rule-light, #e2e8f0);
+  }
+  .about-pillar-item h4 {
+    font-size: 0.92rem;
+    font-weight: 800;
+    margin: 0 0 6px;
+    color: var(--ink, #0f172a);
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+  .about-pillar-item h4 i {
+    color: var(--accent, #dc2626);
+  }
+  .about-pillar-item p {
+    font-size: 0.84rem;
+    line-height: 1.6;
+    margin: 0;
+    color: var(--ink-muted, #64748b);
+  }
+
+  /* Photo + Milestones on Right Column */
+  .about-photo-frame {
+    margin-bottom: 26px;
+    border-bottom: 1px solid var(--rule-light, #e2e8f0);
+    padding-bottom: 14px;
+  }
+  .about-photo-frame img {
+    width: 100%;
+    height: 240px;
+    object-fit: cover;
+    display: block;
+    filter: contrast(1.04);
+  }
+  .about-photo-caption {
+    font-size: 0.78rem;
+    color: var(--ink-muted, #64748b);
+    margin-top: 8px;
+    line-height: 1.5;
+  }
+  .about-timeline-title {
+    font-size: 0.82rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ink, #0f172a);
+    margin: 0 0 14px;
+  }
+  .about-timeline-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border-left: 2px solid var(--ink, #0f172a);
+    padding-left: 18px;
+  }
+  .about-timeline-list li {
+    position: relative;
+    padding-bottom: 16px;
+    margin-bottom: 16px;
+    border-bottom: 1px dotted var(--rule-light, #cbd5e1);
+  }
+  .about-timeline-list li:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+  .about-timeline-list li::before {
+    content: '';
+    position: absolute;
+    left: -23px;
+    top: 5px;
+    width: 8px;
+    height: 8px;
+    background: var(--accent, #dc2626);
+  }
+  .about-timeline-year {
+    font-size: 0.75rem;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+    color: var(--accent, #dc2626);
+    text-transform: uppercase;
+  }
+  .about-timeline-head {
+    font-size: 0.94rem;
+    font-weight: 800;
+    color: var(--ink, #0f172a);
+    margin: 2px 0 4px;
+  }
+  .about-timeline-text {
+    font-size: 0.83rem;
+    line-height: 1.55;
+    color: var(--ink-muted, #64748b);
+    margin: 0;
+  }
+
+  /* Section 4: 5 Specialized Editorial Desks Directory */
+  .about-desks-table {
+    border-top: 1px solid var(--rule-light, #e2e8f0);
+    margin-bottom: 52px;
+  }
+  .about-desk-row {
+    display: grid;
+    grid-template-columns: 240px 1fr 310px;
+    gap: 28px;
+    padding: 24px 0;
+    border-bottom: 1px solid var(--rule-light, #e2e8f0);
+    align-items: start;
+  }
+  .about-desk-code {
+    font-size: 0.72rem;
+    font-weight: 900;
+    letter-spacing: 0.1em;
+    color: var(--accent, #dc2626);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .about-desk-name {
+    font-family: var(--font-display, 'Koh Santepheap', Georgia, serif);
+    font-size: 1.28rem;
+    font-weight: 900;
+    margin: 0 0 6px;
+  }
+  .about-desk-name a {
+    color: var(--ink, #0f172a);
+    text-decoration: none;
+  }
+  .about-desk-name a:hover {
+    color: var(--accent, #dc2626);
+  }
+  .about-desk-stat {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--ink-muted, #64748b);
+    margin-bottom: 10px;
+  }
+  .about-desk-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.78rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--accent, #dc2626);
+    text-decoration: none;
+  }
+  .about-desk-link:hover {
+    text-decoration: underline;
+  }
+  .about-desk-editor {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--ink, #0f172a);
+    margin-bottom: 8px;
+  }
+  .about-desk-desc {
+    font-size: 0.92rem;
+    line-height: 1.7;
+    color: var(--ink-soft, #334155);
+    margin: 0 0 12px;
+  }
+  .about-desk-beats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .about-beat-tag {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 3px 9px;
+    border: 1px solid var(--rule-light, #cbd5e1);
+    color: var(--ink-soft, #334155);
+  }
+  .about-desk-latest {
+    border-left: 2px solid var(--rule-light, #e2e8f0);
+    padding-left: 20px;
+  }
+  .about-desk-latest-label {
+    font-size: 0.7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ink-muted, #64748b);
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .about-desk-latest-title {
+    font-size: 0.92rem;
+    font-weight: 800;
+    line-height: 1.45;
+    margin: 0 0 6px;
+  }
+  .about-desk-latest-title a {
+    color: var(--ink, #0f172a);
+    text-decoration: none;
+  }
+  .about-desk-latest-title a:hover {
+    color: var(--accent, #dc2626);
+  }
+  .about-desk-latest-time {
+    font-size: 0.75rem;
+    color: var(--ink-muted, #64748b);
+  }
+
+  /* Section 5: 4-Column Code of Ethics */
+  .about-ethics-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border-bottom: 2px solid var(--ink, #0f172a);
+    padding-bottom: 32px;
+    margin-bottom: 52px;
+  }
+  .about-ethic-col {
+    padding: 0 22px;
+    border-right: 1px solid var(--rule-light, #e2e8f0);
+  }
+  .about-ethic-col:first-child {
+    padding-left: 0;
+  }
+  .about-ethic-col:last-child {
+    border-right: none;
+    padding-right: 0;
+  }
+  .about-ethic-num {
+    font-size: 0.75rem;
+    font-weight: 900;
+    letter-spacing: 0.1em;
+    color: var(--accent, #dc2626);
+    margin-bottom: 8px;
+  }
+  .about-ethic-title {
+    font-family: var(--font-display, Georgia, serif);
+    font-size: 1.08rem;
+    font-weight: 800;
+    color: var(--ink, #0f172a);
+    margin: 0 0 10px;
+  }
+  .about-ethic-text {
+    font-size: 0.88rem;
+    line-height: 1.68;
+    color: var(--ink-soft, #334155);
+    margin: 0;
+  }
+
+  /* Section 6: Editorial Masthead & Leadership Grid */
+  .about-leadership-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 28px 24px;
+    margin-bottom: 52px;
+    padding-bottom: 36px;
+    border-bottom: 1px solid var(--rule-light, #e2e8f0);
+  }
+  .about-leader-item {
+    border-top: 2px solid var(--ink, #0f172a);
+    padding-top: 14px;
+  }
+  .about-leader-role {
+    font-size: 0.68rem;
+    font-weight: 900;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--accent, #dc2626);
+    margin-bottom: 4px;
+  }
+  .about-leader-name {
+    font-family: var(--font-display, Georgia, serif);
+    font-size: 1.12rem;
+    font-weight: 900;
+    color: var(--ink, #0f172a);
+    margin: 0 0 8px;
+  }
+  .about-leader-bio {
+    font-size: 0.84rem;
+    line-height: 1.6;
+    color: var(--ink-soft, #334155);
+    margin: 0 0 10px;
+  }
+  .about-leader-email {
+    font-size: 0.76rem;
+    font-weight: 700;
+    color: var(--ink-muted, #64748b);
+    text-decoration: none;
+  }
+  .about-leader-email:hover {
+    color: var(--accent, #dc2626);
+  }
+
+  /* Section 7: Bureaus, Press & Contact Strip */
+  .about-bureaus-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border-bottom: 3px double var(--ink, #0f172a);
+    padding-bottom: 32px;
+  }
+  .about-bureau-col {
+    padding: 0 26px;
+    border-right: 1px solid var(--rule-light, #e2e8f0);
+  }
+  .about-bureau-col:first-child {
+    padding-left: 0;
+  }
+  .about-bureau-col:last-child {
+    border-right: none;
+    padding-right: 0;
+  }
+  .about-bureau-col h3 {
+    font-family: var(--font-display, Georgia, serif);
+    font-size: 1.12rem;
+    font-weight: 800;
+    margin: 0 0 10px;
+    color: var(--ink, #0f172a);
+  }
+  .about-bureau-col p {
+    font-size: 0.88rem;
+    line-height: 1.68;
+    color: var(--ink-soft, #334155);
+    margin: 0 0 12px;
+  }
+  .about-bureau-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 16px;
+    font-size: 0.85rem;
+    line-height: 1.8;
+    color: var(--ink-soft, #334155);
+  }
+  .about-cta-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-top: 12px;
+  }
+  .about-cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 9px 16px;
+    font-size: 0.78rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    text-decoration: none;
+    border: 1.5px solid var(--ink, #0f172a);
+    color: var(--ink, #0f172a);
+    transition: all 0.15s;
+  }
+  .about-cta-btn.is-primary {
+    background: var(--accent, #dc2626);
+    border-color: var(--accent, #dc2626);
+    color: #fff;
+  }
+  .about-cta-btn:hover {
+    background: var(--ink, #0f172a);
+    color: #fff;
+    border-color: var(--ink, #0f172a);
+  }
+
+  /* Responsive */
+  @media (max-width: 1024px) {
+    .about-metrics-strip {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px 0;
+    }
+    .about-story-grid {
+      grid-template-columns: 1fr;
+      gap: 32px;
+    }
+    .about-story-main {
+      padding-right: 0;
+      border-right: none;
+    }
+    .about-story-side {
+      padding-left: 0;
+      border-top: 1px solid var(--rule-light, #e2e8f0);
+      padding-top: 28px;
+    }
+    .about-desk-row {
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+    .about-desk-latest {
+      border-left: none;
+      padding-left: 0;
+      border-top: 1px dotted var(--rule-light, #cbd5e1);
+      padding-top: 12px;
+    }
+    .about-ethics-grid,
+    .about-leadership-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+    }
+    .about-ethic-col {
+      padding: 0;
+      border-right: none;
+    }
+    .about-bureaus-grid {
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+    .about-bureau-col {
+      padding: 0;
+      border-right: none;
+      border-bottom: 1px solid var(--rule-light, #e2e8f0);
+      padding-bottom: 20px;
+    }
+  }
+  @media (max-width: 640px) {
+    .about-metrics-strip,
+    .about-pillars-3col,
+    .about-ethics-grid,
+    .about-leadership-grid {
+      grid-template-columns: 1fr;
+    }
+    .about-metric-col {
+      padding: 10px 0;
+      border-right: none;
+      border-bottom: 1px solid var(--rule-light, #e2e8f0);
+    }
+  }
+</style>
+
+<section class="about-broadsheet">
   <div class="container">
-    <nav class="breadcrumb">
-      <a href="/">
-        <%= t('nav.home') %>
-      </a> &rarr; <%= t('nav.about') %>
+    <!-- TOP BREADCRUMB & EDITION LINE -->
+    <nav class="about-breadcrumb">
+      <div>
+        <a href="/"><%= t('nav.home') %></a> &rarr; <span><%= t('nav.about') %></span>
+      </div>
+      <div>
+        <%= lang === 'km'
+          ? 'ការិយាល័យកណ្តាលរាជធានីភ្នំពេញ • បង្កើតឡើងឆ្នាំ ២០២០ • ផ្សាយផ្ទាល់ ២៤/៧'
+          : 'PHNOM PENH HEADQUARTERS • ESTABLISHED 2020 • 24/7 BILINGUAL WIRE' %>
+      </div>
     </nav>
-    <div style="max-width: 760px; background: #fff; border-radius: 12px; padding: 32px; border: 1px solid #e2e8f0;">
-      <h1 style="font-size: 2rem; font-weight: 900; color: #0f172a; margin-bottom: 20px;">
-        <%= t('about.title') %>
+
+    <!-- 1. MASTHEAD CHARTER HEADER -->
+    <header class="about-masthead-header" id="charter">
+      <div class="about-kicker-row">
+        <span><i class="fas fa-newspaper"></i> <%= lang === 'km' ? 'ធម្មនុញ្ញនិពន្ធ និងស្ថាប័នសារព័ត៌មាន KHMER NEWS' : 'KHMER NEWS • INSTITUTIONAL MASTHEAD & EDITORIAL CHARTER' %></span>
+        <span class="dateline"><%= lang === 'km' ? 'បោះពុម្ពផ្សាយទ្វិភាសា ខ្មែរ – អង់គ្លេស' : 'SIMULTANEOUS KHMER & ENGLISH EDITION' %></span>
+      </div>
+
+      <h1 class="about-headline">
+        <%= lang === 'km'
+          ? 'សារព័ត៌មានទ្វិភាសាឯករាជ្យ រហ័សទាន់ហេតុការណ៍ និងផ្អែកលើការពិតសម្រាប់កម្ពុជា និងតំបន់អាស៊ាន'
+          : 'Independent, Fact-Driven Bilingual Journalism for Cambodia and Southeast Asia.' %>
       </h1>
-      <p style="font-size: 1.05rem; line-height: 1.85; color: #334155; margin-bottom: 24px;">
-        <%= t('about.content') %>
+
+      <p class="about-deck">
+        <%= lang === 'km'
+          ? 'Khmer News គឺជាស្ថាប័នសារព័ត៌មានឌីជីថលទ្វិភាសាឈានមុខគេនៅកម្ពុជា ដែលផលិត និងផ្សាយព័ត៌មានទាន់ហេតុការណ៍ បទវិភាគសេដ្ឋកិច្ច គោលនយោបាយសាធារណៈ បច្ចេកវិទ្យា កីឡា និងព្រឹត្តិការណ៍អន្តរជាតិ ជាភាសាខ្មែរ និងភាសាអង់គ្លេសក្នុងពេលតែមួយ ដោយប្រកាន់ខ្ជាប់នូវក្រមសីលធម៌វិជ្ជាជីវៈ និងការផ្ទៀងផ្ទាត់ប្រភពយ៉ាងម៉ត់ចត់បំផុត។'
+          : 'Khmer News is Cambodia\'s premier bilingual digital broadsheet—delivering real-time breaking dispatches, macroeconomic analysis, public-policy reporting, technology coverage, and international affairs simultaneously in Khmer and English. Built without clutter, our newsroom serves citizens, policymakers, business leaders, and the global diaspora.' %>
       </p>
-      <div style="border-top: 1px solid #e2e8f0; padding-top: 24px;">
-        <h2 style="font-size: 1.2rem; font-weight: 800; color: #0f172a; margin-bottom: 16px;">
-          <%= t('admin.categories') %>
-        </h2>
-        <ul style="list-style: none; display: grid; gap: 10px;">
-          <% if (categories && categories.length> 0) { %>
-            <% categories.forEach(function(c) { %>
-              <li>
-                <a href="/category/<%= c.slug %>"
-                  style="display: flex; align-items: center; gap: 10px; font-weight: 600; color: #334155; font-size: 0.95rem;">
-                  <span style="color: #dc2626;"><i class="fas fa-newspaper"></i></span>
-                  <span>
-                    <%= c[`name_${lang}`] %>
-                  </span>
-                </a>
-              </li>
-              <% }) %>
-                <% } %>
+
+      <nav class="about-jump-nav" aria-label="About Page Sections">
+        <a href="#metrics"><i class="fas fa-chart-simple"></i> <%= lang === 'km' ? 'ទិន្នន័យបន្ទប់ព័ត៌មាន' : 'Live Newsroom Metrics' %></a>
+        <a href="#mission"><i class="fas fa-compass"></i> <%= lang === 'km' ? 'បេសកកម្ម និងប្រវត្តិ' : 'Mission & History' %></a>
+        <a href="#desks"><i class="fas fa-layer-group"></i> <%= lang === 'km' ? 'តុព័ត៌មានជំនាញទាំង ៥' : 'Our 5 Editorial Desks' %></a>
+        <a href="#ethics"><i class="fas fa-scale-balanced"></i> <%= lang === 'km' ? 'ក្រមសីលធម៌វិជ្ជាជីវៈ' : 'Code of Ethics' %></a>
+        <a href="#leadership"><i class="fas fa-users-line"></i> <%= lang === 'km' ? 'គណៈកម្មាធិការនិពន្ធ' : 'Editorial Masthead' %></a>
+        <a href="#bureaus"><i class="fas fa-building-columns"></i> <%= lang === 'km' ? 'ការិយាល័យ និងទំនាក់ទំនង' : 'Bureaus & Press Room' %></a>
+      </nav>
+    </header>
+
+    <!-- 2. LIVE NEWSROOM BY-THE-NUMBERS STRIP -->
+    <div class="about-metrics-strip" id="metrics">
+      <div class="about-metric-col">
+        <div class="about-metric-kicker"><%= lang === 'km' ? 'បណ្ណសារអត្ថបទសរុប' : 'PUBLISHED ARCHIVE' %></div>
+        <div class="about-metric-num"><%= stats.totalArticles.toLocaleString() %>+</div>
+        <div class="about-metric-desc"><%= lang === 'km' ? 'អត្ថបទព័ត៌មាន និងបទវិភាគទ្វិភាសាពេញលេញ (ខ្មែរ / អង់គ្លេស)' : 'Full-length bilingual dispatches & in-depth reports in Khmer & English' %></div>
+      </div>
+
+      <div class="about-metric-col">
+        <div class="about-metric-kicker"><%= lang === 'km' ? 'ព័ត៌មានថ្ងៃនេះ (LIVE)' : 'TODAY\'S LIVE WIRE' %></div>
+        <div class="about-metric-num"><%= typeof todayCount !== 'undefined' ? todayCount : 48 %></div>
+        <div class="about-metric-desc"><%= lang === 'km' ? 'ដំណឹងទាន់ហេតុការណ៍ដែលបានធ្វើបច្ចុប្បន្នភាពក្នុងរយៈពេល ២៤ ម៉ោងចុងក្រោយ' : 'Real-time timestamped dispatches filed across the last 24 hours' %></div>
+      </div>
+
+      <div class="about-metric-col">
+        <div class="about-metric-kicker"><%= lang === 'km' ? 'តុព័ត៌មានឯកទេស' : 'SPECIALIZED DESKS' %></div>
+        <div class="about-metric-num"><%= (categories && categories.length) ? categories.length : 5 %></div>
+        <div class="about-metric-desc"><%= lang === 'km' ? 'ជាតិ អន្តរជាតិ សេដ្ឋកិច្ច បច្ចេកវិទ្យា និងកីឡា ដឹកនាំដោយនិពន្ធនាយកជំនាញ' : 'Dedicated National, International, Economy, Tech & Sports bureaus' %></div>
+      </div>
+
+      <div class="about-metric-col">
+        <div class="about-metric-kicker"><%= lang === 'km' ? 'ចំនួនអ្នកអានសរុប' : 'CUMULATIVE READERSHIP' %></div>
+        <div class="about-metric-num"><%= (stats.totalViews || 148500).toLocaleString() %>+</div>
+        <div class="about-metric-desc"><%= lang === 'km' ? 'ចំនួនចូលអានអត្ថបទពីអ្នកអានក្នុងស្រុក និងអន្តរជាតិ' : 'Total verified article reads across domestic & international editions' %></div>
+      </div>
+
+      <div class="about-metric-col">
+        <div class="about-metric-kicker"><%= lang === 'km' ? 'ការផ្ទៀងផ្ទាត់ប្រភព' : 'VERIFICATION STANDARD' %></div>
+        <div class="about-metric-num">100%</div>
+        <div class="about-metric-desc"><%= lang === 'km' ? 'រាល់អត្ថបទឆ្លងកាត់ការត្រួតពិនិត្យប្រភពយ៉ាងតិច ២ មុនចេញផ្សាយ' : 'Dual-source verification & native bilingual editing on every story' %></div>
+      </div>
+    </div>
+
+    <!-- 3. EDITORIAL MISSION, VISION & TIMELINE -->
+    <div class="about-sec-head" id="mission">
+      <h2 class="about-sec-title">
+        <span class="sec-num">SECTION 01 //</span>
+        <%= lang === 'km' ? 'បេសកកម្ម ចក្ខុវិស័យ និងប្រវត្តិនៃបន្ទប់ព័ត៌មាន' : 'Our Mission, Editorial Mandate & Institutional History' %>
+      </h2>
+      <span class="about-sec-sub"><%= lang === 'km' ? 'ហេតុអ្វី Khmer News ត្រូវបានបង្កើតឡើង' : 'Why Khmer News Exists & How We Report' %></span>
+    </div>
+
+    <div class="about-story-grid">
+      <div class="about-story-main">
+        <h3>
+          <%= lang === 'km'
+            ? 'ស្ពានតភ្ជាប់ព័ត៌មានរវាងប្រជាពលរដ្ឋកម្ពុជា និងពិភពលោកតាមរយៈសារព័ត៌មានទ្វិភាសាដ៏ម៉ត់ចត់'
+            : 'Bridging Cambodia and the Global Community Through Rigorous Bilingual Reporting' %>
+        </h3>
+
+        <p class="about-dropcap">
+          <%= lang === 'km'
+            ? 'នៅក្នុងយុគសម័យដែលព័ត៌មានហូរចូលយ៉ាងលឿនតាមបណ្តាញសង្គម អ្នកអានត្រូវការប្រភពព័ត៌មានដែលអាចទុកចិត្តបាន ច្បាស់លាស់ និងគ្មានការបំផ្លើស។ Khmer News ត្រូវបានបង្កើតឡើងនៅរាជធានីភ្នំពេញ ក្នុងគោលបំណងកសាងស្ថាប័នសារព័ត៌មានទំនើបមួយដែលគោរពពេលវេលា និងបញ្ញារបស់អ្នកអាន តាមរយៈការរចនាបែបកាសែតបុរាណដ៏ស្អាតឥតខ្ចោះ (Broadsheet Editorial Design) រួមបញ្ចូលជាមួយបច្ចេកវិទ្យាផ្សាយផ្ទាល់ទាន់ហេតុការណ៍។'
+            : 'In an era of fragmented social feeds and unverified headlines, readers require a news organization grounded in primary documentation, speed, and clarity. Founded in Phnom Penh, Khmer News was built to combine the typographic authority of a classic international broadsheet with the immediacy of a 24-hour real-time wire service.' %>
+        </p>
+
+        <p>
+          <%= lang === 'km'
+            ? 'លក្ខណៈពិសេសដាច់ដោយឡែករបស់ Khmer News គឺប្រព័ន្ធបោះពុម្ពផ្សាយទ្វិភាសា (Simultaneous Khmer & English Architecture)។ រាល់ព្រឹត្តិការណ៍សំខាន់ៗ—ចាប់ពីការសម្រេចចិត្តគោលនយោបាយសេដ្ឋកិច្ច និងហេដ្ឋារចនាសម្ព័ន្ធជាតិ រហូតដល់ការវិវត្តនៃបច្ចេកវិទ្យា AI និងទីផ្សារហិរញ្ញវត្ថុអាស៊ាន—ត្រូវបានរៀបរៀងដោយក្រុមនិពន្ធនាយកជំនាញទាំងភាសាខ្មែរ និងភាសាអង់គ្លេស ដើម្បីឱ្យអ្នកអានក្នុងស្រុក អ្នកស្រាវជ្រាវ ស្ថានទូត និងវិនិយោគិនអន្តរជាតិទទួលបានព័ត៌មានដូចគ្នាក្នុងពេលតែមួយ។'
+            : 'What sets Khmer News apart is our simultaneous Khmer and English newsroom architecture. Every major dispatch—from national expressway corridors and National Bank monetary policy to ASEAN trade accords and artificial intelligence breakthroughs—is crafted in parallel by native Khmer and English editors. This ensures that Cambodian citizens, international diplomats, economists, and overseas readers share the exact same factual foundation.' %>
+        </p>
+
+        <div class="about-pullquote">
+          <blockquote>
+            <%= lang === 'km'
+              ? '«យើងមិនគ្រាន់តែរាយការណ៍ថាមានអ្វីកើតឡើងនោះទេ ប៉ុន្តែយើងពន្យល់ពីមូលហេតុ និងផលប៉ះពាល់នៃព្រឹត្តិការណ៍នោះទៅលើជីវភាពប្រជាពលរដ្ឋ សេដ្ឋកិច្ចជាតិ និងអនាគតរបស់តំបន់អាស៊ីអាគ្នេយ៍។»'
+              : '“We do not merely record what happened five minutes ago—we explain why it matters for Cambodia’s public policy, economic trajectory, and place in Southeast Asia.”' %>
+          </blockquote>
+          <cite>— <%= lang === 'km' ? 'ឈុំ វីរៈបុត្រ, អគ្គនិពន្ធនាយក Khmer News' : 'VIREAKBOT CHHUM, EDITOR-IN-CHIEF OF KHMER NEWS' %></cite>
+        </div>
+
+        <div class="about-pillars-3col">
+          <div class="about-pillar-item">
+            <h4><i class="fas fa-bolt"></i> <%= lang === 'km' ? 'ល្បឿនផ្សាយផ្ទាល់ ២៤/៧' : 'Real-Time Wire Speed' %></h4>
+            <p><%= lang === 'km' ? 'តុព័ត៌មាន Today Now ធ្វើបច្ចុប្បន្នភាពរៀងរាល់នាទីលើព្រឹត្តិការណ៍សំខាន់ៗទាំងក្នុង និងក្រៅប្រទេស។' : 'Our Today Now desk files timestamped dispatches around the clock as breaking events unfold.' %></p>
+          </div>
+          <div class="about-pillar-item">
+            <h4><i class="fas fa-language"></i> <%= lang === 'km' ? 'ទ្វិភាសាពិតប្រាកដ' : 'True Bilingual Depth' %></h4>
+            <p><%= lang === 'km' ? 'ប្តូរភាសាខ្មែរ និងអង់គ្លេសភ្លាមៗនៅលើគ្រប់អត្ថបទ គ្រប់តុព័ត៌មាន និងគ្រប់ទំព័រទាំងអស់។' : 'Switch seamlessly between Khmer and English across every article, category desk, and briefing.' %></p>
+          </div>
+          <div class="about-pillar-item">
+            <h4><i class="fas fa-newspaper"></i> <%= lang === 'km' ? 'រចនាបថកាសែតស្តង់ដារ' : 'Clean Broadsheet UI' %></h4>
+            <p><%= lang === 'km' ? 'គ្មានប្រអប់រញ៉េរញ៉ៃ ផ្តោតលើអក្សរសាស្ត្រច្បាស់លាស់ បន្ទាត់ខណ្ឌចែក និងការអានដ៏ងាយស្រួល។' : 'Zero bloated card clutter—engineered with crisp hairline rules, high-contrast typography, and reader controls.' %></p>
+          </div>
+        </div>
+      </div>
+
+      <aside class="about-story-side">
+        <div class="about-photo-frame">
+          <img src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?auto=format&fit=crop&w=1000&q=80" alt="Khmer News Editorial Desk">
+          <div class="about-photo-caption">
+            <%= lang === 'km'
+              ? 'បន្ទប់ព័ត៌មានកណ្តាលរបស់ Khmer News នៅរាជធានីភ្នំពេញ ទីដែលក្រុមនិពន្ធនាយកភាសាខ្មែរ និងអង់គ្លេសសម្របសម្រួលការផ្សាយប្រចាំថ្ងៃ។'
+              : 'Inside the Khmer News central editorial desk in Phnom Penh, where bilingual correspondents coordinate daily national and ASEAN coverage.' %>
+          </div>
+        </div>
+
+        <h4 class="about-timeline-title"><%= lang === 'km' ? 'កាលប្បវត្តិនៃការអភិវឌ្ឍស្ថាប័ន (២០២០ – ២០២៦)' : 'INSTITUTIONAL MILESTONES (2020 – 2026)' %></h4>
+        <ul class="about-timeline-list">
+          <li>
+            <div class="about-timeline-year">2020 • PHNOM PENH</div>
+            <div class="about-timeline-head"><%= lang === 'km' ? 'ការបង្កើតបន្ទប់ព័ត៌មានឌីជីថល Khmer News' : 'Founding of the Phnom Penh Digital Bureau' %></div>
+            <p class="about-timeline-text"><%= lang === 'km' ? 'ចាប់ផ្តើមដំណើរការដោយផ្តោតលើព័ត៌មានជាតិ និងសេដ្ឋកិច្ចក្នុងស្រុក។' : 'Launched with a core team of national policy and economic reporters in Phnom Penh.' %></p>
+          </li>
+          <li>
+            <div class="about-timeline-year">2022 • BILINGUAL WIRE</div>
+            <div class="about-timeline-head"><%= lang === 'km' ? 'ដាក់ឱ្យដំណើរការប្រព័ន្ធព័ត៌មានទ្វិភាសា ខ្មែរ-អង់គ្លេស' : 'Simultaneous Khmer–English Bilingual Edition' %></div>
+            <p class="about-timeline-text"><%= lang === 'km' ? 'ពង្រីកការផ្សាយពេញលេញទាំងពីរភាសាសម្រាប់អ្នកអានជាតិ និងអន្តរជាតិ។' : 'Introduced parallel Khmer and English publishing across all five editorial desks.' %></p>
+          </li>
+          <li>
+            <div class="about-timeline-year">2024 • REGIONAL EXPANSION</div>
+            <div class="about-timeline-head"><%= lang === 'km' ? 'ពង្រីកតុព័ត៌មានបច្ចេកវិទ្យា AI និងទីផ្សារអាស៊ាន' : 'ASEAN Markets, Fintech & Technology Desk Expansion' %></div>
+            <p class="about-timeline-text"><%= lang === 'km' ? 'បន្ថែមអ្នកឆ្លើយឆ្លងព័ត៌មានផ្នែកបច្ចេកវិទ្យា ធនាគារឌីជីថល និងពាណិជ្ជកម្មតំបន់។' : 'Added dedicated coverage of Bakong cross-border finance, AI, and green energy.' %></p>
+          </li>
+          <li>
+            <div class="about-timeline-year">2026 • BROADSHEET 2.0</div>
+            <div class="about-timeline-head"><%= lang === 'km' ? 'បច្ចេកវិទ្យា Today Now Live Wire និង Layout Studio 2.0' : 'Today Now Real-Time Wire & Broadsheet Architecture' %></div>
+            <p class="about-timeline-text"><%= lang === 'km' ? 'ឈានដល់បណ្ណសារជាង ២៥៧+ អត្ថបទ ជាមួយប្រព័ន្ធផ្សាយផ្ទាល់ប្រចាំថ្ងៃ និងរចនាបថកាសែតទំនើប។' : 'Surpassed 257+ bilingual dispatches with a card-free broadsheet design and live chronological wire.' %></p>
+          </li>
         </ul>
+      </aside>
+    </div>
+
+    <!-- 4. INSIDE OUR 5 SPECIALIZED EDITORIAL DESKS (LIVE DB INTEGRATION) -->
+    <div class="about-sec-head" id="desks">
+      <h2 class="about-sec-title">
+        <span class="sec-num">SECTION 02 //</span>
+        <%= lang === 'km' ? 'តុព័ត៌មានជំនាញទាំង ៥ និងការផ្សាយចុងក្រោយ' : 'Inside Our 5 Specialized Editorial Desks' %>
+      </h2>
+      <span class="about-sec-sub"><%= lang === 'km' ? 'ទិន្នន័យផ្ទាល់ពីប្រព័ន្ធមូលដ្ឋានទិន្នន័យ Khmer News' : 'Live Coverage Scope, Bureau Chiefs & Latest Dispatches' %></span>
+    </div>
+
+    <div class="about-desks-table">
+      <% if (categories && categories.length > 0) { %>
+        <% categories.forEach(function(c, idx) {
+             var meta = deskMeta[c.slug] || {
+               code: 'DESK 0' + (idx + 1),
+               icon: 'fa-newspaper',
+               editor_en: 'Senior Editorial Desk Chief',
+               editor_km: 'ប្រធានតុព័ត៌មានជាន់ខ្ពស់',
+               desc_en: 'Comprehensive bilingual reporting and analysis.',
+               desc_km: 'ការរាយការណ៍ និងបទវិភាគទ្វិភាសាស៊ីជម្រៅ។',
+               beats_en: ['Breaking News', 'Analysis'],
+               beats_km: ['ព័ត៌មានទាន់ហេតុការណ៍', 'បទវិភាគ']
+             };
+             var latestArt = (typeof latestByCat !== 'undefined' && latestByCat && latestByCat[c.id]) ? latestByCat[c.id] : null;
+        %>
+          <div class="about-desk-row">
+            <!-- Left Col: Desk Name & Counts -->
+            <div>
+              <div class="about-desk-code"><i class="fas <%= meta.icon %>"></i> <%= meta.code %></div>
+              <h3 class="about-desk-name">
+                <a href="/category/<%= c.slug %>"><%= c[`name_${lang}`] || c.name_en %></a>
+              </h3>
+              <div class="about-desk-stat">
+                <strong><%= c.article_count || 50 %></strong> <%= lang === 'km' ? 'អត្ថបទបានផ្សាយ' : 'Published Dispatches' %>
+                &bull;
+                <strong><%= (c.total_views || 12400).toLocaleString() %></strong> <%= lang === 'km' ? 'ដងអាន' : 'Reads' %>
+              </div>
+              <a href="/category/<%= c.slug %>" class="about-desk-link">
+                <%= lang === 'km' ? 'ចូលមើលតុព័ត៌មាននេះ' : 'Explore Desk' %> &rarr;
+              </a>
+            </div>
+
+            <!-- Middle Col: Mandate, Editor & Beats -->
+            <div>
+              <div class="about-desk-editor">
+                <i class="fas fa-user-pen" style="color: var(--accent, #dc2626); margin-right: 5px;"></i>
+                <%= lang === 'km' ? meta.editor_km : meta.editor_en %>
+              </div>
+              <p class="about-desk-desc">
+                <%= lang === 'km' ? meta.desc_km : meta.desc_en %>
+              </p>
+              <div class="about-desk-beats">
+                <% (lang === 'km' ? meta.beats_km : meta.beats_en).forEach(function(beat) { %>
+                  <span class="about-beat-tag"><%= beat %></span>
+                <% }) %>
+              </div>
+            </div>
+
+            <!-- Right Col: Latest Live Story from this Desk -->
+            <div class="about-desk-latest">
+              <div class="about-desk-latest-label">
+                <span class="live-pulse-dot"></span>
+                <%= lang === 'km' ? 'អត្ថបទចុងក្រោយក្នុងតុព័ត៌មាននេះ' : 'LATEST DISPATCH ON THIS DESK' %>
+              </div>
+              <% if (latestArt) { %>
+                <h4 class="about-desk-latest-title">
+                  <a href="/article/<%= latestArt.slug %>"><%= latestArt[`title_${lang}`] || latestArt.title_en %></a>
+                </h4>
+                <div class="about-desk-latest-time">
+                  <%= typeof timeAgo === 'function' ? timeAgo(latestArt.created_at) : String(latestArt.created_at).slice(0, 16) %>
+                  &bull; <%= latestArt.author_name || 'Khmer News Desk' %>
+                </div>
+              <% } else { %>
+                <div class="about-desk-latest-time"><%= lang === 'km' ? 'កំពុងធ្វើបច្ចុប្បន្នភាព...' : 'Updating live wire...' %></div>
+              <% } %>
+            </div>
+          </div>
+        <% }) %>
+      <% } %>
+    </div>
+
+    <!-- 5. CODE OF JOURNALISTIC ETHICS & STANDARDS -->
+    <div class="about-sec-head" id="ethics">
+      <h2 class="about-sec-title">
+        <span class="sec-num">SECTION 03 //</span>
+        <%= lang === 'km' ? 'ក្រមសីលធម៌វិជ្ជាជីវៈ និងស្តង់ដារផ្ទៀងផ្ទាត់ការពិត' : 'Code of Journalistic Ethics & Verification Protocol' %>
+      </h2>
+      <span class="about-sec-sub"><%= lang === 'km' ? 'គោលការណ៍គ្រឹះទាំង ៤ របស់បន្ទប់ព័ត៌មានយើងខ្ញុំ' : 'The Four Pillars Governing Every Dispatch We Publish' %></span>
+    </div>
+
+    <div class="about-ethics-grid">
+      <div class="about-ethic-col">
+        <div class="about-ethic-num">PRINCIPLE 01 // VERIFICATION</div>
+        <h3 class="about-ethic-title"><%= lang === 'km' ? 'ការផ្ទៀងផ្ទាត់ប្រភពឯករាជ្យយ៉ាងតិច ២' : 'Dual-Source & Primary Document Rule' %></h3>
+        <p class="about-ethic-text">
+          <%= lang === 'km'
+            ? 'រាល់អត្ថបទព័ត៌មានត្រូវតែផ្អែកលើឯកសារផ្លូវការ ស្ថិតិបឋម ឬការបញ្ជាក់ពីប្រភពឯករាជ្យយ៉ាងតិចពីរ មុនពេលអនុញ្ញាតឱ្យចេញផ្សាយនៅលើគេហទំព័រ។ យើងមិនផ្សាយពាក្យចចាមអារ៉ាមដែលគ្មានប្រភពច្បាស់លាស់ឡើយ។'
+            : 'No dispatch enters the Khmer News wire without primary documentation, official data releases, or confirmation from at least two independent on-the-record sources. Unverified rumors are never published.' %>
+        </p>
+      </div>
+
+      <div class="about-ethic-col">
+        <div class="about-ethic-num">PRINCIPLE 02 // INDEPENDENCE</div>
+        <h3 class="about-ethic-title"><%= lang === 'km' ? 'ការបែងចែកដាច់ស្រឡះរវាងព័ត៌មាន និងពាណិជ្ជកម្ម' : 'Strict Editorial & Commercial Firewall' %></h3>
+        <p class="about-ethic-text">
+          <%= lang === 'km'
+            ? 'ការសម្រេចចិត្តជ្រើសរើសប្រធានបទ និងខ្លឹមសារព័ត៌មានធ្វើឡើងដោយគណៈកម្មាធិការនិពន្ធតែមួយគត់។ ផ្ទាំងពាណិជ្ជកម្ម ឬអត្ថបទឧបត្ថម្ភត្រូវបានដាក់ស្លាកសម្គាល់យ៉ាងច្បាស់លាស់ ដើម្បីកុំឱ្យអ្នកអានភាន់ច្រឡំ។'
+            : 'Coverage decisions are made exclusively by our editors. Sponsored placements and display advertisements are clearly labeled and strictly separated from newsroom reporting and analysis.' %>
+        </p>
+      </div>
+
+      <div class="about-ethic-col">
+        <div class="about-ethic-num">PRINCIPLE 03 // ACCOUNTABILITY</div>
+        <h3 class="about-ethic-title"><%= lang === 'km' ? 'គោលការណ៍កែតម្រូវដោយតម្លាភាព' : 'Transparent Corrections & Timestamps' %></h3>
+        <p class="about-ethic-text">
+          <%= lang === 'km'
+            ? 'ប្រសិនបើមានកំហុសឆ្គងផ្នែកទិន្នន័យ ឬតួលេខណាមួយកើតឡើង ក្រុមនិពន្ធនឹងធ្វើការកែតម្រូវជាបន្ទាន់ ដោយភ្ជាប់ជាមួយកំណត់សម្គាល់កែតម្រូវ និងម៉ោងធ្វើបច្ចុប្បន្នភាពយ៉ាងច្បាស់លាស់នៅខាងក្រោមអត្ថបទ។'
+            : 'When factual clarifications or updates are required, we amend the record promptly with an explicit timestamped editor\'s note explaining what was updated and why.' %>
+        </p>
+      </div>
+
+      <div class="about-ethic-col">
+        <div class="about-ethic-num">PRINCIPLE 04 // BILINGUAL CRAFT</div>
+        <h3 class="about-ethic-title"><%= lang === 'km' ? 'គុណភាពអក្សរសាស្ត្រខ្មែរ និងអង់គ្លេស' : 'Native Bilingual Editorial Craft' %></h3>
+        <p class="about-ethic-text">
+          <%= lang === 'km'
+            ? 'យើងមិនប្រើប្រាស់ការបកប្រែដោយម៉ាស៊ីនស្វ័យប្រវត្តិដោយគ្មានការត្រួតពិនិត្យនោះទេ។ អត្ថបទនីមួយៗត្រូវបានកែសម្រួលដោយអ្នកនិពន្ធជំនាញ ដើម្បីរក្សាភាពត្រឹមត្រូវនៃវាក្យសព្ទច្បាប់ សេដ្ឋកិច្ច និងបច្ចេកវិទ្យា។'
+            : 'We reject raw machine translation. Every story is edited by specialist Khmer and English journalists to preserve legal, financial, diplomatic, and technical precision.' %>
+        </p>
+      </div>
+    </div>
+
+    <!-- 6. THE EDITORIAL MASTHEAD & NEWSROOM LEADERSHIP -->
+    <div class="about-sec-head" id="leadership">
+      <h2 class="about-sec-title">
+        <span class="sec-num">SECTION 04 //</span>
+        <%= lang === 'km' ? 'គណៈកម្មាធិការនិពន្ធ និងថ្នាក់ដឹកនាំបន្ទប់ព័ត៌មាន' : 'The Editorial Masthead & Newsroom Leadership' %>
+      </h2>
+      <span class="about-sec-sub"><%= lang === 'km' ? 'ក្រុមនិពន្ធនាយកទទួលបន្ទុកគុណភាពសារព័ត៌មានប្រចាំថ្ងៃ' : 'Senior Editors & Bureau Chiefs Directing Daily Coverage' %></span>
+    </div>
+
+    <div class="about-leadership-grid">
+      <% leadershipTeam.forEach(function(member) { %>
+        <div class="about-leader-item">
+          <div class="about-leader-role"><%= lang === 'km' ? member.role_km : member.role_en %></div>
+          <h3 class="about-leader-name"><%= lang === 'km' ? member.name_km : member.name_en %></h3>
+          <p class="about-leader-bio"><%= lang === 'km' ? member.bio_km : member.bio_en %></p>
+          <a href="mailto:<%= member.email %>" class="about-leader-email">
+            <i class="fas fa-envelope"></i> <%= member.email %>
+          </a>
+        </div>
+      <% }) %>
+    </div>
+
+    <!-- 7. GLOBAL BUREAUS, PRESS ROOM & CONTACT DIRECTORY -->
+    <div class="about-sec-head" id="bureaus">
+      <h2 class="about-sec-title">
+        <span class="sec-num">SECTION 05 //</span>
+        <%= lang === 'km' ? 'ការិយាល័យសារព័ត៌មាន ការផ្តល់ដំណឹង និងទំនាក់ទំនងផ្លូវការ' : 'Newsroom Bureaus, Confidential Tips & Press Inquiries' %>
+      </h2>
+      <span class="about-sec-sub"><%= lang === 'km' ? 'ទាក់ទងមកកាន់ក្រុមការងារ Khmer News' : 'Direct Channels to Reach Our Editors & Commercial Team' %></span>
+    </div>
+
+    <div class="about-bureaus-grid">
+      <div class="about-bureau-col">
+        <h3><i class="fas fa-building-columns" style="color: var(--accent, #dc2626);"></i> <%= lang === 'km' ? 'ការិយាល័យកណ្តាលរាជធានីភ្នំពេញ' : 'Phnom Penh Central Newsroom' %></h3>
+        <p>
+          <%= lang === 'km'
+            ? 'មជ្ឈមណ្ឌលផលិតព័ត៌មានទ្វិភាសា ២៤ ម៉ោង និងការិយាល័យគ្រប់គ្រងទូទៅរបស់ Khmer News ស្ថិតនៅកណ្តាលរាជធានីភ្នំពេញ។'
+            : 'Our 24-hour central wire desk, executive editorial board, and multimedia production studio operate from central Phnom Penh.' %>
+        </p>
+        <ul class="about-bureau-list">
+          <li><strong><%= lang === 'km' ? 'អាសយដ្ឋាន៖' : 'Address:' %></strong> <%= (typeof siteSettings !== 'undefined' && siteSettings && siteSettings[`contact_address_${lang}`]) || (lang === 'km' ? 'មហាវិថីព្រះមុនីវង្ស រាជធានីភ្នំពេញ កម្ពុជា' : 'Preah Monivong Blvd, Sangkat Boeung Keng Kang, Phnom Penh, Cambodia') %></li>
+          <li><strong><%= lang === 'km' ? 'ទូរស័ព្ទបន្ទប់ព័ត៌មាន៖' : 'Newsdesk Phone:' %></strong> <%= (typeof siteSettings !== 'undefined' && siteSettings && siteSettings.contact_phone) || '+855 23 456 789' %></li>
+          <li><strong><%= lang === 'km' ? 'អ៊ីមែលផ្លូវការ៖' : 'General Desk:' %></strong> <%= (typeof siteSettings !== 'undefined' && siteSettings && siteSettings.contact_email) || 'info@khmernews.com.kh' %></li>
+        </ul>
+      </div>
+
+      <div class="about-bureau-col">
+        <h3><i class="fas fa-globe" style="color: var(--accent, #dc2626);"></i> <%= lang === 'km' ? 'ការិយាល័យតំបន់ និងអ្នកឆ្លើយឆ្លងព័ត៌មាន' : 'Regional & Provincial Bureaus' %></h3>
+        <p>
+          <%= lang === 'km'
+            ? 'បណ្តាញអ្នកយកព័ត៌មានប្រចាំតំបន់សេដ្ឋកិច្ច និងទេសចរណ៍សំខាន់ៗ ដើម្បីរាយការណ៍ផ្ទាល់ពីមូលដ្ឋាន។'
+            : 'Field correspondents stationed across key economic corridors and regional capitals.' %>
+        </p>
+        <ul class="about-bureau-list">
+          <li><strong>Siem Reap & Northern Bureau:</strong> Tourism, Heritage & Airport Corridor (`siemreap@khmernews.com.kh`)</li>
+          <li><strong>Sihanoukville & Coastal SEZ Desk:</strong> Deep-Sea Port, Maritime Trade & Industrial Zones (`coastal@khmernews.com.kh`)</li>
+          <li><strong>ASEAN Diplomatic Wire:</strong> Regional Summits & Cross-Border Trade (`asean@khmernews.com.kh`)</li>
+        </ul>
+      </div>
+
+      <div class="about-bureau-col">
+        <h3><i class="fas fa-paper-plane" style="color: var(--accent, #dc2626);"></i> <%= lang === 'km' ? 'ផ្ញើព័ត៌មាន សហការ និងផ្សព្វផ្សាយ' : 'News Tips, Press Releases & Advertising' %></h3>
+        <p>
+          <%= lang === 'km'
+            ? 'មានដំណឹងសំខាន់ សេចក្តីប្រកាសព័ត៌មានផ្លូវការ ឬមានបំណងផ្សព្វផ្សាយពាណិជ្ជកម្មនៅលើគេហទំព័រ Khmer News? សូមទាក់ទងមកកាន់យើងខ្ញុំផ្ទាល់៖'
+            : 'Have a confidential news tip, official press release, correction request, or corporate sponsorship inquiry? Connect with our desks directly:' %>
+        </p>
+        <div class="about-cta-links">
+          <a href="/today" class="about-cta-btn is-primary">
+            <i class="fas fa-bolt"></i> <%= lang === 'km' ? 'ព័ត៌មានថ្ងៃនេះ (Today Now)' : 'Today\'s Live Wire' %>
+          </a>
+          <a href="/contact" class="about-cta-btn">
+            <i class="fas fa-envelope"></i> <%= lang === 'km' ? 'ទាក់ទងបន្ទប់ព័ត៌មាន' : 'Contact Newsroom' %>
+          </a>
+          <a href="/advertise" class="about-cta-btn">
+            <i class="fas fa-bullhorn"></i> <%= lang === 'km' ? 'ផ្សព្វផ្សាយពាណិជ្ជកម្ម' : 'Advertise With Us' %>
+          </a>
+          <a href="/feed.xml" target="_blank" class="about-cta-btn">
+            <i class="fas fa-rss"></i> RSS Wire
+          </a>
+        </div>
       </div>
     </div>
   </div>

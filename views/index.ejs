@@ -25,7 +25,7 @@
                     <span class="editorial-live-tag"><%= t('common.lead_story') %></span>
                     <a href="/category/<%= mainLead.category_slug %>" class="editorial-kicker"><%= mainLead[`category_name_${lang}`] %></a>
                     <span class="editorial-meta-sep">•</span>
-                    <time class="editorial-time-fresh"><%= timeAgo(mainLead.created_at) %></time>
+                    <time class="editorial-time-fresh" datetime="<%= mainLead.created_at %>" data-live-time="<%= mainLead.created_at %>"><%= timeAgo(mainLead.created_at) %></time>
                   </div>
                   <h1 class="editorial-lead-headline"><a href="/article/<%= mainLead.slug %>"><%= mainLead[`title_${lang}`] %></a></h1>
                   <p class="editorial-lead-deck"><%= mainLead[`summary_${lang}`] ? mainLead[`summary_${lang}`] : stripHtml(mainLead[`content_${lang}`], 240) %></p>
@@ -42,7 +42,7 @@
                     <div class="editorial-meta-row">
                       <a href="/category/<%= f.category_slug %>" class="editorial-kicker"><%= f[`category_name_${lang}`] %></a>
                       <span class="editorial-meta-sep">•</span>
-                      <time class="editorial-time-fresh"><%= timeAgo(f.created_at) %></time>
+                      <time class="editorial-time-fresh" datetime="<%= f.created_at %>" data-live-time="<%= f.created_at %>"><%= timeAgo(f.created_at) %></time>
                     </div>
                     <h2 class="editorial-lead-headline"><a href="/article/<%= f.slug %>"><%= f[`title_${lang}`] %></a></h2>
                     <p class="editorial-lead-deck"><%= f[`summary_${lang}`] ? f[`summary_${lang}`] : stripHtml(f[`content_${lang}`], 180) %></p>
@@ -67,7 +67,7 @@
                             <a href="/category/<%= mainLead.category_slug %>" class="editorial-kicker"><%= mainLead[`category_name_${lang}`] %></a>
                           <% } %>
                           <span class="editorial-meta-sep">•</span>
-                          <time class="editorial-time-fresh"><%= timeAgo(mainLead.created_at) %></time>
+                          <time class="editorial-time-fresh" datetime="<%= mainLead.created_at %>" data-live-time="<%= mainLead.created_at %>"><%= timeAgo(mainLead.created_at) %></time>
                         </div>
                         <h1 class="editorial-lead-headline">
                           <a href="/article/<%= mainLead.slug %>"><%= mainLead[`title_${lang}`] %></a>
@@ -95,7 +95,7 @@
                               <a href="/category/<%= sub.category_slug %>" class="editorial-kicker"><%= sub[`category_name_${lang}`] %></a>
                               <span class="editorial-meta-sep">•</span>
                             <% } %>
-                            <time class="editorial-time"><%= timeAgo(sub.created_at) %></time>
+                            <time class="editorial-time" datetime="<%= sub.created_at %>" data-live-time="<%= sub.created_at %>"><%= timeAgo(sub.created_at) %></time>
                           </div>
                           <h3 class="newspaper-sublead-title">
                             <a href="/article/<%= sub.slug %>"><%= sub[`title_${lang}`] %></a>
@@ -126,7 +126,7 @@
                           <a href="/category/<%= pick.category_slug %>" class="editorial-kicker"><%= pick[`category_name_${lang}`] %></a>
                           <span class="editorial-meta-sep">•</span>
                         <% } %>
-                        <time class="editorial-time"><%= timeAgo(pick.created_at) %></time>
+                        <time class="editorial-time" datetime="<%= pick.created_at %>" data-live-time="<%= pick.created_at %>"><%= timeAgo(pick.created_at) %></time>
                       </div>
                       <h3 class="newspaper-mid-title">
                         <a href="/article/<%= pick.slug %>"><%= pick[`title_${lang}`] %></a>
@@ -152,7 +152,7 @@
                     <% wireItems.forEach(function(w) { %>
                       <article class="newspaper-wire-item">
                         <div class="newspaper-wire-meta">
-                          <time class="newspaper-wire-time"><%= timeAgo(w.created_at) %></time>
+                          <time class="newspaper-wire-time" datetime="<%= w.created_at %>" data-live-time="<%= w.created_at %>"><%= timeAgo(w.created_at) %></time>
                           <% if (w.category_name_en) { %>
                             <span class="editorial-meta-sep">•</span>
                             <a href="/category/<%= w.category_slug %>" class="editorial-kicker"><%= w[`category_name_${lang}`] %></a>
@@ -187,7 +187,7 @@
               <div class="editorial-ticker-scroll">
                 <% tickerItems.slice(0, 6).forEach(function(a) { %>
                   <a href="/article/<%= a.slug %>" class="editorial-ticker-entry">
-                    <time><%= timeAgo(a.created_at) %></time>
+                    <time datetime="<%= a.created_at %>" data-live-time="<%= a.created_at %>"><%= timeAgo(a.created_at) %></time>
                     <span><%= a[`title_${lang}`] %></span>
                   </a>
                 <% }) %>
@@ -217,7 +217,7 @@
                     <a href="/category/<%= spotlight.category_slug %>" class="editorial-kicker"><%= spotlight[`category_name_${lang}`] %></a>
                   <% } %>
                   <span class="editorial-meta-sep">•</span>
-                  <time class="editorial-time"><%= timeAgo(spotlight.created_at) %></time>
+                  <time class="editorial-time" datetime="<%= spotlight.created_at %>" data-live-time="<%= spotlight.created_at %>"><%= timeAgo(spotlight.created_at) %></time>
                 </div>
                 <h3 class="editorial-spotlight-title">
                   <a href="/article/<%= spotlight.slug %>"><%= spotlight[`title_${lang}`] %></a>
@@ -273,7 +273,7 @@
                       <div class="editorial-meta-row">
                         <a href="/category/<%= deskLead.category_slug %>" class="editorial-kicker"><%= deskLead[`category_name_${lang}`] %></a>
                         <span class="editorial-meta-sep">•</span>
-                        <time class="editorial-time"><%= timeAgo(deskLead.created_at) %></time>
+                        <time class="editorial-time" datetime="<%= deskLead.created_at %>" data-live-time="<%= deskLead.created_at %>"><%= timeAgo(deskLead.created_at) %></time>
                       </div>
                       <h3 class="editorial-desk-lead-title">
                         <a href="/article/<%= deskLead.slug %>"><%= deskLead[`title_${lang}`] %></a>
@@ -298,7 +298,7 @@
                         <div class="editorial-meta-row">
                           <a href="/category/<%= a.category_slug %>" class="editorial-kicker"><%= a[`category_name_${lang}`] %></a>
                           <span class="editorial-meta-sep">•</span>
-                          <time class="editorial-time"><%= timeAgo(a.created_at) %></time>
+                          <time class="editorial-time" datetime="<%= a.created_at %>" data-live-time="<%= a.created_at %>"><%= timeAgo(a.created_at) %></time>
                         </div>
                         <h4 class="editorial-story-title">
                           <a href="/article/<%= a.slug %>"><%= a[`title_${lang}`] %></a>
@@ -316,7 +316,7 @@
                     <% deskBottom.forEach(function(a) { %>
                       <article class="editorial-compact-unit">
                         <div class="editorial-meta-row">
-                          <time class="editorial-time"><%= timeAgo(a.created_at) %></time>
+                          <time class="editorial-time" datetime="<%= a.created_at %>" data-live-time="<%= a.created_at %>"><%= timeAgo(a.created_at) %></time>
                         </div>
                         <h4 class="editorial-compact-title">
                           <a href="/article/<%= a.slug %>"><%= a[`title_${lang}`] %></a>
@@ -341,7 +341,7 @@
                       <div class="editorial-meta-row">
                         <a href="/category/<%= bigList[0].category_slug %>" class="editorial-kicker"><%= bigList[0][`category_name_${lang}`] %></a>
                         <span class="editorial-meta-sep">•</span>
-                        <time class="editorial-time"><%= timeAgo(bigList[0].created_at) %></time>
+                        <time class="editorial-time" datetime="<%= bigList[0].created_at %>" data-live-time="<%= bigList[0].created_at %>"><%= timeAgo(bigList[0].created_at) %></time>
                       </div>
                       <h3 class="editorial-desk-lead-title">
                         <a href="/article/<%= bigList[0].slug %>"><%= bigList[0][`title_${lang}`] %></a>
@@ -358,7 +358,7 @@
                           <div class="editorial-meta-row">
                             <a href="/category/<%= a.category_slug %>" class="editorial-kicker"><%= a[`category_name_${lang}`] %></a>
                             <span class="editorial-meta-sep">•</span>
-                            <time class="editorial-time"><%= timeAgo(a.created_at) %></time>
+                            <time class="editorial-time" datetime="<%= a.created_at %>" data-live-time="<%= a.created_at %>"><%= timeAgo(a.created_at) %></time>
                           </div>
                           <h4 class="editorial-stack-title">
                             <a href="/article/<%= a.slug %>"><%= a[`title_${lang}`] %></a>
@@ -384,7 +384,7 @@
                     <article class="editorial-stream-row">
                       <div class="editorial-stream-meta-col">
                         <a href="/category/<%= a.category_slug %>" class="editorial-kicker"><%= a[`category_name_${lang}`] %></a>
-                        <time class="editorial-time"><%= timeAgo(a.created_at) %></time>
+                        <time class="editorial-time" datetime="<%= a.created_at %>" data-live-time="<%= a.created_at %>"><%= timeAgo(a.created_at) %></time>
                       </div>
                       <div class="editorial-stream-body">
                         <h3 class="editorial-stream-title">
@@ -420,7 +420,7 @@
                         <div class="editorial-meta-row">
                           <a href="/category/<%= a.category_slug %>" class="editorial-kicker"><%= a[`category_name_${lang}`] %></a>
                           <span class="editorial-meta-sep">•</span>
-                          <time class="editorial-time"><%= timeAgo(a.created_at) %></time>
+                          <time class="editorial-time" datetime="<%= a.created_at %>" data-live-time="<%= a.created_at %>"><%= timeAgo(a.created_at) %></time>
                         </div>
                         <h3 class="editorial-story-title">
                           <a href="/article/<%= a.slug %>"><%= a[`title_${lang}`] %></a>
@@ -444,7 +444,7 @@
                       <div class="editorial-meta-row">
                         <a href="/category/<%= a.category_slug %>" class="editorial-kicker"><%= a[`category_name_${lang}`] %></a>
                         <span class="editorial-meta-sep">•</span>
-                        <time class="editorial-time"><%= timeAgo(a.created_at) %></time>
+                        <time class="editorial-time" datetime="<%= a.created_at %>" data-live-time="<%= a.created_at %>"><%= timeAgo(a.created_at) %></time>
                       </div>
                       <h3 class="editorial-compact-title">
                         <a href="/article/<%= a.slug %>"><%= a[`title_${lang}`] %></a>
@@ -467,7 +467,7 @@
                       <div class="editorial-meta-row">
                         <a href="/category/<%= a.category_slug %>" class="editorial-kicker"><%= a[`category_name_${lang}`] %></a>
                         <span class="editorial-meta-sep">•</span>
-                        <time class="editorial-time"><%= timeAgo(a.created_at) %></time>
+                        <time class="editorial-time" datetime="<%= a.created_at %>" data-live-time="<%= a.created_at %>"><%= timeAgo(a.created_at) %></time>
                       </div>
                       <h3 class="editorial-story-title">
                         <a href="/article/<%= a.slug %>"><%= a[`title_${lang}`] %></a>
@@ -503,7 +503,7 @@
               <% liveWireList.slice(0, block.limit || 6).forEach(function(item) { %>
                 <article class="editorial-wire-row">
                   <div class="editorial-wire-time-col">
-                    <time class="editorial-wire-badge"><%= timeAgo(item.created_at) %></time>
+                    <time class="editorial-wire-badge" datetime="<%= item.created_at %>" data-live-time="<%= item.created_at %>"><%= timeAgo(item.created_at) %></time>
                     <span class="editorial-wire-clock"><%= item.created_at ? String(item.created_at).slice(11, 16) : 'LIVE' %></span>
                   </div>
                   <div class="editorial-wire-content-col">
@@ -550,14 +550,14 @@
                       <a href="/article/<%= dList[0].slug %>" class="editorial-media-link">
                         <img src="<%= dList[0].image_url %>" alt="<%= dList[0][`title_${lang}`] %>" loading="lazy">
                       </a>
-                      <time class="editorial-time-fresh"><%= timeAgo(dList[0].created_at) %></time>
+                      <time class="editorial-time-fresh" datetime="<%= dList[0].created_at %>" data-live-time="<%= dList[0].created_at %>"><%= timeAgo(dList[0].created_at) %></time>
                       <h3 class="editorial-story-title"><a href="/article/<%= dList[0].slug %>"><%= dList[0][`title_${lang}`] %></a></h3>
                     </article>
                   <% } %>
                   <ul class="editorial-multi-desk-bullets">
                     <% dList.slice(1).forEach(function(item) { %>
                       <li>
-                        <time><%= timeAgo(item.created_at) %></time>
+                        <time datetime="<%= item.created_at %>" data-live-time="<%= item.created_at %>"><%= timeAgo(item.created_at) %></time>
                         <a href="/article/<%= item.slug %>"><%= item[`title_${lang}`] %></a>
                       </li>
                     <% }) %>
@@ -593,7 +593,7 @@
                     <%= op[`summary_${lang}`] ? op[`summary_${lang}`] : stripHtml(op[`content_${lang}`], 115) %>
                   </p>
                   <div class="editorial-byline" style="margin-top:8px;">
-                    <time><%= timeAgo(op.created_at) %></time>
+                    <time datetime="<%= op.created_at %>" data-live-time="<%= op.created_at %>"><%= timeAgo(op.created_at) %></time>
                     <span>•</span>
                     <span><%= op.read_time_minutes || 4 %> <%= t('common.minutes_read') %></span>
                   </div>
@@ -619,7 +619,7 @@
                     <span class="editorial-photo-tag"><%= ph[`category_name_${lang}`] %></span>
                   </a>
                   <div class="editorial-photo-caption">
-                    <time><%= timeAgo(ph.created_at) %></time>
+                    <time datetime="<%= ph.created_at %>" data-live-time="<%= ph.created_at %>"><%= timeAgo(ph.created_at) %></time>
                     <h3><a href="/article/<%= ph.slug %>"><%= ph[`title_${lang}`] %></a></h3>
                   </div>
                 </article>
@@ -662,7 +662,7 @@
                     <div class="editorial-meta-row">
                       <a href="/category/<%= a.category_slug %>" class="editorial-kicker"><%= a[`category_name_${lang}`] %></a>
                       <span class="editorial-meta-sep">•</span>
-                      <time class="editorial-time"><%= timeAgo(a.created_at) %></time>
+                      <time class="editorial-time" datetime="<%= a.created_at %>" data-live-time="<%= a.created_at %>"><%= timeAgo(a.created_at) %></time>
                     </div>
                     <h3 class="editorial-top10-title">
                       <a href="/article/<%= a.slug %>"><%= a[`title_${lang}`] %></a>

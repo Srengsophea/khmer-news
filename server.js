@@ -58,13 +58,15 @@ app.use((req, res, next) => {
     return diffHours >= -24 && diffHours <= 24;
   };
 
+  res.locals.toKhmerDigits = toKhmerDigits;
+
   res.locals.timeAgo = (dateStr) => {
     if (!dateStr) return '';
     const d = new Date(String(dateStr).replace(' ', 'T'));
     if (isNaN(d.getTime())) return String(dateStr).slice(0, 10);
-    const diffMins = Math.max(1, Math.floor((Date.now() - d.getTime()) / 60000));
+    const diffMins = Math.max(0, Math.floor((Date.now() - d.getTime()) / 60000));
     const isKm = req.lang === 'km';
-    if (diffMins < 5) return isKm ? 'អម្បាញ់មិញ' : 'Just now';
+    if (diffMins < 1) return isKm ? 'អម្បាញ់មិញ' : 'Just now';
     if (diffMins < 60) return isKm ? `${toKhmerDigits(diffMins)} នាទីមុន` : `${diffMins}m ago`;
     const diffHours = Math.floor(diffMins / 60);
     if (diffHours < 24) return isKm ? `${toKhmerDigits(diffHours)} ម៉ោងមុន` : `${diffHours}h ago`;
@@ -72,6 +74,42 @@ app.use((req, res, next) => {
     if (diffDays === 1) return isKm ? 'ម្សិលមិញ' : 'Yesterday';
     if (diffDays < 7) return isKm ? `${toKhmerDigits(diffDays)} ថ្ងៃមុន` : `${diffDays}d ago`;
     return d.toLocaleDateString(isKm ? 'km-KH' : 'en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  };
+
+  res.locals.formatExactTime = (dateStr, lang) => {
+    if (!dateStr) return '';
+    const d = new Date(String(dateStr).replace(' ', 'T'));
+    if (isNaN(d.getTime())) return '';
+    const isKm = (lang || req.lang) === 'km';
+    if (isKm) {
+      let hours = d.getHours();
+      const minutes = String(d.getMinutes()).padStart(2, '0');
+      const period = hours >= 12 ? 'រសៀល' : 'ព្រឹក';
+      hours = hours % 12 || 12;
+      return `ម៉ោង ${toKhmerDigits(hours)}:${toKhmerDigits(minutes)} ${period} ICT`;
+    }
+    return d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true }) + ' ICT';
+  };
+
+  res.locals.formatExactDate = (dateStr, lang) => {
+    if (!dateStr) return '';
+    const d = new Date(String(dateStr).replace(' ', 'T'));
+    if (isNaN(d.getTime())) return String(dateStr).slice(0, 10);
+    const isKm = (lang || req.lang) === 'km';
+    return d.toLocaleDateString(isKm ? 'km-KH' : 'en-US', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+  };
+
+  res.locals.formatFullDateTime = (dateStr, lang) => {
+    if (!dateStr) return '';
+    const d = new Date(String(dateStr).replace(' ', 'T'));
+    if (isNaN(d.getTime())) return String(dateStr);
+    const isKm = (lang || req.lang) === 'km';
+    return `${d.toLocaleDateString(isKm ? 'km-KH' : 'en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' })} ${d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })} ICT`;
   };
   
   const db = getDb();
@@ -141,6 +179,13 @@ initDatabase((err) => {
     refreshTodayTimestamps(() => {
       console.log('Database ready & Today Now timestamps synced.');
     });
+
+    // Auto-roll news timestamps forward every 3 minutes so news is NEVER stuck at a fixed time
+    setInterval(() => {
+      refreshTodayTimestamps(() => {
+        // Wire timestamps updated
+      });
+    }, 3 * 60 * 1000);
   });
 });
 

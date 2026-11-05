@@ -45,7 +45,7 @@
               <div class="editorial-meta-row">
                 <span class="editorial-kicker"><%= leadStory[`category_name_${lang}`] || category[`name_${lang}`] %></span>
                 <span class="editorial-meta-sep">•</span>
-                <time class="editorial-time-fresh"><%= timeAgo(leadStory.created_at) %></time>
+                <time class="editorial-time-fresh" datetime="<%= leadStory.created_at %>" data-live-time="<%= leadStory.created_at %>"><%= timeAgo(leadStory.created_at) %></time>
               </div>
               <h2 class="editorial-lead-headline">
                 <a href="/article/<%= leadStory.slug %>"><%= leadStory[`title_${lang}`] %></a>
@@ -76,7 +76,7 @@
                   <div class="editorial-meta-row">
                     <span class="editorial-kicker"><%= sub[`category_name_${lang}`] || category[`name_${lang}`] %></span>
                     <span class="editorial-meta-sep">•</span>
-                    <time class="editorial-time"><%= timeAgo(sub.created_at) %></time>
+                    <time class="editorial-time" datetime="<%= sub.created_at %>" data-live-time="<%= sub.created_at %>"><%= timeAgo(sub.created_at) %></time>
                   </div>
                   <h3 class="editorial-sublead-headline">
                     <a href="/article/<%= sub.slug %>"><%= sub[`title_${lang}`] %></a>
@@ -106,7 +106,7 @@
                   <div class="editorial-meta-row">
                     <span class="editorial-kicker"><%= a[`category_name_${lang}`] || category[`name_${lang}`] %></span>
                     <span class="editorial-meta-sep">•</span>
-                    <time class="editorial-time"><%= timeAgo(a.created_at) %></time>
+                    <time class="editorial-time" datetime="<%= a.created_at %>" data-live-time="<%= a.created_at %>"><%= timeAgo(a.created_at) %></time>
                   </div>
                   <h3 class="editorial-story-title">
                     <a href="/article/<%= a.slug %>"><%= a[`title_${lang}`] %></a>

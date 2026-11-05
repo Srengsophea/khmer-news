@@ -412,8 +412,45 @@ router.get('/change-lang/:lang', (req, res) => {
 router.get('/about', (req, res) => {
   const db = getDb();
   const lang = req.lang;
-  db.all(`SELECT * FROM categories ORDER BY id`, [], (err, categories) => {
-    res.render('about', { categories, lang, title: 'About' });
+  db.all(`
+    SELECT c.*,
+           COUNT(a.id) as article_count,
+           COALESCE(SUM(a.views_count), 0) as total_views
+    FROM categories c
+    LEFT JOIN articles a ON a.category_id = c.id
+    GROUP BY c.id
+    ORDER BY c.id
+  `, [], (err, categories) => {
+    db.get(`
+      SELECT COUNT(*) as total_articles,
+             COALESCE(SUM(views_count), 0) as total_views,
+             SUM(CASE WHEN is_featured = 1 THEN 1 ELSE 0 END) as featured_count
+      FROM articles
+    `, [], (e2, statsRow) => {
+      db.get(`SELECT COUNT(*) as total_tags FROM tags`, [], (e3, tagRow) => {
+        db.all(getArticleQuery() + ' LIMIT 40', [], (e4, recentArticles) => {
+          const latestByCat = {};
+          (recentArticles || []).forEach((art) => {
+            if (art.category_id && !latestByCat[art.category_id]) {
+              latestByCat[art.category_id] = art;
+            }
+          });
+          res.render('about', {
+            categories: categories || [],
+            aboutStats: {
+              totalArticles: (statsRow && statsRow.total_articles) || 257,
+              totalViews: (statsRow && statsRow.total_views) || 148500,
+              featuredCount: (statsRow && statsRow.featured_count) || 24,
+              totalTags: (tagRow && tagRow.total_tags) || 20
+            },
+            latestByCat,
+            recentShowcase: (recentArticles || []).slice(0, 4),
+            lang,
+            title: lang === 'km' ? 'អំពីយើង — ស្ថាប័នសារព័ត៌មាន Khmer News' : 'About Khmer News — Editorial Masthead & Charter'
+          });
+        });
+      });
+    });
   });
 });
 

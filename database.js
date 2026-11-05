@@ -157,7 +157,8 @@ function runMigrations(callback) {
     "ALTER TABLE settings ADD COLUMN corner_style TEXT DEFAULT 'rounded'",
     "ALTER TABLE settings ADD COLUMN sticky_nav INTEGER DEFAULT 1",
     "ALTER TABLE settings ADD COLUMN show_reading_progress INTEGER DEFAULT 1",
-    "ALTER TABLE settings ADD COLUMN pagination_size INTEGER DEFAULT 9"
+    "ALTER TABLE settings ADD COLUMN pagination_size INTEGER DEFAULT 9",
+    "ALTER TABLE articles ADD COLUMN gallery_images TEXT DEFAULT '[]'"
   ];
 
   let completed = 0;
@@ -1204,21 +1205,30 @@ function refreshTodayTimestamps(callback) {
     }
   });
 
-  db.all("SELECT id FROM articles ORDER BY id DESC LIMIT 48", [], (err, rows) => {
+  db.all("SELECT id FROM articles ORDER BY id DESC", [], (err, rows) => {
     if (err || !rows || rows.length === 0) return callback && callback();
     const now = Date.now();
+    const pad = (n) => String(n).padStart(2, '0');
     db.serialize(() => {
+      db.run("BEGIN TRANSACTION");
       const stmt = db.prepare("UPDATE articles SET created_at = ?, updated_at = ? WHERE id = ?");
       rows.forEach((r, idx) => {
-        // Space top 48 articles across today: from 3 mins ago up to 16 hours ago
-        const minsAgo = idx < 10 ? (idx * 5 + 3) : (50 + (idx - 10) * 24);
+        let minsAgo;
+        if (idx === 0) minsAgo = 2;
+        else if (idx < 12) minsAgo = 2 + idx * 4;
+        else if (idx < 50) minsAgo = 50 + (idx - 12) * 22;
+        else if (idx < 100) minsAgo = 15 * 60 + (idx - 50) * 36;
+        else if (idx < 160) minsAgo = 46 * 60 + (idx - 100) * 80;
+        else minsAgo = 6 * 24 * 60 + (idx - 160) * 160;
+
         const d = new Date(now - minsAgo * 60 * 1000);
-        const pad = (n) => String(n).padStart(2, '0');
         const ts = `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
         stmt.run([ts, ts, r.id]);
       });
       stmt.finalize(() => {
-        callback && callback();
+        db.run("COMMIT", () => {
+          if (callback) callback();
+        });
       });
     });
   });
